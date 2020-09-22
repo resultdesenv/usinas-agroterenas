@@ -6,7 +6,7 @@ class ApontamentoEstimativaListaEstado extends Equatable {
   final List<EstimativaModelo> estimativas;
   final String mensagemErro;
   final List<EstimativaModelo> estimativasSelecionadas;
-  final Map<String, String> filtros;
+  final Map<String, dynamic> filtros;
   final Map<String, List<String>> listaDropDown;
 
   ApontamentoEstimativaListaEstado({
@@ -23,7 +23,7 @@ class ApontamentoEstimativaListaEstado extends Equatable {
     List<EstimativaModelo> estimativas,
     List<EstimativaModelo> estimativasSelecionadas,
     String mensagemErro,
-    Map<String, String> filtros,
+    Map<String, dynamic> filtros,
     Map<String, List<String>> listaDropDown,
   }) {
     return ApontamentoEstimativaListaEstado(

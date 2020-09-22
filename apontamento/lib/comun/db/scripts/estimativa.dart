@@ -5,9 +5,9 @@ final tabelaEstimativa = '''
     noBoletim INTEGER NOT NULL,
     noSeq INTEGER NOT NULL,
     cdSafra INTEGER,
-    cdUpnivel1 TEXT,
-    cdUpnivel2 TEXT,
-    cdUpnivel3 TEXT,
+    cdUpnivel1 TEXT NOT NULL,
+    cdUpnivel2 TEXT NOT NULL,
+    cdUpnivel3 TEXT NOT NULL,
     cdTpPropr INTEGER,
     deTpPropr TEXT,
     cdVaried INTEGER,
@@ -30,6 +30,6 @@ final tabelaEstimativa = '''
     dtHistorico TEXT,
     status TEXT,
     dtStatus TEXT,
-    PRIMARY KEY(dispositivo,instancia,noBoletim,noSeq)
+    PRIMARY KEY(dispositivo,instancia,noBoletim, noSeq, cdUpnivel1, cdUpnivel2, cdUpnivel3)
   )
 ''';

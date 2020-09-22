@@ -9,8 +9,8 @@ import 'package:apontamento/comun/modelo/usuario_model.dart';
 import 'package:apontamento/comun/sincronizacao/sincronizacao_base.dart';
 
 class SincronizacaoSafraRepository implements SincronizacaoBase<Usuario> {
+  Dio dio;
   final Db db;
-  final Dio dio;
   final SincronizacaoHistoricoRepository sincronizacaoHistoricoRepository;
 
   SincronizacaoSafraRepository(
@@ -18,14 +18,24 @@ class SincronizacaoSafraRepository implements SincronizacaoBase<Usuario> {
       @required this.dio,
       @required this.sincronizacaoHistoricoRepository});
 
+  updateDio(Dio dio) {
+    this.dio = dio;
+  }
+
   Future<void> index(
     String token, {
     String cdInstManfro,
     String cdSafra,
   }) async {
+    final dataInicial = DateTime.now();
     await limpar();
     final usuarios = await buscar(token, cdInstManfro);
-    await salvar(usuarios);
+    final dataFinal = DateTime.now();
+    await salvar(
+        usuarios,
+        Duration(
+            milliseconds: dataFinal.millisecondsSinceEpoch -
+                dataInicial.millisecondsSinceEpoch));
   }
 
   Future<void> limpar() async {
@@ -45,11 +55,12 @@ class SincronizacaoSafraRepository implements SincronizacaoBase<Usuario> {
         .toList();
   }
 
-  Future<void> salvar(List<SafraModel> safras) async {
+  Future<void> salvar(List<SafraModel> safras, Duration duracao) async {
     final dbInstancia = await db.get();
     for (final safra in safras) {
       await dbInstancia.insert('safra', safra.toJson());
     }
-    await sincronizacaoHistoricoRepository.salvarDataAtualizacao('safra');
+    await sincronizacaoHistoricoRepository.salvarDataAtualizacao(
+        'safra', duracao, safras.length);
   }
 }

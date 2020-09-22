@@ -1,8 +1,8 @@
 final tabelaSequencia = '''
   CREATE TABLE sequencia (
+    instancia TEXT PRIMARY KEY,
     aplicacao TEXT,
     idDispositivo TEXT,
-    instancia TEXT,
     sequencia INTEGER,
     idAplicacao INTEGER
   )

@@ -1,5 +1,6 @@
+import 'dart:convert';
+
 import 'package:apontamento/comun/modelo/estimativa_modelo.dart';
-import 'package:apontamento/comun/modelo/preferencia_model.dart';
 import 'package:apontamento/comun/repositorios/preferencia_repository.dart';
 import 'package:apontamento/comun/repositorios/repositorio_estimativa.dart';
 import 'package:apontamento/paginas/apontamento_estimativa_lista/apontamento_estimativa_lista_estado.dart';
@@ -29,16 +30,17 @@ class ApontamentoEstimativaListaBloc extends Bloc<
           estimativas: [],
           estimativasSelecionadas: [],
         );
-        final res = await repositorioEstimativa.get(filtros: evento.filtros);
+
+        final res = await repositorioEstimativa.get(
+          filtros: _formataFiltros(evento.filtros),
+        );
         final Map<String, List<String>> listaDropDown =
             await repositorioEstimativa.buscaDropDow();
 
         if (evento.salvaFiltros)
           await preferenciaRepository.salvar(
-            preferencia: PreferenciaModel(
-              idPreferencia: 'estimativa',
-              valorPreferencia: evento.filtros,
-            ),
+            idPreferencia: 'estimativaLista',
+            valorPreferencia: json.encode(evento.filtros),
           );
 
         yield state.juntar(
@@ -70,7 +72,7 @@ class ApontamentoEstimativaListaBloc extends Bloc<
         yield state.juntar(carregando: false, mensagemErro: e.toString());
       }
     } else if (evento is AlterarFiltroEstimativas) {
-      final Map<String, String> filtros = Map.from(state.filtros);
+      final Map<String, dynamic> filtros = Map.from(state.filtros);
 
       if (evento.valor.isNotEmpty)
         filtros[evento.chave] = evento.valor;
@@ -79,9 +81,39 @@ class ApontamentoEstimativaListaBloc extends Bloc<
 
       yield state.juntar(filtros: filtros);
     } else if (evento is IniciarListaEstimativas) {
-      final Map<String, String> filtros =
-          await preferenciaRepository.get(idPreferencia: 'estimativa');
+      final res =
+          await preferenciaRepository.get(idPreferencia: 'estimativaLista');
+      final Map<String, dynamic> filtros = res != null ? json.decode(res) : {};
       this.add(CarregarListas(filtros: filtros, salvaFiltros: false));
+    } else if (evento is CheckAllEstimativaLista) {
+      if (!evento.valor) {
+        yield state.juntar(estimativasSelecionadas: []);
+      } else {
+        yield state.juntar(estimativasSelecionadas: state.estimativas);
+      }
     }
+  }
+
+  Map<String, dynamic> _formataFiltros(Map<String, dynamic> valores) {
+    final Map<String, dynamic> filtrosFormatados = Map.from(valores);
+    filtrosFormatados.removeWhere((chave, valor) => valor.isEmpty);
+
+    if (valores['dtInicio'] != null && valores['dtFim'] != null) {
+      final dataInicio = ">= date('${valores['dtInicio']}') ";
+      final dataFinal = "<= date('${valores['dtFim']}')";
+
+      filtrosFormatados['date(dtHistorico)'] =
+          "${valores['dtInicio'] != null ? dataInicio : " "}"
+          "${valores['dtInicio'] != null && valores['dtFim'] != null ? " AND date(dtUltimoCorte) " : ""} "
+          "${valores['dtFim'] != null ? dataFinal : ""}";
+    }
+
+    filtrosFormatados.remove('dtInicio');
+    filtrosFormatados.remove('dtFim');
+
+    if (valores['status'] != null && valores['status'].isNotEmpty)
+      filtrosFormatados['status'] = 'IN ${valores['status']}';
+
+    return filtrosFormatados;
   }
 }

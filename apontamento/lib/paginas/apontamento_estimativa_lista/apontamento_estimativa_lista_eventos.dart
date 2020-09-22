@@ -26,3 +26,9 @@ class AlterarFiltroEstimativas extends ApontamentoEstimativaListaEvento {
 }
 
 class IniciarListaEstimativas extends ApontamentoEstimativaListaEvento {}
+
+class CheckAllEstimativaLista extends ApontamentoEstimativaListaEvento {
+  final bool valor;
+
+  CheckAllEstimativaLista({@required this.valor});
+}

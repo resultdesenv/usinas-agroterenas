@@ -18,6 +18,8 @@ class ApontamentoEstimativaListaTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ExpansionTile(
+      trailing: Container(width: 1, height: 1),
+      tilePadding: EdgeInsets.only(left: 8, right: 0),
       leading: Checkbox(value: selected, onChanged: onSelectionChange),
       title: MontaTabela(
         estimativa: estimativa,
@@ -79,6 +81,10 @@ class ApontamentoEstimativaListaTile extends StatelessWidget {
                       ),
                     ),
                     MontaLinha(
+                        label: 'Data',
+                        valor: Moment.parse(estimativa.dtHistorico)
+                            .format('dd/MM/yyyy')),
+                    MontaLinha(
                         label: 'TpProp',
                         valor: estimativa.cdTpPropr.toString()),
                     MontaLinha(
@@ -108,7 +114,8 @@ class ApontamentoEstimativaListaTile extends StatelessWidget {
                         valor: estimativa.tchAnoPassado.toString()),
                     MontaLinha(
                         label: 'Tech Ano Retrasado',
-                        valor: estimativa.tchAnoRetrasado.toString()),
+                        valor: Moment.parse(estimativa.dtHistorico)
+                            .format('dd/MM/yyyy')),
                   ],
                 ),
               ),

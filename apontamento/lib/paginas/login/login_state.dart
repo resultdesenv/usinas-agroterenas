@@ -17,6 +17,7 @@ class LoginState extends Equatable {
   final EmpresaModel empresaAutenticada;
   final Usuario usuarioAutenticada;
   final List<UsuarioSalvo> usuariosSalvos;
+  final bool irParaConfiguracao;
 
   LoginState({
     this.versao,
@@ -30,6 +31,7 @@ class LoginState extends Equatable {
     this.empresaAutenticada,
     this.usuarioAutenticada,
     this.usuariosSalvos = const [],
+    this.irParaConfiguracao = false,
   });
 
   LoginState juntar({
@@ -44,6 +46,7 @@ class LoginState extends Equatable {
     EmpresaModel empresaAutenticada,
     Usuario usuarioAutenticada,
     List<UsuarioSalvo> usuariosSalvos,
+    bool irParaConfiguracao,
   }) {
     return LoginState(
       versao: versao ?? this.versao,
@@ -58,6 +61,9 @@ class LoginState extends Equatable {
       empresaAutenticada: empresaAutenticada ?? this.empresaAutenticada,
       usuarioAutenticada: usuarioAutenticada ?? this.usuarioAutenticada,
       usuariosSalvos: usuariosSalvos ?? this.usuariosSalvos,
+      irParaConfiguracao: irParaConfiguracao == null
+          ? this.irParaConfiguracao
+          : irParaConfiguracao,
     );
   }
 
@@ -74,5 +80,6 @@ class LoginState extends Equatable {
         empresaAutenticada,
         usuarioAutenticada,
         usuariosSalvos,
+        irParaConfiguracao,
       ];
 }

@@ -33,10 +33,17 @@ class _LoginContentState extends State<LoginContent> {
         _irParaTelaInicial(
             usuario: state.usuarioAutenticada,
             empresa: state.empresaAutenticada);
+      if (state.irParaConfiguracao == true)
+        _irParaConfiguracao(context, sincronizacaoInicial: true);
       if (state.mensagem != null) _snackbar(state.mensagem);
     }, child: BlocBuilder<LoginBloc, LoginState>(
             builder: (BuildContext context, LoginState state) {
-      return Padding(
+      if (!state.pronto)
+        return Container(
+          color: Colors.white,
+          constraints: BoxConstraints.expand(),
+            child: Center(child: CircularProgressIndicator()));
+      return SingleChildScrollView(
           padding: const EdgeInsets.only(
               bottom: 16.0, right: 16.0, left: 16.0, top: 120),
           child: Card(
@@ -153,14 +160,21 @@ class _LoginContentState extends State<LoginContent> {
             child: ApontamentoEstimativaListaPagina()));
   }
 
-  _irParaConfiguracao(context) async {
-    final sincronizado = await Navigator.push(
-        context,
-        PageTransition(
-            type: PageTransitionType.rightToLeft, child: ConfiguracaoPage()));
-    if (sincronizado == true)
-      Scaffold.of(context)
-          .showSnackBar(SnackBar(content: Text('Sincronizado com sucesso')));
+  _irParaConfiguracao(context, {bool sincronizacaoInicial = false}) async {
+    if (sincronizacaoInicial) {
+      Navigator.pushReplacement(
+          context,
+          PageTransition(
+              type: PageTransitionType.rightToLeft, child: ConfiguracaoPage()));
+    } else {
+      final sincronizado = await Navigator.push(
+          context,
+          PageTransition(
+              type: PageTransitionType.rightToLeft, child: ConfiguracaoPage()));
+      if (sincronizado == true)
+        Scaffold.of(context)
+            .showSnackBar(SnackBar(content: Text('Sincronizado com sucesso')));
+    }
   }
 
   _snackbar(message) {

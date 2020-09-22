@@ -1,3 +1,5 @@
+import 'package:apontamento/comun/modelo/dispositivo_model.dart';
+import 'package:apontamento/comun/modelo/sequencia_model.dart';
 import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
 
@@ -10,6 +12,8 @@ class ConfiguracaoState extends Equatable {
   final bool configurado;
   final String mensagem;
   final bool enviandoEmail;
+  final DispositivoModel dispositivo;
+  final List<Sequencia> sequencias;
 
   ConfiguracaoState({
     this.chave,
@@ -19,6 +23,8 @@ class ConfiguracaoState extends Equatable {
     this.configurado = false,
     this.enviandoEmail = false,
     this.mensagem,
+    this.dispositivo,
+    this.sequencias = const [],
   });
 
   List<Object> get props => [
@@ -29,16 +35,21 @@ class ConfiguracaoState extends Equatable {
         configurado,
         mensagem,
         enviandoEmail,
+        dispositivo,
+        sequencias,
       ];
 
-  ConfiguracaoState juntar(
-      {String chave,
-      String url,
-      bool carregando,
-      bool salvando,
-      bool configurado,
-      String mensagem,
-      bool enviandoEmail}) {
+  ConfiguracaoState juntar({
+    String chave,
+    String url,
+    bool carregando,
+    bool salvando,
+    bool configurado,
+    String mensagem,
+    bool enviandoEmail,
+    DispositivoModel dispositivo,
+    List<Sequencia> sequencias,
+  }) {
     return ConfiguracaoState(
       chave: chave ?? this.chave,
       url: url ?? this.url,
@@ -47,6 +58,8 @@ class ConfiguracaoState extends Equatable {
       configurado: configurado == null ? this.configurado : configurado,
       enviandoEmail: enviandoEmail == null ? this.enviandoEmail : enviandoEmail,
       mensagem: mensagem,
+      dispositivo: dispositivo ?? this.dispositivo,
+      sequencias: sequencias ?? this.sequencias,
     );
   }
 }

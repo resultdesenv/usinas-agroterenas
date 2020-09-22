@@ -7,7 +7,8 @@ class SincronizacaoHistoricoRepository {
 
   SincronizacaoHistoricoRepository({@required this.db});
 
-  Future<void> salvarDataAtualizacao(String tabela) async {
+  Future<void> salvarDataAtualizacao(
+      String tabela, Duration duracao, int quantidadeRegistros) async {
     final dbInstance = await db.get();
 
     await dbInstance.delete('historico_sincronizacao',
@@ -16,6 +17,8 @@ class SincronizacaoHistoricoRepository {
     await dbInstance.insert('historico_sincronizacao', {
       'tabela': tabela,
       'dataAtualizacao': DateTime.now().toIso8601String(),
+      'duracao': duracao.inMilliseconds,
+      'quantidade': quantidadeRegistros,
     });
   }
 

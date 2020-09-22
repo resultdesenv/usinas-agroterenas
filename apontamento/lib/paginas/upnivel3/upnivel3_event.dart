@@ -33,3 +33,9 @@ class ConfirmaSelecaoUpNivel3 extends UpNivel3Event {
 
   ConfirmaSelecaoUpNivel3({@required this.context});
 }
+
+class CheckAllUpNivel3 extends UpNivel3Event {
+  final bool valor;
+
+  CheckAllUpNivel3({@required this.valor});
+}

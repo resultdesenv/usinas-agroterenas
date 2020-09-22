@@ -22,12 +22,23 @@ class ApontamentoFormulario extends StatelessWidget {
                 children: [
                   Expanded(
                     child: _montaCampo(
-                      labelText: 'Seq',
-                      initialValue: apontamento.noSeq,
+                      labelText: 'Boletim',
+                      initialValue: apontamento.noBoletim,
                       enabled: false,
                     ),
                   ),
                   Padding(padding: EdgeInsets.only(left: 16)),
+                  Expanded(
+                    child: _montaCampo(
+                      labelText: 'Sequencia',
+                      initialValue: apontamento.noSeq,
+                      enabled: false,
+                    ),
+                  ),
+                ],
+              ),
+              Row(
+                children: [
                   Expanded(
                     child: _montaCampo(
                       labelText: 'Safra',
@@ -35,10 +46,7 @@ class ApontamentoFormulario extends StatelessWidget {
                       enabled: false,
                     ),
                   ),
-                ],
-              ),
-              Row(
-                children: [
+                  Padding(padding: EdgeInsets.only(left: 16)),
                   Expanded(
                     child: _montaCampo(
                       labelText: 'UpNivel1',
@@ -46,7 +54,10 @@ class ApontamentoFormulario extends StatelessWidget {
                       enabled: false,
                     ),
                   ),
-                  Padding(padding: EdgeInsets.only(left: 16)),
+                ],
+              ),
+              Row(
+                children: [
                   Expanded(
                     child: _montaCampo(
                       labelText: 'UpNivel2',
@@ -54,19 +65,14 @@ class ApontamentoFormulario extends StatelessWidget {
                       enabled: false,
                     ),
                   ),
-                ],
-              ),
-              Row(
-                children: [
+                  Padding(padding: EdgeInsets.only(left: 16)),
                   Expanded(
                     child: _montaCampo(
-                      labelText: 'UpNivel1',
-                      initialValue: apontamento.cdUpnivel1,
+                      labelText: 'UpNivel3',
+                      initialValue: apontamento.cdUpnivel3,
                       enabled: false,
                     ),
                   ),
-                  Padding(padding: EdgeInsets.only(left: 16)),
-                  Spacer(flex: 1),
                 ],
               ),
               Padding(

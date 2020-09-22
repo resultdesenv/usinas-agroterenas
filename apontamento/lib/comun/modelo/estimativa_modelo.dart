@@ -56,8 +56,8 @@ class EstimativaModelo extends Equatable {
     @required this.dtHistorico,
     @required this.tchAnoPassado,
     @required this.tchAnoRetrasado,
-    this.status,
-    this.dtStatus,
+    this.status = 'P',
+    @required this.dtStatus,
   });
 
   factory EstimativaModelo.deMap(Map<String, dynamic> map) {

@@ -24,15 +24,11 @@ class _LoginPageState extends State<LoginPage> {
     return Scaffold(
         backgroundColor: Theme.of(context).primaryColor,
         key: _scaffoldKey,
-        body: SafeArea(
-            child: SingleChildScrollView(
-                child: Column(children: <Widget>[
-          BlocProvider(
-              create: (context) =>
-                  LoginBloc(loginRepository: LoginRepository(db: Db()))
-                    ..add(Started()),
-              child: LoginContent())
-        ]))));
+        body: BlocProvider(
+            create: (context) =>
+                LoginBloc(loginRepository: LoginRepository(db: Db()))
+                  ..add(Started()),
+            child: LoginContent()));
   }
 
   @override

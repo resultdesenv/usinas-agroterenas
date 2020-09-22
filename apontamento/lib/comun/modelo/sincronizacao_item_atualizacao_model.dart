@@ -7,14 +7,14 @@ class HistoricoItemAtualizacaoModel extends Equatable {
   final String nome;
   final String tabela;
   final SincronizacaoBase repository;
-  final DateTime dataAtualizacao;
+  final String atualizacao;
   final bool atualizando;
   final bool upnivel3;
 
   List<Object> get props => [
         nome,
         tabela,
-        dataAtualizacao,
+    atualizacao,
         atualizando,
         upnivel3,
       ];
@@ -23,7 +23,7 @@ class HistoricoItemAtualizacaoModel extends Equatable {
     @required this.nome,
     @required this.tabela,
     @required this.repository,
-    this.dataAtualizacao,
+    this.atualizacao,
     this.atualizando = false,
     this.upnivel3 = false,
   });
@@ -32,7 +32,7 @@ class HistoricoItemAtualizacaoModel extends Equatable {
     String nome,
     String tabela,
     SincronizacaoBase repository,
-    DateTime dataAtualizacao,
+    String atualizacao,
     bool atualizando,
     bool upnivel3,
   }) =>
@@ -40,7 +40,7 @@ class HistoricoItemAtualizacaoModel extends Equatable {
         nome: nome ?? this.nome,
         tabela: tabela ?? this.tabela,
         repository: repository ?? this.repository,
-        dataAtualizacao: dataAtualizacao ?? this.dataAtualizacao,
+        atualizacao: atualizacao ?? this.atualizacao,
         atualizando: atualizando == null ? this.atualizando : atualizando,
         upnivel3: upnivel3 == null ? this.upnivel3 : upnivel3,
       );

@@ -1,4 +1,5 @@
 import 'package:apontamento/comun/sincronizacao/sincronizacao_base.dart';
+import 'package:dio/dio.dart';
 import 'package:meta/meta.dart';
 
 class SincronizacaoCompletaRepository {
@@ -6,10 +7,10 @@ class SincronizacaoCompletaRepository {
 
   SincronizacaoCompletaRepository({@required this.list});
 
-  index(String token) async {
+  index(String token, {Dio dio}) async {
     for (final item in list) {
+      if (dio != null) item.updateDio(dio);
       await item.index(token);
-      print(item.toString());
     }
   }
 }

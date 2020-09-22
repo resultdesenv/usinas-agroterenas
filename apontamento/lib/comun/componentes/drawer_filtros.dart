@@ -8,9 +8,9 @@ class DrawerFiltros extends StatelessWidget {
   final List<String> listaUp1;
   final List<String> listaUp2;
   final List<String> listaUp3;
-  final Map<String, String> filtros;
+  final Map<String, dynamic> filtros;
   final Function(String chave, String valor) alteraFiltro;
-  final Function(Map<String, String> filtros) filtrar;
+  final Function(Map<String, dynamic> filtros) filtrar;
   final Map<String, String> listaStatus = {
     'Selecione': '',
     'Sincronizado': '(\'I\')',
@@ -46,25 +46,59 @@ class DrawerFiltros extends StatelessWidget {
                       onChanged: (valor) => alteraFiltro('noBoletim', valor),
                     )
                   : Container(),
-              DateField(
-                callback: (DateTime valor) => alteraFiltro(
-                  'dtHistoricoInicio',
-                  Moment.fromDate(valor).format('yyyy-MM-dd'),
-                ),
-                label: 'Data Inicial',
-                selectedDate: filtros['dtHistoricoInicio'] != null
-                    ? DateTime.parse(filtros['dtHistoricoInicio'])
-                    : null,
+              Row(
+                children: [
+                  Expanded(
+                    child: DateField(
+                      callback: (DateTime valor) => alteraFiltro(
+                        'dtInicio',
+                        Moment.fromDate(valor).format('yyyy-MM-dd'),
+                      ),
+                      label: 'Data Inicial',
+                      selectedDate: filtros['dtInicio'] != null
+                          ? DateTime.parse(filtros['dtInicio'])
+                          : null,
+                    ),
+                  ),
+                  SizedBox(
+                    height: 32,
+                    width: 32,
+                    child: IconButton(
+                      padding: EdgeInsets.all(2),
+                      tooltip: 'Limpar data inicial',
+                      icon: Icon(Icons.close),
+                      onPressed: () => alteraFiltro('dtInicio', ''),
+                      color: Colors.red,
+                    ),
+                  ),
+                ],
               ),
-              DateField(
-                callback: (DateTime valor) => alteraFiltro(
-                  'dtHistoricoFim',
-                  Moment.fromDate(valor).format('yyyy-MM-dd'),
-                ),
-                label: 'Data Final',
-                selectedDate: filtros['dtHistoricoFim'] != null
-                    ? DateTime.parse(filtros['dtHistoricoFim'])
-                    : null,
+              Row(
+                children: [
+                  Expanded(
+                    child: DateField(
+                      callback: (DateTime valor) => alteraFiltro(
+                        'dtFim',
+                        Moment.fromDate(valor).format('yyyy-MM-dd'),
+                      ),
+                      label: 'Data Final',
+                      selectedDate: filtros['dtFim'] != null
+                          ? DateTime.parse(filtros['dtFim'])
+                          : null,
+                    ),
+                  ),
+                  SizedBox(
+                    height: 32,
+                    width: 32,
+                    child: IconButton(
+                      padding: EdgeInsets.all(2),
+                      tooltip: 'Limpar data final',
+                      icon: Icon(Icons.close),
+                      onPressed: () => alteraFiltro('dtFim', ''),
+                      color: Colors.red,
+                    ),
+                  ),
+                ],
               ),
               DropdownButtonFormField<String>(
                 decoration: InputDecoration(labelText: 'Safra'),

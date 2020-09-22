@@ -1,10 +1,14 @@
+import 'dart:convert';
+
 import 'package:apontamento/base/base_inherited.dart';
+import 'package:apontamento/comun/modelo/empresa_model.dart';
 import 'package:apontamento/comun/modelo/estimativa_modelo.dart';
 import 'package:apontamento/comun/modelo/preferencia_model.dart';
 import 'package:apontamento/comun/modelo/upnivel3_model.dart';
 import 'package:apontamento/comun/repositorios/epnivel3_consulta_repository.dart';
 import 'package:apontamento/comun/repositorios/preferencia_repository.dart';
 import 'package:apontamento/comun/repositorios/repositorio_estimativa.dart';
+import 'package:apontamento/comun/repositorios/sequencia_repository.dart';
 import 'package:apontamento/comun/utilidades/navegacao.dart';
 import 'package:apontamento/paginas/apontamento_estimativa_form/apontamento_estimativa_pagina.dart';
 import 'package:apontamento/paginas/upnivel3/upnivel3_event.dart';
@@ -16,17 +20,19 @@ class UpNivel3Bloc extends Bloc<UpNivel3Event, UpNivel3State> {
   final UpNivel3ConsultaRepository upNivel3ConsultaRepository;
   final PreferenciaRepository preferenciaRepository;
   final RepositorioEstimativa estimativaRepository;
+  final SincronizacaoSequenciaRepository sequenciaRepository;
 
   UpNivel3Bloc({
     @required this.upNivel3ConsultaRepository,
     @required this.preferenciaRepository,
     @required this.estimativaRepository,
+    @required this.sequenciaRepository,
   }) : super(UpNivel3State());
 
   @override
   Stream<UpNivel3State> mapEventToState(UpNivel3Event evento) async* {
     if (evento is AlterarFiltroUpNivel3) {
-      final Map<String, String> filtros = Map.from(state.filtros);
+      final Map<String, dynamic> filtros = Map.from(state.filtros);
 
       if (evento.valor.isNotEmpty)
         filtros[evento.chave] = evento.valor;
@@ -42,15 +48,14 @@ class UpNivel3Bloc extends Bloc<UpNivel3Event, UpNivel3State> {
           selecionadas: [],
         );
 
-        final res =
-            await upNivel3ConsultaRepository.get(filtros: evento.filtros);
+        final res = await upNivel3ConsultaRepository.get(
+          filtros: _formataFiltros(evento.filtros),
+        );
 
         if (evento.salvaFiltros)
           await preferenciaRepository.salvar(
-            preferencia: PreferenciaModel(
-              idPreferencia: 'upnivel3',
-              valorPreferencia: evento.filtros,
-            ),
+            idPreferencia: 'upnivel3Filtros',
+            valorPreferencia: json.encode(evento.filtros),
           );
 
         yield state.juntar(
@@ -71,8 +76,8 @@ class UpNivel3Bloc extends Bloc<UpNivel3Event, UpNivel3State> {
       }
       yield state.juntar(selecionadas: selecionadas);
     } else if (evento is IniciarListaUpNivel3) {
-      final Map<String, String> filtros =
-          await preferenciaRepository.get(idPreferencia: 'upnivel3');
+      final Map<String, dynamic> filtros = json.decode(
+          await preferenciaRepository.get(idPreferencia: 'upnivel3Filtros'));
       final Map<String, List<String>> listaDropDown =
           await upNivel3ConsultaRepository.buscaDropDow();
 
@@ -81,35 +86,43 @@ class UpNivel3Bloc extends Bloc<UpNivel3Event, UpNivel3State> {
         listaDropDown: listaDropDown,
       );
     } else if (evento is ConfirmaSelecaoUpNivel3) {
-      final instancia = BaseInherited.of(
-        evento.context,
-      ).empresaAutenticada.cdInstManfro;
-      final List<EstimativaModelo> estimativas = List();
-      final cdFunc = BaseInherited.of(evento.context).usuarioAutenticada.cdFunc;
-      int noSeq = 1;
-      String mensagemInicial;
+      try {
+        final empresa = BaseInherited.of(
+          evento.context,
+        ).empresaAutenticada;
 
-      for (var item in state.selecionadas) {
-        final existeEstimativa = await estimativaRepository.get(filtros: {
-          'cdSafra': item.cdSafra,
-          'cdUpnivel1': item.cdUpnivel1,
-          'cdUpnivel2': item.cdUpnivel2,
-          'cdUpnivel3': item.cdUpnivel3,
-          'instancia': instancia,
-        }).then((value) => value.length > 0);
+        final Map<String, dynamic> dispositivo = json.decode(
+          await preferenciaRepository.get(idPreferencia: 'dispositivo'),
+        );
+        final sequencia =
+            await sequenciaRepository.buscarSequencia(empresa: empresa);
+        if (dispositivo == null) throw Exception('Dispositivo não cadastrado');
 
-        if (existeEstimativa) {
-          mensagemInicial =
-              'Já existe estimativa para alguns registros. Removendo estes da lista!';
-        } else {
-          estimativas.add(item.gerarEstimativa(
-            cdFunc: cdFunc,
-            // TIRAR O MOCK QUANDO POSSIVEL
-            noSeq: noSeq++,
-            noBoletim: 44547,
-            dispositivo: 1,
-            // TIRAR O MOCK QUANDO POSSIVEL
-          ));
+        final List<EstimativaModelo> estimativas = List();
+        final cdFunc =
+            BaseInherited.of(evento.context).usuarioAutenticada.cdFunc;
+        String mensagemInicial;
+
+        for (var item in state.selecionadas) {
+          final existeEstimativa = await estimativaRepository.get(filtros: {
+            'cdSafra': item.cdSafra,
+            'cdUpnivel1': item.cdUpnivel1,
+            'cdUpnivel2': item.cdUpnivel2,
+            'cdUpnivel3': item.cdUpnivel3,
+            'instancia': empresa.cdInstManfro,
+          }).then((value) => value.length > 0);
+
+          if (existeEstimativa) {
+            mensagemInicial =
+                'Já existe estimativa para alguns registros. Removendo estes da lista!';
+          } else {
+            estimativas.add(item.gerarEstimativa(
+              cdFunc: cdFunc,
+              noSeq: sequencia.sequencia + 1,
+              noBoletim: 10000 + sequencia.sequencia + 1,
+              dispositivo: dispositivo['idDispositivo'],
+            ));
+          }
         }
 
         navegar(
@@ -120,7 +133,37 @@ class UpNivel3Bloc extends Bloc<UpNivel3Event, UpNivel3State> {
             mensagemInicial: mensagemInicial,
           ),
         );
+      } catch (e) {
+        print(e);
+        yield state.juntar(mensagemErro: e.toString());
+      }
+    } else if (evento is CheckAllUpNivel3) {
+      print(evento.valor);
+      if (!evento.valor) {
+        yield state.juntar(selecionadas: []);
+      } else {
+        yield state.juntar(selecionadas: state.lista);
       }
     }
+  }
+
+  Map<String, dynamic> _formataFiltros(Map<String, dynamic> filtros) {
+    final Map<String, dynamic> filtrosFormatados = Map.from(filtros);
+    filtrosFormatados.removeWhere((chave, valor) => valor.isEmpty);
+
+    if (filtros['dtInicio'] != null || filtros['dtFim'] != null) {
+      final dataInicio = ">= date('${filtros['dtInicio']}') ";
+      final dataFinal = "<= date('${filtros['dtFim']}')";
+
+      filtrosFormatados['date(dtUltimoCorte)'] =
+          "${filtros['dtInicio'] != null ? dataInicio : ""}"
+          "${filtros['dtInicio'] != null && filtros['dtFim'] != null ? " AND date(dtUltimoCorte) " : ""} "
+          "${filtros['dtFim'] != null ? dataFinal : ""}";
+    }
+
+    filtrosFormatados.remove('dtInicio');
+    filtrosFormatados.remove('dtFim');
+
+    return filtrosFormatados;
   }
 }

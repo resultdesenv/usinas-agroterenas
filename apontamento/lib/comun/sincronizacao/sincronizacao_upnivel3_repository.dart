@@ -10,8 +10,8 @@ import 'package:apontamento/comun/modelo/usuario_model.dart';
 import 'package:apontamento/comun/sincronizacao/sincronizacao_base.dart';
 
 class SincronizacaoUpNivel3Repository implements SincronizacaoBase<Usuario> {
+  Dio dio;
   final Db db;
-  final Dio dio;
   final SincronizacaoHistoricoRepository sincronizacaoHistoricoRepository;
 
   SincronizacaoUpNivel3Repository(
@@ -19,14 +19,25 @@ class SincronizacaoUpNivel3Repository implements SincronizacaoBase<Usuario> {
       @required this.dio,
       @required this.sincronizacaoHistoricoRepository});
 
+  updateDio(Dio dio) {
+    this.dio = dio;
+  }
+
   Future<void> index(
     String token, {
     String cdInstManfro,
     String cdSafra,
   }) async {
+    final dataInicial = DateTime.now();
     await limpar();
     final upnivel3 = await buscar(token, cdInstManfro, cdSafra);
-    await salvar(upnivel3);
+    final dataFinal = DateTime.now();
+    // TODO: Salvar duracao após salvar registros
+    await salvar(upnivel3,
+        Duration(
+            milliseconds: dataFinal.millisecondsSinceEpoch -
+                dataInicial.millisecondsSinceEpoch)
+    );
   }
 
   Future<void> limpar() async {
@@ -51,11 +62,11 @@ class SincronizacaoUpNivel3Repository implements SincronizacaoBase<Usuario> {
         .toList();
   }
 
-  Future<void> salvar(List<UpNivel3Model> upnivels) async {
+  Future<void> salvar(List<UpNivel3Model> upnivels, Duration duracao) async {
     final dbInstancia = await db.get();
     for (final upnivel in upnivels) {
       await dbInstancia.insert('upnivel3', upnivel.toJson());
     }
-    await sincronizacaoHistoricoRepository.salvarDataAtualizacao('upnivel3');
+    await sincronizacaoHistoricoRepository.salvarDataAtualizacao('upnivel3', duracao, upnivels.length);
   }
 }

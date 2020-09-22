@@ -42,7 +42,7 @@ class UpNivel3ConsultaRepository {
       columns: colunasUpNivel3,
       where: filtros != null && filtros.keys.length > 0
           ? filtros.keys
-              .map((e) => !['(date(dtUltimoCorte)'].contains(e)
+              .map((e) => !['date(dtUltimoCorte)'].contains(e)
                   ? "$e = '${filtros[e]}'"
                   : '$e ${filtros[e]}')
               .join(' AND ')

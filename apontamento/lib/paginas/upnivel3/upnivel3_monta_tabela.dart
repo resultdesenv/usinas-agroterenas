@@ -8,54 +8,43 @@ class UpNivel3MontaTabela extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      scrollDirection: Axis.horizontal,
-      child: SizedBox(
-        width: 480,
-        child: Table(
-          columnWidths: {6: FractionColumnWidth(0.18)},
+    return Table(
+      children: [
+        TableRow(
           children: [
-            TableRow(
-              children: [
-                TableCell(
-                  child: Text('Safra', style: TextStyle(color: Colors.grey)),
-                ),
-                TableCell(
-                  child: Text('Up1', style: TextStyle(color: Colors.grey)),
-                ),
-                TableCell(
-                  child: Text('Up2', style: TextStyle(color: Colors.grey)),
-                ),
-                TableCell(
-                  child: Text('Up3', style: TextStyle(color: Colors.grey)),
-                ),
-                TableCell(
-                  child: Text('Area', style: TextStyle(color: Colors.grey)),
-                ),
-              ],
+            TableCell(
+              child: Text(
+                upnivel3.cdSafra.toString(),
+                style: TextStyle(fontSize: 10),
+              ),
             ),
-            TableRow(
-              children: [
-                TableCell(
-                  child: Text(upnivel3.cdSafra.toString()),
-                ),
-                TableCell(
-                  child: Text(upnivel3.cdUpnivel1.replaceAll(' ', '0')),
-                ),
-                TableCell(
-                  child: Text(upnivel3.cdUpnivel2.replaceAll(' ', '0')),
-                ),
-                TableCell(
-                  child: Text(upnivel3.cdUpnivel3.replaceAll(' ', '0')),
-                ),
-                TableCell(
-                  child: Text(upnivel3.qtAreaProd.toString()),
-                ),
-              ],
+            TableCell(
+              child: Text(
+                upnivel3.cdUpnivel1.replaceAll(' ', '0'),
+                style: TextStyle(fontSize: 10),
+              ),
+            ),
+            TableCell(
+              child: Text(
+                upnivel3.cdUpnivel2.replaceAll(' ', '0'),
+                style: TextStyle(fontSize: 10),
+              ),
+            ),
+            TableCell(
+              child: Text(
+                upnivel3.cdUpnivel3.replaceAll(' ', '0'),
+                style: TextStyle(fontSize: 10),
+              ),
+            ),
+            TableCell(
+              child: Text(
+                upnivel3.qtAreaProd.toString(),
+                style: TextStyle(fontSize: 10),
+              ),
             ),
           ],
         ),
-      ),
+      ],
     );
   }
 }

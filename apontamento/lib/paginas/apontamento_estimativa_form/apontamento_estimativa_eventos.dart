@@ -17,7 +17,11 @@ class EditarApontamento extends ApontamentoEstimativaEvento {
   EditarApontamento({@required this.apontamento, @required this.indice});
 }
 
-class ApagarApontamentos extends ApontamentoEstimativaEvento {}
+class ApagarApontamentos extends ApontamentoEstimativaEvento {
+  final BuildContext context;
+
+  ApagarApontamentos({@required this.context});
+}
 
 class SalvarApontamentos extends ApontamentoEstimativaEvento {
   final BuildContext context;

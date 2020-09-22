@@ -13,15 +13,21 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
   @override
   Stream<LoginState> mapEventToState(LoginEvent event) async* {
     if (event is Started) {
+      yield LoginState();
       PackageInfo packageInfo = await PackageInfo.fromPlatform();
 
-      final usuarios = await loginRepository.buscarUsuarios();
+      final usuarios = await loginRepository.buscarUsuariosSalvos();
 
-      yield state.juntar(
-        versao: packageInfo.version,
-        usuariosSalvos: usuarios,
-        pronto: true,
-      );
+      final temUsuario = await loginRepository.temUsuario();
+
+      if (!temUsuario)
+        yield state.juntar(irParaConfiguracao: true);
+      else
+        yield state.juntar(
+          versao: packageInfo.version,
+          usuariosSalvos: usuarios,
+          pronto: true,
+        );
     }
 
     if (event is BuscarEmpresas) {
@@ -42,12 +48,6 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
             usuario: event.usuario, senha: event.senha);
         final empresa = await loginRepository
             .buscarEmpresaPorId(int.tryParse(event.cmEmpresa));
-
-        print('event ${event.cmEmpresa.toString()}');
-
-        print('event ${empresa.cdEmpresa.toString()}');
-
-
 
         if (event.salvar) await loginRepository.salvarUsuario(usuario, empresa);
         yield state.juntar(

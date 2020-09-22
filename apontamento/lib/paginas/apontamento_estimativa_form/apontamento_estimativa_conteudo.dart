@@ -52,66 +52,44 @@ class ApontamentoEstimativaConteudo extends StatelessWidget {
                   ),
                 ],
               ),
-              body: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  Padding(
-                    padding: EdgeInsets.all(8),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              body: estado.apontamentos.length > 0
+                  ? Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
-                        Padding(
-                          padding: EdgeInsets.only(right: 16),
-                          child: Container(
-                            constraints: BoxConstraints(maxWidth: 80),
-                            child: TextField(
-                              decoration: InputDecoration(labelText: 'Boletim'),
-                              enabled: false,
-                            ),
-                          ),
-                        ),
                         Expanded(
-                          child: TextField(
-                            decoration:
-                                InputDecoration(labelText: 'Qtd de Sequencia'),
-                            enabled: false,
-                          ),
-                        ),
-                        Padding(
-                          padding: EdgeInsets.only(left: 16),
-                          child: IconButton(
-                            color: Colors.red,
-                            icon: Icon(Icons.delete),
-                            onPressed: () => _mostrarModal(context),
-                            tooltip: 'Apagar todos os registros',
+                          child: ListView.builder(
+                            padding: EdgeInsets.only(top: 8, left: 8, right: 8),
+                            itemCount: estado.apontamentos.length,
+                            itemBuilder: (context, indice) {
+                              final apontamento = estado.apontamentos[indice];
+                              return ApontamentoFormulario(
+                                apontamento: apontamento,
+                                onChanged: (apontamento) {
+                                  context
+                                      .bloc<ApontamentoEstimativaBloc>()
+                                      .add(EditarApontamento(
+                                        apontamento: apontamento,
+                                        indice: indice,
+                                      ));
+                                },
+                              );
+                            },
                           ),
                         ),
                       ],
+                    )
+                  : Center(
+                      child: Text('Nenhum apontamento para ser preenchido!'),
                     ),
-                  ),
-                  Expanded(
-                    child: ListView.builder(
-                      padding: EdgeInsets.only(top: 8, left: 8, right: 8),
-                      itemCount: estado.apontamentos.length,
-                      itemBuilder: (context, indice) {
-                        final apontamento = estado.apontamentos[indice];
-                        return ApontamentoFormulario(
-                          apontamento: apontamento,
-                          onChanged: (apontamento) {
-                            context
-                                .bloc<ApontamentoEstimativaBloc>()
-                                .add(EditarApontamento(
-                                  apontamento: apontamento,
-                                  indice: indice,
-                                ));
-                          },
-                        );
-                      },
-                    ),
-                  ),
-                ],
-              ),
               backgroundColor: Color(0xFFFAFAFA),
+              floatingActionButton: !estado.criacao
+                  ? FloatingActionButton(
+                      backgroundColor: Colors.red,
+                      child: Icon(Icons.delete),
+                      onPressed: () => _mostrarModal(context),
+                      tooltip: 'Apagar todos os registros',
+                    )
+                  : Container(),
             );
           },
         ),
@@ -124,8 +102,7 @@ class ApontamentoEstimativaConteudo extends StatelessWidget {
       context: context,
       builder: (_) => AlertDialog(
         title: Text('Você tem certeza?'),
-        content: Text(
-            'Deseja excluir TODAS as sequencias selecionadas desse boletim?'),
+        content: Text('Deseja excluir TODAS as estimativas selecionadas?'),
         actions: [
           FlatButton(
             child: Text('Voltar'),
@@ -138,7 +115,7 @@ class ApontamentoEstimativaConteudo extends StatelessWidget {
             ),
             onPressed: () => context
                 .bloc<ApontamentoEstimativaBloc>()
-                .add(ApagarApontamentos()),
+                .add(ApagarApontamentos(context: context)),
           ),
         ],
       ),

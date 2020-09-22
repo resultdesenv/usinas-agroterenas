@@ -5,7 +5,7 @@ class UpNivel3State extends Equatable {
   final bool carregando;
   final List<UpNivel3Model> lista;
   final List<UpNivel3Model> selecionadas;
-  final Map<String, String> filtros;
+  final Map<String, dynamic> filtros;
   final String mensagemErro;
   final Map<String, List<String>> listaDropDown;
 
@@ -22,7 +22,7 @@ class UpNivel3State extends Equatable {
     bool carregando,
     List<UpNivel3Model> lista,
     List<UpNivel3Model> selecionadas,
-    Map<String, String> filtros,
+    Map<String, dynamic> filtros,
     String mensagemErro,
     Map<String, List<String>> listaDropDown,
   }) {

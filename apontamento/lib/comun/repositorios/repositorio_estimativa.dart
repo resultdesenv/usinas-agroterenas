@@ -1,8 +1,8 @@
 import 'package:apontamento/comun/db/db.dart';
 import 'package:apontamento/comun/modelo/estimativa_modelo.dart';
-import 'package:apontamento/comun/repositorios/repositorio_base.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
+import 'package:sqflite/sqflite.dart';
 
 final colunasEstimativa = [
   'cdEstagio',
@@ -34,11 +34,10 @@ final colunasEstimativa = [
   'dtStatus',
 ];
 
-class RepositorioEstimativa implements RepositorioBase<EstimativaModelo> {
+class RepositorioEstimativa {
   final Db db;
-  final Dio dio;
 
-  RepositorioEstimativa({@required this.db, @required this.dio});
+  RepositorioEstimativa({@required this.db});
 
   Future<List<EstimativaModelo>> get({
     Map<String, dynamic> filtros,
@@ -49,7 +48,7 @@ class RepositorioEstimativa implements RepositorioBase<EstimativaModelo> {
       columns: colunasEstimativa,
       where: filtros != null && filtros.keys.length > 0
           ? filtros.keys
-              .map((e) => !['status', '(date(dtHistorico)'].contains(e)
+              .map((e) => !['status', 'date(dtHistorico)'].contains(e)
                   ? "$e = '${filtros[e]}'"
                   : '$e ${filtros[e]}')
               .join(' AND ')
@@ -94,39 +93,36 @@ class RepositorioEstimativa implements RepositorioBase<EstimativaModelo> {
     };
   }
 
-  Future<bool> sincronizarSaida() async {
-    final banco = await db.get();
-    final estimativas =
-        await banco.query('apont_estimativa', columns: colunasEstimativa);
-    await dio.post('/estimativa/insert', data: estimativas);
-    return true;
-  }
-
   Future<bool> salvar(List<EstimativaModelo> estimativas) async {
     final banco = await db.get();
 
-    await banco.delete('apont_estimativa');
-
     for (final item in estimativas) {
-      await banco.insert('apont_estimativa', item.paraMap());
+      await banco.insert(
+        'apont_estimativa',
+        item.paraMap(),
+        conflictAlgorithm: ConflictAlgorithm.replace,
+      );
     }
     return true;
   }
 
   Future<bool> atualizarItens(List<EstimativaModelo> estimativas) async {
     final banco = await db.get();
-
+    print('update');
     for (final item in estimativas) {
       await banco.update(
         'apont_estimativa',
         item.paraMap(),
         where:
-            'dispositivo = ? AND instancia = ? AND noBoletim = ? AND noSeq = ?',
+            'dispositivo = ? AND instancia = ? AND noBoletim = ? AND noSeq = ? AND cdUpnivel1 = ? AND cdUpnivel2 = ? AND cdUpnivel3 = ?',
         whereArgs: [
           item.dispositivo,
           item.instancia,
           item.noBoletim,
           item.noSeq,
+          item.cdUpnivel1,
+          item.cdUpnivel2,
+          item.cdUpnivel3,
         ],
       );
     }
@@ -140,12 +136,15 @@ class RepositorioEstimativa implements RepositorioBase<EstimativaModelo> {
       await banco.delete(
         'apont_estimativa',
         where:
-            'dispositivo = ? AND instancia = ? AND noBoletim = ? AND noSeq = ?',
+            'dispositivo = ? AND instancia = ? AND noBoletim = ? AND noSeq = ? AND cdUpnivel1 = ? AND cdUpnivel2 = ? AND cdUpnivel3 = ?',
         whereArgs: [
           item.dispositivo,
           item.instancia,
           item.noBoletim,
           item.noSeq,
+          item.cdUpnivel1,
+          item.cdUpnivel2,
+          item.cdUpnivel3,
         ],
       );
     }

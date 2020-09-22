@@ -1,6 +1,8 @@
 import 'package:apontamento/base/base_bloc.dart';
 import 'package:apontamento/base/base_inherited.dart';
 import 'package:apontamento/comun/db/db.dart';
+import 'package:apontamento/comun/repositorios/preferencia_repository.dart';
+import 'package:apontamento/comun/repositorios/sequencia_repository.dart';
 import 'package:apontamento/comun/sincronizacao/sincronizacao_autenticacao.dart';
 import 'package:apontamento/comun/sincronizacao/sincronizacao_completa_repository.dart';
 import 'package:apontamento/comun/sincronizacao/sincronizacao_empresa_repository.dart';
@@ -25,6 +27,14 @@ class ConfiguracaoPage extends StatelessWidget {
         appBar: AppBar(title: Text('Configuração')),
         body: BlocProvider<ConfiguracaoBloc>(
           create: (context) => ConfiguracaoBloc(
+              preferenciaRepository: PreferenciaRepository(db: Db()),
+              sincronizacaoSequenciaRepository:
+                  SincronizacaoSequenciaRepository(
+                      db: Db(),
+                      dio: dio,
+                      preferenciaRepository: PreferenciaRepository(db: Db()),
+                      sincronizacaoHistoricoRepository:
+                          SincronizacaoHistoricoRepository(db: Db())),
               baseBloc: baseBloc,
               configuracaoRepository: ConfiguracaoRepository(),
               sincronizacaoAutenticacao: SincronizacaoAutenticacao(dio: dio),
@@ -42,6 +52,12 @@ class ConfiguracaoPage extends StatelessWidget {
                         SincronizacaoHistoricoRepository(db: Db())),
                 SincronizacaoUsuarioEmpresaRepository(
                     dio: dio,
+                    db: Db(),
+                    sincronizacaoHistoricoRepository:
+                        SincronizacaoHistoricoRepository(db: Db())),
+                SincronizacaoSequenciaRepository(
+                    dio: dio,
+                    preferenciaRepository: PreferenciaRepository(db: Db()),
                     db: Db(),
                     sincronizacaoHistoricoRepository:
                         SincronizacaoHistoricoRepository(db: Db())),

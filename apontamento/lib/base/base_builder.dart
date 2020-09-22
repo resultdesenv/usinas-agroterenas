@@ -16,7 +16,7 @@ class BaseBuilder extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<BaseBloc, BaseState>(builder: (context, state) {
-      if (!state.pronto) return Center(child: CircularProgressIndicator());
+      if (!state.pronto) return Center(child: CircularProgressIndicator());;
       return BaseInherited(
           url: state.url,
           empresaAutenticada: state.empresaAutenticada,

@@ -1,68 +1,35 @@
-import 'dart:convert';
-
 import 'package:apontamento/comun/db/db.dart';
-import 'package:apontamento/comun/modelo/preferencia_model.dart';
 import 'package:flutter/material.dart';
-
-final colunaspreferencia = [
-  'idPreferencia',
-  'valorPreferencia',
-];
+import 'package:sqflite/sqflite.dart';
 
 class PreferenciaRepository {
   final Db db;
 
   PreferenciaRepository({@required this.db});
 
-  Future<Map<String, String>> get({@required String idPreferencia}) async {
+  Future<String> get({@required String idPreferencia}) async {
     final banco = await db.get();
-
     final preferencia = await banco.query(
       'preferencia',
       where: 'idPreferencia = ?',
       whereArgs: [idPreferencia],
-      columns: colunaspreferencia,
       limit: 1,
     );
-
-    Map<String, String> filtro;
-
-    if (preferencia.length > 0) {
-      filtro = Map();
-      final Map<String, dynamic> map =
-          json.decode(preferencia[0]['valorPreferencia']);
-      map.keys.forEach((key) {
-        filtro[key] = map[key];
-      });
-    }
-
-    return filtro;
+    if (preferencia.length == 0) return null;
+    return preferencia[0]['valorPreferencia'];
   }
 
-  Future<bool> salvar({
-    @required PreferenciaModel preferencia,
+  Future<void> salvar({
+    @required String idPreferencia,
+    @required dynamic valorPreferencia,
   }) async {
     final banco = await db.get();
-    final existepreferencia =
-        await get(idPreferencia: preferencia.idPreferencia);
-
-    if (existepreferencia == null) {
-      await banco.insert('preferencia', {
-        ...preferencia.paraMap(),
-        'valorPreferencia': preferencia.preferenciaParaString,
-      });
-    } else {
-      await banco.update(
+    await banco.insert(
         'preferencia',
         {
-          ...preferencia.paraMap(),
-          'valorPreferencia': preferencia.preferenciaParaString
+          'idPreferencia': idPreferencia,
+          'valorPreferencia': valorPreferencia,
         },
-        where: 'idPreferencia = ?',
-        whereArgs: [preferencia.idPreferencia],
-      );
-    }
-
-    return true;
+        conflictAlgorithm: ConflictAlgorithm.replace);
   }
 }

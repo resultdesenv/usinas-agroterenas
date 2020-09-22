@@ -1,3 +1,5 @@
+import 'package:apontamento/comun/db/db.dart';
+import 'package:apontamento/comun/repositorios/preferencia_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -15,7 +17,7 @@ class BaseProvider extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider<BaseBloc>(
         create: (context) =>
-            BaseBloc()..add(IniciarBase()),
+            BaseBloc(preferenciaRepository: PreferenciaRepository(db: Db()))..add(IniciarBase()),
         child: BaseBuilder(title: title, home: home));
   }
 }

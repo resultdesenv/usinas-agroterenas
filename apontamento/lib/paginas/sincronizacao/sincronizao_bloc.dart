@@ -29,9 +29,8 @@ class SincronizacaoBloc extends Bloc<SincronizacaoEvent, SincronizacaoState> {
             .where((e) => e.tabela == itemSincronizacao.tabela)
             .toList();
 
-        final dataAtualizacao =
-            historico.length == 0 ? null : historico[0].dataAtualizacao;
-        return itemSincronizacao.copyWith(dataAtualizacao: dataAtualizacao);
+        final dataAtualizacao = historico.length == 0 ? 'Sem historico de atualização' : historico[0].toText();
+        return itemSincronizacao.copyWith(atualizacao: dataAtualizacao);
       }).toList();
 
       print(itensSincronizacao[itensSincronizacao.length - 1].upnivel3);
@@ -60,19 +59,21 @@ class SincronizacaoBloc extends Bloc<SincronizacaoEvent, SincronizacaoState> {
         final historicoAtualizacao =
             await sincronizacaoHistoricoRepository.buscarHistorico();
 
-        final novaDataAtualizacao = historicoAtualizacao
+        final novaAtualizacao = historicoAtualizacao
             .firstWhere((item) =>
                 item.tabela == event.historicoItemAtualizacaoModel.tabela)
-            .dataAtualizacao;
+            .toText();
 
         final novaListaSemLoading = novaListaComLoading.map((item) {
           if (item.tabela == event.historicoItemAtualizacaoModel.tabela)
             return item.copyWith(
-                atualizando: false, dataAtualizacao: novaDataAtualizacao);
+                atualizando: false, atualizacao: novaAtualizacao);
           return item;
         }).toList();
 
-        yield state.copyWith(itensSincronizacao: novaListaSemLoading);
+        final safras = await safraRepository.buscarSafras();
+
+        yield state.copyWith(itensSincronizacao: novaListaSemLoading, safras: safras);
       } catch (e) {
         yield state.copyWith(
             itensSincronizacao: state.itensSincronizacao

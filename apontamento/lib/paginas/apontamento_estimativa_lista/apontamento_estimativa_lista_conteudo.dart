@@ -48,27 +48,115 @@ class ApontamentoEstimativaListaConteudo extends StatelessWidget {
             ],
           ),
           body: estado.estimativas.length > 0
-              ? ListView.builder(
-                  itemCount: estado.estimativas.length,
-                  itemBuilder: (context, indice) =>
-                      ApontamentoEstimativaListaTile(
-                        estimativa: estado.estimativas[indice],
-                        selected: estado.estimativasSelecionadas
-                            .contains(estado.estimativas[indice]),
-                        onSelectionChange: (__) {
-                          context
-                              .bloc<ApontamentoEstimativaListaBloc>()
-                              .add(MudaSelecaoEstimativa(
-                                estimativa: estado.estimativas[indice],
-                              ));
-                        },
-                      ))
+              ? Column(
+                  children: [
+                    Row(
+                      children: [
+                        Padding(
+                          padding: EdgeInsets.only(right: 16, left: 8),
+                          child: Checkbox(
+                            value: estado.estimativas.length ==
+                                estado.estimativasSelecionadas.length,
+                            onChanged: (valor) => context
+                                .bloc<ApontamentoEstimativaListaBloc>()
+                                .add(CheckAllEstimativaLista(valor: valor)),
+                          ),
+                        ),
+                        Expanded(
+                          child: Padding(
+                            padding: EdgeInsets.only(right: 16),
+                            child: Table(
+                              children: [
+                                TableRow(
+                                  children: [
+                                    TableCell(
+                                      child: Text(
+                                        'Boletim',
+                                        style: TextStyle(
+                                          fontSize: 10,
+                                          fontWeight: FontWeight.w500,
+                                        ),
+                                      ),
+                                    ),
+                                    TableCell(
+                                      child: Text(
+                                        'Seq',
+                                        style: TextStyle(
+                                          fontSize: 10,
+                                          fontWeight: FontWeight.w500,
+                                        ),
+                                      ),
+                                    ),
+                                    TableCell(
+                                      child: Text(
+                                        'Safra',
+                                        style: TextStyle(
+                                          fontSize: 10,
+                                          fontWeight: FontWeight.w500,
+                                        ),
+                                      ),
+                                    ),
+                                    TableCell(
+                                      child: Text(
+                                        'Up1',
+                                        style: TextStyle(
+                                          fontSize: 10,
+                                          fontWeight: FontWeight.w500,
+                                        ),
+                                      ),
+                                    ),
+                                    TableCell(
+                                      child: Text(
+                                        'Up2',
+                                        style: TextStyle(
+                                          fontSize: 10,
+                                          fontWeight: FontWeight.w500,
+                                        ),
+                                      ),
+                                    ),
+                                    TableCell(
+                                      child: Text(
+                                        'Up3',
+                                        style: TextStyle(
+                                          fontSize: 10,
+                                          fontWeight: FontWeight.w500,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    Expanded(
+                      child: ListView.builder(
+                        itemCount: estado.estimativas.length,
+                        itemBuilder: (context, indice) =>
+                            ApontamentoEstimativaListaTile(
+                          estimativa: estado.estimativas[indice],
+                          selected: estado.estimativasSelecionadas
+                              .contains(estado.estimativas[indice]),
+                          onSelectionChange: (__) {
+                            context
+                                .bloc<ApontamentoEstimativaListaBloc>()
+                                .add(MudaSelecaoEstimativa(
+                                  estimativa: estado.estimativas[indice],
+                                ));
+                          },
+                        ),
+                      ),
+                    ),
+                  ],
+                )
               : Center(child: Text('Nenhum registro encontrado!')),
           floatingActionButton: Stack(
             overflow: Overflow.visible,
             children: <Widget>[
               AnimatedPositioned(
-                curve: Curves.bounceInOut,
+                curve: Curves.easeInOut,
                 duration: Duration(milliseconds: 380),
                 bottom: estado.estimativasSelecionadas.length > 0 ? 74 : -84,
                 right: 5,
@@ -81,12 +169,12 @@ class ApontamentoEstimativaListaConteudo extends StatelessWidget {
                 ),
               ),
               AnimatedPositioned(
-                curve: Curves.bounceInOut,
-                duration: Duration(microseconds: 380),
+                curve: Curves.easeInOut,
+                duration: Duration(milliseconds: 380),
                 bottom: estado.estimativasSelecionadas.length > 0 ? 0 : -84,
                 right: 0,
                 child: AnimatedContainer(
-                  duration: Duration(microseconds: 380),
+                  duration: Duration(milliseconds: 380),
                   height: estado.estimativasSelecionadas.length > 0 ? 64 : null,
                   width: estado.estimativasSelecionadas.length > 0 ? 64 : null,
                   child: FloatingActionButton(
@@ -120,7 +208,7 @@ class ApontamentoEstimativaListaConteudo extends StatelessWidget {
             filtrar: (valores) {
               context
                   .bloc<ApontamentoEstimativaListaBloc>()
-                  .add(CarregarListas(filtros: _formataFiltros(valores)));
+                  .add(CarregarListas(filtros: valores));
             },
           ),
         );
@@ -156,17 +244,23 @@ class ApontamentoEstimativaListaConteudo extends StatelessWidget {
     );
   }
 
-  Map<String, String> _formataFiltros(Map<String, String> valores) {
-    final Map<String, String> filtrosFormatados = Map.from(valores);
+  Map<String, dynamic> _formataFiltros(Map<String, dynamic> valores) {
+    final Map<String, dynamic> filtrosFormatados = Map.from(valores);
     filtrosFormatados.removeWhere((chave, valor) => valor.isEmpty);
 
-    if (valores['dtHistoricoInicio'] != null &&
-        valores['dtHistoricoFim'] != null) {
-      filtrosFormatados.remove('dtHistoricoInicio');
-      filtrosFormatados.remove('dtHistoricoFim');
-      filtrosFormatados['(date(dtHistorico)'] =
-          "BETWEEN date('${valores['dtHistoricoInicio']}') AND date('${valores['dtHistoricoFim']}'))";
+    if (valores['dtInicio'] != null && valores['dtFim'] != null) {
+      final dataInicio = ">= date('${valores['dtInicio']}') ";
+      final dataFinal = "<= date('${valores['dtFim']}')";
+
+      filtrosFormatados['date(dtHistorico)'] =
+          "${valores['dtInicio'] != null ? dataInicio : " "}"
+          "${valores['dtInicio'] != null && valores['dtFim'] != null ? " AND date(dtUltimoCorte) " : ""} "
+          "${valores['dtFim'] != null ? dataFinal : ""}";
     }
+
+    filtrosFormatados.remove('dtInicio');
+    filtrosFormatados.remove('dtFim');
+
     if (valores['status'] != null && valores['status'].isNotEmpty)
       filtrosFormatados['status'] = 'IN ${valores['status']}';
 

@@ -23,9 +23,9 @@ class UpNivel3Tile extends StatelessWidget {
       leading: selecaoMultipla
           ? Checkbox(value: selected, onChanged: onSelectionChange)
           : null,
-      title: UpNivel3MontaTabela(
-        upnivel3: upnivel3,
-      ),
+      title: UpNivel3MontaTabela(upnivel3: upnivel3),
+      tilePadding: EdgeInsets.only(left: 8, right: 0),
+      trailing: Container(width: 1, height: 1),
       childrenPadding: EdgeInsets.all(16),
       children: [
         Column(

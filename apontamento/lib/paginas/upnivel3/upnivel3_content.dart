@@ -9,9 +9,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 class UpNivel3Content extends StatelessWidget {
   final bool selecaoMultipla;
-  final _scaffoldKey = GlobalKey<ScaffoldState>();
+  final scaffoldKey;
 
-  UpNivel3Content({@required this.selecaoMultipla});
+  UpNivel3Content({@required this.selecaoMultipla, @required this.scaffoldKey});
 
   @override
   Widget build(BuildContext context) {
@@ -30,11 +30,8 @@ class UpNivel3Content extends StatelessWidget {
           anterior.mensagemErro != atual.mensagemErro,
       child: BlocBuilder<UpNivel3Bloc, UpNivel3State>(
         builder: (context, estado) {
-          if (estado.carregando)
-            return Center(child: CircularProgressIndicator());
-
           return Scaffold(
-            key: _scaffoldKey,
+            key: scaffoldKey,
             appBar: AppBar(
               title: Text(
                   BaseInherited.of(context).empresaAutenticada.cdInstManfro),
@@ -42,34 +39,113 @@ class UpNivel3Content extends StatelessWidget {
                 IconButton(
                   icon: Icon(Icons.filter_list),
                   onPressed: () {
-                    _scaffoldKey.currentState.openEndDrawer();
+                    scaffoldKey.currentState.openEndDrawer();
                   },
                 ),
               ],
             ),
-            body: estado.lista.length > 0
-                ? ListView.builder(
-                    itemCount: estado.lista.length,
-                    itemBuilder: (context, indice) => UpNivel3Tile(
-                      selecaoMultipla: selecaoMultipla,
-                      upnivel3: estado.lista[indice],
-                      selected:
-                          estado.selecionadas.contains(estado.lista[indice]),
-                      onSelectionChange: (__) {
-                        context.bloc<UpNivel3Bloc>().add(MudaSelecaoUpNivel3(
-                            upnivel3: estado.lista[indice]));
-                      },
-                    ),
-                  )
-                : Center(
-                    child: Text('Nenhum registro encontrado!'),
-                  ),
+            body: estado.carregando
+                ? Center(child: CircularProgressIndicator())
+                : estado.lista.length > 0
+                    ? Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Row(
+                            children: [
+                              Padding(
+                                padding: EdgeInsets.only(right: 16, left: 8),
+                                child: Checkbox(
+                                  value: estado.selecionadas.length ==
+                                      estado.lista.length,
+                                  onChanged: (valor) => context
+                                      .bloc<UpNivel3Bloc>()
+                                      .add(CheckAllUpNivel3(valor: valor)),
+                                ),
+                              ),
+                              Expanded(
+                                child: Padding(
+                                  padding: EdgeInsets.only(right: 24),
+                                  child: Table(
+                                    children: [
+                                      TableRow(
+                                        children: [
+                                          TableCell(
+                                            child: Text(
+                                              'Safra',
+                                              style: TextStyle(
+                                                  fontSize: 10,
+                                                  fontWeight: FontWeight.w500),
+                                            ),
+                                          ),
+                                          TableCell(
+                                            child: Text(
+                                              'Up1',
+                                              style: TextStyle(
+                                                  fontSize: 10,
+                                                  fontWeight: FontWeight.w500),
+                                            ),
+                                          ),
+                                          TableCell(
+                                            child: Text(
+                                              'Up2',
+                                              style: TextStyle(
+                                                  fontSize: 10,
+                                                  fontWeight: FontWeight.w500),
+                                            ),
+                                          ),
+                                          TableCell(
+                                            child: Text(
+                                              'Up3',
+                                              style: TextStyle(
+                                                  fontSize: 10,
+                                                  fontWeight: FontWeight.w500),
+                                            ),
+                                          ),
+                                          TableCell(
+                                            child: Text(
+                                              'Area',
+                                              style: TextStyle(
+                                                  fontSize: 10,
+                                                  fontWeight: FontWeight.w500),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                          Expanded(
+                            child: ListView.builder(
+                              itemCount: estado.lista.length,
+                              itemBuilder: (context, indice) => UpNivel3Tile(
+                                selecaoMultipla: selecaoMultipla,
+                                upnivel3: estado.lista[indice],
+                                selected: estado.selecionadas
+                                    .contains(estado.lista[indice]),
+                                onSelectionChange: (__) {
+                                  context
+                                      .bloc<UpNivel3Bloc>()
+                                      .add(MudaSelecaoUpNivel3(
+                                        upnivel3: estado.lista[indice],
+                                      ));
+                                },
+                              ),
+                            ),
+                          ),
+                        ],
+                      )
+                    : Center(
+                        child: Text('Nenhum registro encontrado!'),
+                      ),
             floatingActionButton: Stack(
               overflow: Overflow.visible,
               children: [
                 AnimatedPositioned(
-                  curve: Curves.bounceInOut,
-                  duration: Duration(milliseconds: 600),
+                  curve: Curves.easeInOut,
+                  duration: Duration(milliseconds: 380),
                   bottom: estado.selecionadas.length == 0 ? -84 : 0,
                   right: 0,
                   child: FloatingActionButton(
@@ -95,27 +171,12 @@ class UpNivel3Content extends StatelessWidget {
               filtrar: (filtros) {
                 context
                     .bloc<UpNivel3Bloc>()
-                    .add(BuscaListaUpNivel3(filtros: _formataFiltros(filtros)));
+                    .add(BuscaListaUpNivel3(filtros: filtros));
               },
             ),
           );
         },
       ),
     );
-  }
-
-  Map<String, String> _formataFiltros(Map<String, String> filtros) {
-    final Map<String, String> filtrosFormatados = Map.from(filtros);
-    filtrosFormatados.removeWhere((chave, valor) => valor.isEmpty);
-
-    if (filtros['dtHistoricoInicio'] != null &&
-        filtros['dtHistoricoFim'] != null) {
-      filtrosFormatados.remove('dtHistoricoInicio');
-      filtrosFormatados.remove('dtHistoricoFim');
-      filtrosFormatados['(date(dtUltimoCorte)'] =
-          "BETWEEN date('${filtros['dtHistoricoInicio']}') AND date('${filtros['dtHistoricoFim']}'))";
-    }
-
-    return filtrosFormatados;
   }
 }

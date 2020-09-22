@@ -2,9 +2,13 @@ import 'package:dio/dio.dart';
 import 'package:meta/meta.dart';
 
 class SincronizacaoAutenticacao {
-  final Dio dio;
+  Dio dio;
 
   SincronizacaoAutenticacao({@required this.dio});
+
+  updateDio(Dio dio) {
+    this.dio = dio;
+  }
 
   Future<String> index() async {
     final res = await this.dio.post('/agt-api-pims/autenticacao', data: {

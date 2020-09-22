@@ -1,4 +1,9 @@
+import 'dart:convert';
 import 'dart:io';
+import 'package:apontamento/comun/modelo/dispositivo_model.dart';
+import 'package:apontamento/comun/repositorios/preferencia_repository.dart';
+import 'package:apontamento/comun/repositorios/sequencia_repository.dart';
+import 'package:dio/dio.dart';
 import 'package:path/path.dart';
 import 'package:apontamento/base/base_bloc.dart';
 import 'package:apontamento/base/base_event.dart';
@@ -8,8 +13,8 @@ import 'package:bloc/bloc.dart';
 import 'package:flutter_email_sender/flutter_email_sender.dart';
 import 'package:meta/meta.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sqflite/sqflite.dart';
+import 'package:imei_plugin/imei_plugin.dart';
 
 import '../env.dart';
 import 'configuracao.dart';
@@ -20,22 +25,42 @@ class ConfiguracaoBloc extends Bloc<ConfiguracaoEvent, ConfiguracaoState> {
   final BaseBloc baseBloc;
   final ConfiguracaoRepository configuracaoRepository;
   final SincronizacaoCompletaRepository sincronizacaoCompletaRepository;
+  final SincronizacaoSequenciaRepository sincronizacaoSequenciaRepository;
   final SincronizacaoAutenticacao sincronizacaoAutenticacao;
+  final PreferenciaRepository preferenciaRepository;
 
   ConfiguracaoBloc({
     @required this.baseBloc,
     @required this.configuracaoRepository,
     @required this.sincronizacaoCompletaRepository,
     @required this.sincronizacaoAutenticacao,
+    @required this.sincronizacaoSequenciaRepository,
+    @required this.preferenciaRepository,
   }) : super(ConfiguracaoState());
 
   @override
   Stream<ConfiguracaoState> mapEventToState(ConfiguracaoEvent event) async* {
     if (event is Iniciar) {
-      final prefs = await SharedPreferences.getInstance();
-      String chave = prefs.getString('chave');
-      String url = prefs.getString('url');
-      yield ConfiguracaoState(chave: chave, url: url, carregando: false);
+      String chave = await preferenciaRepository.get(idPreferencia: 'chave');
+      String url = await preferenciaRepository.get(idPreferencia: 'url');
+      String dispositivoTexto =
+          await preferenciaRepository.get(idPreferencia: 'dispositivo');
+
+      DispositivoModel dispositivoModel;
+      if (dispositivoTexto != null)
+        dispositivoModel =
+            DispositivoModel.fromJson(jsonDecode(dispositivoTexto));
+
+      final sequencias =
+          await sincronizacaoSequenciaRepository.buscarListaSequenciaDb();
+
+      yield ConfiguracaoState(
+        chave: chave,
+        url: url,
+        carregando: false,
+        dispositivo: dispositivoModel,
+        sequencias: sequencias,
+      );
     }
 
     if (event is AtualizarConfiguracao) {
@@ -44,36 +69,43 @@ class ConfiguracaoBloc extends Bloc<ConfiguracaoEvent, ConfiguracaoState> {
         final ConfiguracaoModel configuracao =
             await configuracaoRepository.buscarConfiguracoes(event.chave);
 
-        final prefs = await SharedPreferences.getInstance();
-        prefs.setString('chave', configuracao.chave);
-        prefs.setString('url', configuracao.url);
+        String imei = await ImeiPlugin.getImei();
 
+        final dispositivo = await this
+            .configuracaoRepository
+            .cadastrarDispositivo(url: configuracao.url, imei: imei);
+
+        await preferenciaRepository.salvar(
+            idPreferencia: 'dispositivo',
+            valorPreferencia: jsonEncode(dispositivo.toJson()));
+
+        await preferenciaRepository.salvar(
+            idPreferencia: 'chave', valorPreferencia: configuracao.chave);
+        await preferenciaRepository.salvar(
+            idPreferencia: 'url', valorPreferencia: configuracao.url);
+
+        final dio = Dio(BaseOptions(baseUrl: configuracao.url));
+
+        sincronizacaoAutenticacao.updateDio(dio);
         final token = await sincronizacaoAutenticacao.index();
 
-//        await sincronizacaoLimparRepository.index([
-//          'usuario',
-//          'empresa',
-//          'usuario_emp',
-//          'safra',
-//          'apont_estimativa',
-//          'dispositivo',
-//          'sequencia',
-//          'upnivel3',
-//          'preferencia',
-//        ]);
-
-        await sincronizacaoCompletaRepository.index(token);
+        await sincronizacaoCompletaRepository.index(token, dio: dio);
 
         baseBloc.add(
             AtualizarBase(url: configuracao.url, chave: configuracao.chave));
 
+        final sequencias =
+        await sincronizacaoSequenciaRepository.buscarListaSequenciaDb();
+
         yield ConfiguracaoState(
-            chave: configuracao.chave,
-            url: configuracao.url,
-            salvando: false,
-            configurado: true);
+          chave: configuracao.chave,
+          url: configuracao.url,
+          salvando: false,
+          configurado: true,
+          dispositivo: dispositivo,
+          sequencias: sequencias,
+        );
       } catch (e) {
-        print(e);
         yield state.juntar(
             salvando: false,
             mensagem: e.toString() ??
@@ -101,7 +133,6 @@ class ConfiguracaoBloc extends Bloc<ConfiguracaoEvent, ConfiguracaoState> {
           ],
           isHTML: false,
         );
-
         await FlutterEmailSender.send(email);
         yield state.juntar(
             enviandoEmail: false, mensagem: 'E-mail enviado com sucesso');

@@ -2,7 +2,9 @@ import 'package:apontamento/base/base_inherited.dart';
 import 'package:apontamento/comun/componentes/drawer_menu.dart';
 import 'package:apontamento/comun/db/db.dart';
 import 'package:apontamento/comun/modelo/sincronizacao_item_atualizacao_model.dart';
+import 'package:apontamento/comun/repositorios/preferencia_repository.dart';
 import 'package:apontamento/comun/repositorios/safra_repository.dart';
+import 'package:apontamento/comun/repositorios/sequencia_repository.dart';
 import 'package:apontamento/comun/sincronizacao/sincronizacao_autenticacao.dart';
 import 'package:apontamento/comun/sincronizacao/sincronizacao_empresa_repository.dart';
 import 'package:apontamento/comun/sincronizacao/sincronizacao_historico_repository.dart';
@@ -53,6 +55,15 @@ class SincronizacaoPage extends StatelessWidget {
                         db: Db(),
                         sincronizacaoHistoricoRepository:
                             SincronizacaoHistoricoRepository(db: Db()),
+                        dio: dio)),
+                HistoricoItemAtualizacaoModel(
+                    nome: 'Sequencia',
+                    tabela: 'sequencia',
+                    repository: SincronizacaoSequenciaRepository(
+                        db: Db(),
+                        preferenciaRepository: PreferenciaRepository(db: Db()),
+                        sincronizacaoHistoricoRepository:
+                        SincronizacaoHistoricoRepository(db: Db()),
                         dio: dio)),
                 HistoricoItemAtualizacaoModel(
                     nome: 'Safra',

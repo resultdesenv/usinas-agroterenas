@@ -4,6 +4,24 @@ import 'package:apontamento/comun/componentes/menu_apontamentos_item.dart';
 import 'package:apontamento/paginas/apontamento_estimativa_lista/apontamento_estimativa_lista_pagina.dart';
 import 'package:flutter/material.dart';
 
+final opcoes = [
+  {
+    'titulo': 'Estimativas',
+    'icone': Icons.show_chart,
+    'pagina': ApontamentoEstimativaListaPagina(),
+  },
+  // {
+  //   'titulo': 'Insumos',
+  //   'icone': Icons.chrome_reader_mode,
+  //   'pagina': MenuSincronizacao(),
+  // },
+  // {
+  //   'titulo': 'Climatologico',
+  //   'icone': Icons.filter_drama,
+  //   'pagina': MenuSincronizacao(),
+  // },
+];
+
 class PaginaMenuApontamentos extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -19,26 +37,14 @@ class PaginaMenuApontamentos extends StatelessWidget {
           crossAxisSpacing: 4,
           mainAxisSpacing: 4,
         ),
-        children: [
-          MenuApontamentosItem(
-            titulo: 'Estimativas',
-            icone: Icons.show_chart,
-            pagina: ApontamentoEstimativaListaPagina(),
-            context: context,
-          ),
-          // MenuApontamentosItem(
-          //   titulo: 'Insumos',
-          //   icone: Icons.chrome_reader_mode,
-          //   pagina: MenuSincronizacao(),
-          //   context: context,
-          // ),
-          // MenuApontamentosItem(
-          //   titulo: 'Climatologico',
-          //   icone: Icons.filter_drama,
-          //   pagina: MenuSincronizacao(),
-          //   context: context,
-          // ),
-        ],
+        children: opcoes
+            .map((e) => MenuApontamentosItem(
+                  titulo: e['titulo'],
+                  icone: e['icone'],
+                  pagina: e['pagina'],
+                  context: context,
+                ))
+            .toList(),
       ),
       backgroundColor: Color(0xFFEEEEEE),
       drawer: DrawerMenu(),

@@ -10,8 +10,8 @@ import 'sincronizacao_historico_repository.dart';
 
 class SincronizacaoUsuarioEmpresaRepository
     implements SincronizacaoBase<Usuario> {
+  Dio dio;
   final Db db;
-  final Dio dio;
   final SincronizacaoHistoricoRepository sincronizacaoHistoricoRepository;
 
   SincronizacaoUsuarioEmpresaRepository(
@@ -19,14 +19,24 @@ class SincronizacaoUsuarioEmpresaRepository
       @required this.dio,
       @required this.sincronizacaoHistoricoRepository});
 
+  updateDio(Dio dio) {
+    this.dio = dio;
+  }
+
   Future<void> index(
     String token, {
     String cdInstManfro,
     String cdSafra,
   }) async {
+    final dataInicial = DateTime.now();
     await limpar();
     final usuarioEmpresa = await buscar(token);
-    await salvar(usuarioEmpresa);
+    final dataFinal = DateTime.now();
+    await salvar(usuarioEmpresa,
+        Duration(
+            milliseconds: dataFinal.millisecondsSinceEpoch -
+                dataInicial.millisecondsSinceEpoch)
+    );
   }
 
   Future<void> limpar() async {
@@ -46,11 +56,11 @@ class SincronizacaoUsuarioEmpresaRepository
         .toList();
   }
 
-  Future<void> salvar(List<UsuarioEmpresaModel> usuarioEmpresas) async {
+  Future<void> salvar(List<UsuarioEmpresaModel> usuarioEmpresas, Duration duracao) async {
     final dbInstancia = await db.get();
     for (final usuarioEmpresa in usuarioEmpresas) {
       await dbInstancia.insert('usuario_emp', usuarioEmpresa.toJson());
     }
-    await sincronizacaoHistoricoRepository.salvarDataAtualizacao('usuario_emp');
+    await sincronizacaoHistoricoRepository.salvarDataAtualizacao('usuario_emp', duracao, usuarioEmpresas.length);
   }
 }

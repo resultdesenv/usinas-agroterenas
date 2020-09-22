@@ -53,6 +53,12 @@ class LoginRepository {
     return EmpresaModel.fromJson(empresaEncontrado[0]);
   }
 
+  Future<bool> temUsuario() async {
+    final dbInstance = await db.get();
+    final usuarios = await dbInstance.query('usuario');
+    return usuarios.length > 0;
+  }
+
   salvarUsuario(Usuario usuario, EmpresaModel empresa) async {
     final dbInstance = await db.get();
     await dbInstance.insert(
@@ -60,7 +66,7 @@ class LoginRepository {
         conflictAlgorithm: ConflictAlgorithm.replace);
   }
 
-  Future<List<UsuarioSalvo>> buscarUsuarios() async {
+  Future<List<UsuarioSalvo>> buscarUsuariosSalvos() async {
     final dbInstance = await db.get();
     final usuariosJson = await dbInstance.query('usuarioSalvos');
     return usuariosJson

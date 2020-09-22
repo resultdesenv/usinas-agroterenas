@@ -23,7 +23,6 @@ class SincronizacaoItemLista extends StatefulWidget {
 class _SincronizacaoItemListaState extends State<SincronizacaoItemLista> {
   @override
   Widget build(BuildContext context) {
-    print(widget.safras);
     return Column(children: [
       widget.item.upnivel3
           ? Column(children: [
@@ -54,16 +53,13 @@ class _SincronizacaoItemListaState extends State<SincronizacaoItemLista> {
           : Container(),
       ListTile(
           onTap: () {
-            print('tap');
             BlocProvider.of<SincronizacaoBloc>(context).add(SincronizarItem(
                 historicoItemAtualizacaoModel: widget.item,
                 empresaModel: BaseInherited.of(context).empresaAutenticada));
           },
           title:
               Text(widget.item.nome, style: Theme.of(context).textTheme.body1),
-          subtitle: Text(widget.item.dataAtualizacao == null
-              ? 'Sem historico de sincronização'
-              : widget.item.dataAtualizacao.toIso8601String()),
+          subtitle: Text(widget.item.atualizacao),
           trailing: widget.item.atualizando
               ? Container(
                   height: 28,

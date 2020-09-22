@@ -12,10 +12,7 @@ class ApontamentoEstimativaListaPagina extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) => ApontamentoEstimativaListaBloc(
-        repositorioEstimativa: RepositorioEstimativa(
-          db: Db(),
-          dio: null,
-        ),
+        repositorioEstimativa: RepositorioEstimativa(db: Db()),
         preferenciaRepository: PreferenciaRepository(db: Db()),
       )..add(IniciarListaEstimativas()),
       child: Scaffold(
