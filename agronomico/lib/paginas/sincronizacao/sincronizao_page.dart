@@ -31,59 +31,70 @@ class SincronizacaoPage extends StatelessWidget {
                 sincronizacaoHistoricoRepository:
                     SincronizacaoHistoricoRepository(db: Db()),
                 sincronizacaoAutenticacao: SincronizacaoAutenticacao(dio: dio),
-              preferenciaRepository: PreferenciaRepository(db: Db())
-            )
+                preferenciaRepository: PreferenciaRepository(db: Db()))
               ..add(BuscarItensSincronizacao(itensSincronizacao: [
                 HistoricoItemAtualizacaoModel(
-                    nome: 'Usuario',
-                    tabela: 'usuario',
-                    repository: SincronizacaoUsuarioRepository(
-                        db: Db(),
-                        sincronizacaoHistoricoRepository:
-                            SincronizacaoHistoricoRepository(db: Db()),
-                        dio: dio)),
+                  nome: 'Usuario',
+                  tabela: 'usuario',
+                  repository: SincronizacaoUsuarioRepository(
+                    db: Db(),
+                    sincronizacaoHistoricoRepository:
+                        SincronizacaoHistoricoRepository(db: Db()),
+                    dio: dio,
+                  ),
+                ),
                 HistoricoItemAtualizacaoModel(
-                    nome: 'Empresa',
-                    tabela: 'empresa',
-                    repository: SincronizacaoEmpresaRepository(
-                        db: Db(),
-                        sincronizacaoHistoricoRepository:
-                            SincronizacaoHistoricoRepository(db: Db()),
-                        dio: dio)),
+                  nome: 'Empresa',
+                  tabela: 'empresa',
+                  repository: SincronizacaoEmpresaRepository(
+                    db: Db(),
+                    sincronizacaoHistoricoRepository:
+                        SincronizacaoHistoricoRepository(db: Db()),
+                    dio: dio,
+                  ),
+                ),
                 HistoricoItemAtualizacaoModel(
-                    nome: 'Usuario x Empresa',
-                    tabela: 'usuario_emp',
-                    repository: SincronizacaoUsuarioEmpresaRepository(
-                        db: Db(),
-                        sincronizacaoHistoricoRepository:
-                            SincronizacaoHistoricoRepository(db: Db()),
-                        dio: dio)),
+                  nome: 'Usuario x Empresa',
+                  tabela: 'usuario_emp',
+                  repository: SincronizacaoUsuarioEmpresaRepository(
+                    db: Db(),
+                    sincronizacaoHistoricoRepository:
+                        SincronizacaoHistoricoRepository(db: Db()),
+                    dio: dio,
+                  ),
+                ),
                 HistoricoItemAtualizacaoModel(
-                    nome: 'Sequencia',
-                    tabela: 'sequencia',
-                    repository: SincronizacaoSequenciaRepository(
-                        db: Db(),
-                        preferenciaRepository: PreferenciaRepository(db: Db()),
-                        sincronizacaoHistoricoRepository:
-                            SincronizacaoHistoricoRepository(db: Db()),
-                        dio: dio)),
+                  nome: 'Sequencia',
+                  tabela: 'sequencia',
+                  repository: SincronizacaoSequenciaRepository(
+                    db: Db(),
+                    preferenciaRepository: PreferenciaRepository(db: Db()),
+                    sincronizacaoHistoricoRepository:
+                        SincronizacaoHistoricoRepository(db: Db()),
+                    dio: dio,
+                  ),
+                ),
                 HistoricoItemAtualizacaoModel(
-                    nome: 'Safra',
-                    tabela: 'safra',
-                    repository: SincronizacaoSafraRepository(
-                        db: Db(),
-                        sincronizacaoHistoricoRepository:
-                            SincronizacaoHistoricoRepository(db: Db()),
-                        dio: dio)),
+                  nome: 'Safra',
+                  tabela: 'safra',
+                  repository: SincronizacaoSafraRepository(
+                    db: Db(),
+                    sincronizacaoHistoricoRepository:
+                        SincronizacaoHistoricoRepository(db: Db()),
+                    dio: dio,
+                  ),
+                ),
                 HistoricoItemAtualizacaoModel(
-                    upnivel3: true,
-                    nome: 'Área Nivel3 Safra - Estimativa',
-                    tabela: 'upnivel3',
-                    repository: SincronizacaoUpNivel3Repository(
-                        db: Db(),
-                        sincronizacaoHistoricoRepository:
-                            SincronizacaoHistoricoRepository(db: Db()),
-                        dio: dio))
+                  upnivel3: true,
+                  nome: 'Área Nivel3 Safra - Estimativa',
+                  tabela: 'upnivel3',
+                  repository: SincronizacaoUpNivel3Repository(
+                    db: Db(),
+                    sincronizacaoHistoricoRepository:
+                        SincronizacaoHistoricoRepository(db: Db()),
+                    dio: dio,
+                  ),
+                )
               ])),
             child: SincronizacaoContent()));
   }

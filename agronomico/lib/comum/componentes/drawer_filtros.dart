@@ -20,6 +20,7 @@ class DrawerFiltros extends StatelessWidget {
   final Function(String up1) buscaSafra;
   final Function(String safra) buscaUp2;
   final Function(String up2) buscaUp3;
+  final bool filtrarData;
 
   DrawerFiltros({
     @required this.filtros,
@@ -33,14 +34,15 @@ class DrawerFiltros extends StatelessWidget {
     @required this.buscaUp2,
     @required this.buscaUp3,
     this.estimativa = false,
+    this.filtrarData = true,
     this.controller,
   });
 
   @override
   Widget build(BuildContext context) {
-    if (filtros['dtInicio'] == null)
+    if (filtrarData && filtros['dtInicio'] == null)
       alteraFiltro('dtInicio', Moment.now().format('yyyy-MM-dd'));
-    if (filtros['dtFim'] == null)
+    if (filtrarData && filtros['dtFim'] == null)
       alteraFiltro('dtFim', Moment.now().format('yyyy-MM-dd'));
 
     return SafeArea(
@@ -53,66 +55,68 @@ class DrawerFiltros extends StatelessWidget {
             children: [
               estimativa
                   ? TextFormField(
-                      // initialValue: filtros['noBoletim'] ?? '',
                       decoration: InputDecoration(labelText: 'Boletim'),
                       keyboardType: TextInputType.number,
-                      // onChanged: (valor) => alteraFiltro('noBoletim', valor),
                       controller: controller,
                     )
                   : Container(),
               Row(
-                children: [
-                  Expanded(
-                    child: DateField(
-                      callback: (DateTime valor) => alteraFiltro(
-                        'dtInicio',
-                        Moment.fromDate(valor).format('yyyy-MM-dd'),
-                      ),
-                      label: 'Data Inicial',
-                      selectedDate: filtros['dtInicio'] != null
-                          ? DateTime.parse(filtros['dtInicio'])
-                          : DateTime.now(),
-                    ),
-                  ),
-                  SizedBox(
-                    height: 32,
-                    width: 32,
-                    child: IconButton(
-                      padding: EdgeInsets.all(2),
-                      tooltip: 'Limpar data inicial',
-                      icon: Icon(Icons.close),
-                      onPressed: () => alteraFiltro('dtInicio', ''),
-                      color: Colors.red,
-                    ),
-                  ),
-                ],
+                children: filtrarData
+                    ? [
+                        Expanded(
+                          child: DateField(
+                            callback: (DateTime valor) => alteraFiltro(
+                              'dtInicio',
+                              Moment.fromDate(valor).format('yyyy-MM-dd'),
+                            ),
+                            label: 'Data Inicial',
+                            selectedDate: filtros['dtInicio'] != null
+                                ? DateTime.parse(filtros['dtInicio'])
+                                : DateTime.now(),
+                          ),
+                        ),
+                        SizedBox(
+                          height: 32,
+                          width: 32,
+                          child: IconButton(
+                            padding: EdgeInsets.all(2),
+                            tooltip: 'Limpar data inicial',
+                            icon: Icon(Icons.close),
+                            onPressed: () => alteraFiltro('dtInicio', ''),
+                            color: Colors.red,
+                          ),
+                        ),
+                      ]
+                    : [],
               ),
               Row(
-                children: [
-                  Expanded(
-                    child: DateField(
-                      callback: (DateTime valor) => alteraFiltro(
-                        'dtFim',
-                        Moment.fromDate(valor).format('yyyy-MM-dd'),
-                      ),
-                      label: 'Data Final',
-                      selectedDate: filtros['dtFim'] != null
-                          ? DateTime.parse(filtros['dtFim'])
-                          : DateTime.now(),
-                    ),
-                  ),
-                  SizedBox(
-                    height: 32,
-                    width: 32,
-                    child: IconButton(
-                      padding: EdgeInsets.all(2),
-                      tooltip: 'Limpar data final',
-                      icon: Icon(Icons.close),
-                      onPressed: () => alteraFiltro('dtFim', ''),
-                      color: Colors.red,
-                    ),
-                  ),
-                ],
+                children: filtrarData
+                    ? [
+                        Expanded(
+                          child: DateField(
+                            callback: (DateTime valor) => alteraFiltro(
+                              'dtFim',
+                              Moment.fromDate(valor).format('yyyy-MM-dd'),
+                            ),
+                            label: 'Data Final',
+                            selectedDate: filtros['dtFim'] != null
+                                ? DateTime.parse(filtros['dtFim'])
+                                : DateTime.now(),
+                          ),
+                        ),
+                        SizedBox(
+                          height: 32,
+                          width: 32,
+                          child: IconButton(
+                            padding: EdgeInsets.all(2),
+                            tooltip: 'Limpar data final',
+                            icon: Icon(Icons.close),
+                            onPressed: () => alteraFiltro('dtFim', ''),
+                            color: Colors.red,
+                          ),
+                        ),
+                      ]
+                    : [],
               ),
               DropdownButtonFormField<String>(
                 decoration: InputDecoration(labelText: 'Upnivel1'),

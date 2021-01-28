@@ -34,9 +34,11 @@ class UpNivel3Content extends StatelessWidget {
             key: scaffoldKey,
             appBar: AppBar(
               title: Column(children: [
-                Text('CONSULTA'),
-                Text(BaseInherited.of(context).empresaAutenticada.cdInstManfro,
-                    style: TextStyle(fontSize: 12, color: Colors.grey.shade200))
+                Text('LOCAL'),
+                Text(
+                  BaseInherited.of(context).empresaAutenticada.cdInstManfro,
+                  style: TextStyle(fontSize: 12, color: Colors.grey.shade200),
+                )
               ]),
               actions: [
                 IconButton(
@@ -78,45 +80,45 @@ class UpNivel3Content extends StatelessWidget {
                                               child: Text(
                                                 'Safra',
                                                 style: TextStyle(
-                                                    fontSize: 10,
-                                                    fontWeight:
-                                                        FontWeight.w500),
+                                                  fontSize: 10,
+                                                  fontWeight: FontWeight.w500,
+                                                ),
                                               ),
                                             ),
                                             TableCell(
                                               child: Text(
                                                 'Up1',
                                                 style: TextStyle(
-                                                    fontSize: 10,
-                                                    fontWeight:
-                                                        FontWeight.w500),
+                                                  fontSize: 10,
+                                                  fontWeight: FontWeight.w500,
+                                                ),
                                               ),
                                             ),
                                             TableCell(
                                               child: Text(
                                                 'Up2',
                                                 style: TextStyle(
-                                                    fontSize: 10,
-                                                    fontWeight:
-                                                        FontWeight.w500),
+                                                  fontSize: 10,
+                                                  fontWeight: FontWeight.w500,
+                                                ),
                                               ),
                                             ),
                                             TableCell(
                                               child: Text(
                                                 'Up3',
                                                 style: TextStyle(
-                                                    fontSize: 10,
-                                                    fontWeight:
-                                                        FontWeight.w500),
+                                                  fontSize: 10,
+                                                  fontWeight: FontWeight.w500,
+                                                ),
                                               ),
                                             ),
                                             TableCell(
                                               child: Text(
                                                 'Area',
                                                 style: TextStyle(
-                                                    fontSize: 10,
-                                                    fontWeight:
-                                                        FontWeight.w500),
+                                                  fontSize: 10,
+                                                  fontWeight: FontWeight.w500,
+                                                ),
                                               ),
                                             ),
                                           ],
@@ -137,11 +139,11 @@ class UpNivel3Content extends StatelessWidget {
                                 selected: estado.selecionadas
                                     .contains(estado.lista[indice]),
                                 onSelectionChange: (__) {
-                                  context
-                                      .bloc<UpNivel3Bloc>()
-                                      .add(MudaSelecaoUpNivel3(
-                                        upnivel3: estado.lista[indice],
-                                      ));
+                                  context.bloc<UpNivel3Bloc>().add(
+                                        MudaSelecaoUpNivel3(
+                                          upnivel3: estado.lista[indice],
+                                        ),
+                                      );
                                 },
                               ),
                             ),
@@ -169,6 +171,7 @@ class UpNivel3Content extends StatelessWidget {
               ],
             ),
             endDrawer: DrawerFiltros(
+              filtrarData: false,
               filtros: estado.filtros,
               listaSafra: estado.listaDropDown['cdSafra'] ?? [],
               listaUp1: estado.listaDropDown['cdUpnivel1'] ?? [],

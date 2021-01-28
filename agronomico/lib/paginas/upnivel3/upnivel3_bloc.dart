@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:agronomico/base/base_inherited.dart';
 import 'package:agronomico/comum/modelo/estimativa_modelo.dart';
 import 'package:agronomico/comum/modelo/upnivel3_model.dart';
@@ -13,6 +12,8 @@ import 'package:agronomico/paginas/upnivel3/upnivel3_event.dart';
 import 'package:agronomico/paginas/upnivel3/upnivel3_state.dart';
 import 'package:bloc/bloc.dart';
 import 'package:flutter/cupertino.dart';
+
+import '../../comum/utilidades/navegacao.dart';
 
 class UpNivel3Bloc extends Bloc<UpNivel3Event, UpNivel3State> {
   final UpNivel3ConsultaRepository upNivel3ConsultaRepository;
@@ -192,16 +193,6 @@ class UpNivel3Bloc extends Bloc<UpNivel3Event, UpNivel3State> {
   Map<String, dynamic> _formataFiltros(Map<String, dynamic> filtros) {
     final Map<String, dynamic> filtrosFormatados = Map.from(filtros);
     filtrosFormatados.removeWhere((chave, valor) => valor.isEmpty);
-    if (filtros['dtInicio'] != null || filtros['dtFim'] != null) {
-      final dataInicio = ">= date('${filtros['dtInicio']}') ";
-      final dataFinal = "<= date('${filtros['dtFim']}')";
-
-      filtrosFormatados['date(dtUltimoCorte)'] =
-          "${filtros['dtInicio'] != null ? dataInicio : ""}"
-          "${filtros['dtInicio'] != null && filtros['dtFim'] != null ? " AND date(dtUltimoCorte) " : ""} "
-          "${filtros['dtFim'] != null ? dataFinal : ""}";
-    }
-
     filtrosFormatados.remove('dtInicio');
     filtrosFormatados.remove('dtFim');
 
