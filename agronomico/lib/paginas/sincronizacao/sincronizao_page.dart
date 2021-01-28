@@ -77,7 +77,7 @@ class SincronizacaoPage extends StatelessWidget {
                         dio: dio)),
                 HistoricoItemAtualizacaoModel(
                     upnivel3: true,
-                    nome: 'Área Nivel3 por Safra',
+                    nome: 'Área Nivel3 Safra - Estimativa',
                     tabela: 'upnivel3',
                     repository: SincronizacaoUpNivel3Repository(
                         db: Db(),

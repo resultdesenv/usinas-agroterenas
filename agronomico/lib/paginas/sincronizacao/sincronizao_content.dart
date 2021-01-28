@@ -11,7 +11,7 @@ class SincronizacaoContent extends StatelessWidget {
         listener: (context, state) {
       if (state.mensagem != null)
         Scaffold.of(context)
-            .showSnackBar(SnackBar(content: Text(state.mensagem)));
+            .showSnackBar(SnackBar(content: Text(state.mensagem),),);
     }, child: BlocBuilder<SincronizacaoBloc, SincronizacaoState>(
             builder: (context, state) {
       return Stack(children: [
