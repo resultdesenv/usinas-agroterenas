@@ -42,7 +42,7 @@ class ConfiguracaoRepository {
         BaseOptions(baseUrl: url, headers: {'authorization': 'Bearer $token'}));
     final res = await dio.post('/agt-api-pims/api/dispositivo/registro', data: {
       "cartaoSim": "",
-      "idAndroid": "",
+      "idAndroid": imei,
       "imei": imei,
       "situacao": "A"
     });
