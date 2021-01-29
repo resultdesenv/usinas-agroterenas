@@ -7,6 +7,10 @@ class UpNivel3Model extends Equatable {
   final int cdEstagio;
   final int cdSafra;
   final int cdTpPropr;
+  final int cdEmpresa;
+  final int cdOcup;
+  final double qtPlantas;
+  final String idZonaTalhao;
   final String cdUpnivel1;
   final String cdUpnivel2;
   final String cdUpnivel3;
@@ -52,6 +56,10 @@ class UpNivel3Model extends Equatable {
         tch4,
         tchAnoPassado,
         tchAnoRetrasado,
+        cdEmpresa,
+        cdOcup,
+        qtPlantas,
+        idZonaTalhao,
       ];
 
   UpNivel3Model({
@@ -61,6 +69,10 @@ class UpNivel3Model extends Equatable {
     @required this.cdUpnivel1,
     @required this.cdUpnivel2,
     @required this.cdUpnivel3,
+    @required this.cdEmpresa,
+    @required this.qtPlantas,
+    @required this.cdOcup,
+    @required this.idZonaTalhao,
     @required this.cdVaried,
     @required this.deEstagio,
     @required this.deTpPropr,
@@ -85,6 +97,10 @@ class UpNivel3Model extends Equatable {
       cdEstagio: int.tryParse(json['cdEstagio']?.toString()),
       cdSafra: int.tryParse(json['cdSafra']?.toString()),
       cdTpPropr: int.tryParse(json['cdTpPropr']?.toString()),
+      cdEmpresa: int.tryParse(json['cdEmpresa']?.toString()),
+      cdOcup: int.tryParse(json['cdOcup']?.toString()),
+      idZonaTalhao: json['idZonaTalhao'],
+      qtPlantas: double.tryParse(json['qtPlantas']?.toString()),
       cdUpnivel1: json['cdUpnivel1'],
       cdUpnivel2: json['cdUpnivel2'],
       cdUpnivel3: json['cdUpnivel3'],
@@ -114,6 +130,10 @@ class UpNivel3Model extends Equatable {
         'cdEstagio': cdEstagio,
         'cdSafra': cdSafra,
         'cdTpPropr': cdTpPropr,
+        'cdEmpresa': cdEmpresa,
+        'cdOcup': cdOcup,
+        'idZonaTalhao': idZonaTalhao,
+        'qtPlantas': qtPlantas,
         'cdUpnivel1': cdUpnivel1,
         'cdUpnivel2': cdUpnivel2,
         'cdUpnivel3': cdUpnivel3,

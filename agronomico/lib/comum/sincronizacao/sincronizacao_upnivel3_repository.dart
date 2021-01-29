@@ -55,14 +55,20 @@ class SincronizacaoUpNivel3Repository implements SincronizacaoBase<Usuario> {
         .toList();
   }
 
-  Future<void> salvar(List<UpNivel3Model> upnivels, DateTime dataInicial) async {
+  Future<void> salvar(
+    List<UpNivel3Model> upnivels,
+    DateTime dataInicial,
+  ) async {
     final dbInstancia = await db.get();
     for (final upnivel in upnivels) {
       await dbInstancia.insert('upnivel3', upnivel.toJson());
     }
     await sincronizacaoHistoricoRepository.salvarDataAtualizacao(
-        'upnivel3', Duration(
-        milliseconds: DateTime.now().millisecondsSinceEpoch -
-            dataInicial.millisecondsSinceEpoch), upnivels.length);
+      'upnivel3',
+      Duration(
+          milliseconds: DateTime.now().millisecondsSinceEpoch -
+              dataInicial.millisecondsSinceEpoch),
+      upnivels.length,
+    );
   }
 }
