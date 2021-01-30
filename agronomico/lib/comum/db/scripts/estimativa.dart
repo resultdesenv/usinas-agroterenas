@@ -1,4 +1,4 @@
-final tabelaEstimativa = '''
+const tabelaEstimativa = '''
   CREATE TABLE apont_estimativa (
     dispositivo INTEGER NOT NULL,
     instancia TEXT NOT NULL,

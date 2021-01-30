@@ -1,4 +1,4 @@
-final tabelaEmpresa = '''
+const tabelaEmpresa = '''
   CREATE TABLE empresa (
     cdEmpresa INTEGER PRIMARY KEY,
     cdInstManfro TEXT,

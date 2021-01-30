@@ -1,4 +1,4 @@
-final tabelaSafra = '''
+const tabelaSafra = '''
   CREATE TABLE safra (
     cdSafra INTEGER PRIMARY KEY,
     dtFimSafra TEXT,

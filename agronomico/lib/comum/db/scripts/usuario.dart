@@ -1,4 +1,4 @@
-final tabelaUsuario = '''
+const tabelaUsuario = '''
   CREATE TABLE usuario (
     idUsuario INTEGER PRIMARY KEY,
     cdFunc INTEGER,

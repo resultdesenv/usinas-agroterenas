@@ -1,4 +1,4 @@
-final tabelaDispositivo = '''
+const tabelaDispositivo = '''
   CREATE TABLE dispositivo (
     idDispositivo TEXT,
     imei TEXT,

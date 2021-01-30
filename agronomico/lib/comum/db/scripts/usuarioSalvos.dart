@@ -1,4 +1,4 @@
-final tabelaUsuarioSalvos = '''
+const tabelaUsuarioSalvos = '''
   CREATE TABLE usuario_salvos (
     idUsuario INTEGER PRIMARY KEY,
     login TEXT,

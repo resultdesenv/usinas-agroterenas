@@ -1,4 +1,4 @@
-final tabelaUpnivel3 = '''
+const tabelaUpnivel3 = '''
   CREATE TABLE upnivel3 (
     cdSafra INTEGER NOT NULL,
     cdUpnivel1 TEXT NOT NULL,

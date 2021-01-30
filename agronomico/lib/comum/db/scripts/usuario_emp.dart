@@ -1,4 +1,4 @@
-final tabelaUsuarioEmp = '''
+const tabelaUsuarioEmp = '''
   CREATE TABLE usuario_emp (
     instancia INTEGER,
     situacao TEXT,

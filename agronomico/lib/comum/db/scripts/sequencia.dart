@@ -1,4 +1,4 @@
-final tabelaSequencia = '''
+const tabelaSequencia = '''
   CREATE TABLE sequencia (
     instancia TEXT PRIMARY KEY,
     aplicacao TEXT,
