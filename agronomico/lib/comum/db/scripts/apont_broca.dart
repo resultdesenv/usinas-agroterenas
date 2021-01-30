@@ -1,6 +1,7 @@
 const tabelaApontBroca = '''
   CREATE TABLE apont_broca (
     noColetor INTEGER NOT NULL,
+    dispositivo INTEGER NOT NULL,
     instancia TEXT NOT NULL,
     noBoletim INTEGER NOT NULL,
     noSequencia INTEGER NOT NULL,

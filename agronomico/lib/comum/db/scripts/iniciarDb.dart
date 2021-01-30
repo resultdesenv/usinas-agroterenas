@@ -33,7 +33,7 @@ class IniciarDb {
       await db.execute(tabelaUpnivel3);
       await db.execute(tabelaPreferencia);
       await db.execute(historicoSincronizacao);
-      await db.execute(tabelaFitossanidade);
+      await db.execute(tabelaTipoFitossanidade);
       await db.execute(tabelaApontBroca);
     } catch (e) {
       print(e);

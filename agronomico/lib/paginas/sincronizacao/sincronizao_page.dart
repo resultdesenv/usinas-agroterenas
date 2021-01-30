@@ -9,6 +9,7 @@ import 'package:agronomico/comum/sincronizacao/sincronizacao_autenticacao.dart';
 import 'package:agronomico/comum/sincronizacao/sincronizacao_empresa_repository.dart';
 import 'package:agronomico/comum/sincronizacao/sincronizacao_historico_repository.dart';
 import 'package:agronomico/comum/sincronizacao/sincronizacao_safra_repository.dart';
+import 'package:agronomico/comum/sincronizacao/sincronizacao_tipo_fitossanidade_repository.dart';
 import 'package:agronomico/comum/sincronizacao/sincronizacao_upnivel3_local_repository.dart';
 import 'package:agronomico/comum/sincronizacao/sincronizacao_upnivel3_repository.dart';
 import 'package:agronomico/comum/sincronizacao/sincronizacao_usuario_empresa_repository.dart';
@@ -70,6 +71,16 @@ class SincronizacaoPage extends StatelessWidget {
                   repository: SincronizacaoSequenciaRepository(
                     db: Db(),
                     preferenciaRepository: PreferenciaRepository(db: Db()),
+                    sincronizacaoHistoricoRepository:
+                        SincronizacaoHistoricoRepository(db: Db()),
+                    dio: dio,
+                  ),
+                ),
+                HistoricoItemAtualizacaoModel(
+                  nome: 'Tipo de Fitossanidade',
+                  tabela: 'tipo_fitossanidade',
+                  repository: SincronizacaoTipoFitossanidadeRepository(
+                    db: Db(),
                     sincronizacaoHistoricoRepository:
                         SincronizacaoHistoricoRepository(db: Db()),
                     dio: dio,
