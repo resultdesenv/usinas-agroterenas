@@ -1,36 +1,18 @@
 import 'package:agronomico/base/base_inherited.dart';
 import 'package:agronomico/comum/componentes/drawer_menu.dart';
 import 'package:agronomico/comum/componentes/menu_apontamentos_item.dart';
-import 'package:agronomico/paginas/apontamento_estimativa_lista/apontamento_estimativa_lista_page.dart';
+import 'package:agronomico/paginas/menu_apontamentos/menu_opcoes.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-
 import '../../env.dart';
-
-final opcoes = [
-  {
-    'titulo': 'Estimativas',
-    'icone': Icons.place,
-    'pagina': ApontamentoEstimativaListaPage(),
-  },
-  // {
-  //   'titulo': 'Insumos',
-  //   'icone': Icons.chrome_reader_mode,
-  //   'pagina': MenuSincronizacao(),
-  // },
-  // {
-  //   'titulo': 'Climatologico',
-  //   'icone': Icons.filter_drama,
-  //   'pagina': MenuSincronizacao(),
-  // },
-];
 
 class PaginaMenuApontamentos extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(BaseInherited.of(context).empresaAutenticada?.cdInstManfro ?? ''),
+        title: Text(
+            BaseInherited.of(context).empresaAutenticada?.cdInstManfro ?? ''),
       ),
       body: Stack(
         children: [
@@ -46,7 +28,7 @@ class PaginaMenuApontamentos extends StatelessWidget {
               crossAxisSpacing: 4,
               mainAxisSpacing: 4,
             ),
-            children: opcoes
+            children: menuOpcoes
                 .map((e) => MenuApontamentosItem(
                       titulo: e['titulo'],
                       icone: e['icone'],
