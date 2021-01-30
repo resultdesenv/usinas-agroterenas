@@ -1,5 +1,6 @@
 import 'package:agronomico/comum/sincronizacao/sincronizacao_base.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:meta/meta.dart';
 
 // TODO: Usar um nome mais claro
@@ -10,6 +11,7 @@ class HistoricoItemAtualizacaoModel extends Equatable {
   final String atualizacao;
   final bool atualizando;
   final bool upnivel3;
+  final bool filterNivel2;
 
   List<Object> get props => [
         nome,
@@ -26,6 +28,7 @@ class HistoricoItemAtualizacaoModel extends Equatable {
     this.atualizacao,
     this.atualizando = false,
     this.upnivel3 = false,
+    this.filterNivel2 = false,
   });
 
   HistoricoItemAtualizacaoModel copyWith({
@@ -35,6 +38,7 @@ class HistoricoItemAtualizacaoModel extends Equatable {
     String atualizacao,
     bool atualizando,
     bool upnivel3,
+    List<Widget> filterNivel2,
   }) =>
       HistoricoItemAtualizacaoModel(
         nome: nome ?? this.nome,
@@ -43,5 +47,6 @@ class HistoricoItemAtualizacaoModel extends Equatable {
         atualizacao: atualizacao ?? this.atualizacao,
         atualizando: atualizando == null ? this.atualizando : atualizando,
         upnivel3: upnivel3 == null ? this.upnivel3 : upnivel3,
+        filterNivel2: filterNivel2 ?? this.filterNivel2,
       );
 }

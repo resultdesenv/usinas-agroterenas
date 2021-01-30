@@ -148,9 +148,12 @@ class ApontamentoFormulario extends StatelessWidget {
                             Expanded(
                               child: _montaCampo(
                                 labelText: 'Ult.Compra',
-                                initialValue:
-                                    Moment.parse(apontamento.dtUltimoCorte)
-                                        .format('dd/MM/yyyy'),
+                                initialValue: apontamento.dtUltimoCorte !=
+                                            null &&
+                                        apontamento.dtUltimoCorte.isNotEmpty
+                                    ? Moment.parse(apontamento.dtUltimoCorte)
+                                        .format('dd/MM/yyyy')
+                                    : '',
                                 enabled: false,
                               ),
                             ),
@@ -161,9 +164,11 @@ class ApontamentoFormulario extends StatelessWidget {
                             Expanded(
                               child: _montaCampo(
                                 labelText: 'Precip',
-                                initialValue: apontamento.precipitacao
-                                    .toStringAsFixed(2)
-                                    .replaceFirst('.', ','),
+                                initialValue: apontamento.precipitacao != null
+                                    ? apontamento.precipitacao
+                                        .toStringAsFixed(2)
+                                        .replaceFirst('.', ',')
+                                    : '',
                                 enabled: false,
                               ),
                             ),
@@ -184,9 +189,12 @@ class ApontamentoFormulario extends StatelessWidget {
                             Expanded(
                               child: _montaCampo(
                                 labelText: 'Prod Ant',
-                                initialValue: apontamento.producaoSafraAnt
-                                    .toStringAsFixed(2)
-                                    .replaceFirst('.', ','),
+                                initialValue:
+                                    apontamento.producaoSafraAnt != null
+                                        ? apontamento.producaoSafraAnt
+                                            .toStringAsFixed(2)
+                                            .replaceFirst('.', ',')
+                                        : '',
                                 enabled: false,
                               ),
                             ),
@@ -205,9 +213,11 @@ class ApontamentoFormulario extends StatelessWidget {
                             Expanded(
                               child: _montaCampo(
                                 labelText: 'Tch Ano Passado',
-                                initialValue: apontamento.tchAnoPassado
-                                    .toStringAsFixed(2)
-                                    .replaceFirst('.', ','),
+                                initialValue: apontamento.tchAnoPassado != null
+                                    ? apontamento.tchAnoPassado
+                                        .toStringAsFixed(2)
+                                        .replaceFirst('.', ',')
+                                    : '',
                                 enabled: false,
                               ),
                             ),
@@ -216,9 +226,12 @@ class ApontamentoFormulario extends StatelessWidget {
                               child: _montaCampo(
                                 labelText: 'Tch Ano Retrasado',
                                 enabled: false,
-                                initialValue: apontamento.tchAnoRetrasado
-                                    .toStringAsFixed(2)
-                                    .replaceFirst('.', ','),
+                                initialValue:
+                                    apontamento.tchAnoRetrasado != null
+                                        ? apontamento.tchAnoRetrasado
+                                            .toStringAsFixed(2)
+                                            .replaceFirst('.', ',')
+                                        : '',
                               ),
                             ),
                           ],

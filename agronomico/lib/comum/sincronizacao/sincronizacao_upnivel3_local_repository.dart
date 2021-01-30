@@ -7,13 +7,15 @@ import 'package:meta/meta.dart';
 import 'package:agronomico/comum/db/db.dart';
 import 'package:agronomico/comum/modelo/usuario_model.dart';
 import 'package:agronomico/comum/sincronizacao/sincronizacao_base.dart';
+import 'package:sqflite/sql.dart';
 
-class SincronizacaoUpNivel3Repository implements SincronizacaoBase<Usuario> {
+class SincronizacaoUpNivel3LocalRepository
+    implements SincronizacaoBase<Usuario> {
   Dio dio;
   final Db db;
   final SincronizacaoHistoricoRepository sincronizacaoHistoricoRepository;
 
-  SincronizacaoUpNivel3Repository({
+  SincronizacaoUpNivel3LocalRepository({
     @required this.db,
     @required this.dio,
     @required this.sincronizacaoHistoricoRepository,
@@ -31,7 +33,7 @@ class SincronizacaoUpNivel3Repository implements SincronizacaoBase<Usuario> {
   }) async {
     final dataInicial = DateTime.now();
     await limpar();
-    final upnivel3 = await buscar(token, cdInstManfro, cdSafra);
+    final upnivel3 = await buscar(token, cdInstManfro, cdSafra, nivel2);
     await salvar(upnivel3, dataInicial);
   }
 
@@ -44,16 +46,21 @@ class SincronizacaoUpNivel3Repository implements SincronizacaoBase<Usuario> {
     String token,
     String cdInstManfro,
     String cdSafra,
+    String nivel2,
   ) async {
-    print(
-        '/agt-api-pims/api/estimativa/consulta?instancia=$cdInstManfro&cdSafra=$cdSafra');
+    final url = nivel2 != null && nivel2.isNotEmpty
+        ? '/agt-api-pims/api/locais/instancia/NAPAR/zona/$nivel2'
+        : '/agt-api-pims/api/locais/instancia/NAPAR';
+    print(url);
+    print('token $token');
     final res = await dio.get(
-        '/agt-api-pims/api/estimativa/consulta?instancia=$cdInstManfro&cdSafra=$cdSafra',
-        options: Options(headers: {
-          'authorization': 'Bearer $token',
-        }));
+      url,
+      options: Options(headers: {
+        'authorization': 'Bearer $token',
+      }),
+    );
     final List listaUpNivelJson = res.data;
-    print('SAFRA $cdSafra');
+    print('NIVEL2 $nivel2');
     print('Qtd Registros ${listaUpNivelJson.length}');
     return listaUpNivelJson
         .map((upnivelJson) => UpNivel3Model.fromJson(upnivelJson))
@@ -66,7 +73,11 @@ class SincronizacaoUpNivel3Repository implements SincronizacaoBase<Usuario> {
   ) async {
     final dbInstancia = await db.get();
     for (final upnivel in upnivels) {
-      await dbInstancia.insert('upnivel3', upnivel.toJson());
+      await dbInstancia.insert(
+        'upnivel3',
+        upnivel.toJson(),
+        conflictAlgorithm: ConflictAlgorithm.replace,
+      );
     }
     await sincronizacaoHistoricoRepository.salvarDataAtualizacao(
       'upnivel3',
@@ -75,6 +86,5 @@ class SincronizacaoUpNivel3Repository implements SincronizacaoBase<Usuario> {
               dataInicial.millisecondsSinceEpoch),
       upnivels.length,
     );
-    print('up3: $upnivels');
   }
 }

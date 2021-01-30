@@ -252,7 +252,7 @@ class UpNivel3Tile extends StatelessWidget {
                       ),
                       TableCell(
                         child: Container(
-                          child: Text(upnivel3.deTpPropr),
+                          child: Text(upnivel3.deTpPropr ?? ''),
                           padding: EdgeInsets.all(12),
                         ),
                       ),

@@ -2,6 +2,7 @@ import 'package:agronomico/base/base_inherited.dart';
 import 'package:agronomico/paginas/sincronizacao/sincronizacao_item_lista.dart';
 import 'package:flutter/material.dart';
 import 'package:agronomico/paginas/sincronizacao/sincronizacao.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class SincronizacaoContent extends StatelessWidget {
@@ -11,9 +12,7 @@ class SincronizacaoContent extends StatelessWidget {
       listener: (context, state) {
         if (state.mensagem != null)
           Scaffold.of(context).showSnackBar(
-            SnackBar(
-              content: Text(state.mensagem),
-            ),
+            SnackBar(content: Text(state.mensagem)),
           );
       },
       child: BlocBuilder<SincronizacaoBloc, SincronizacaoState>(
@@ -25,7 +24,10 @@ class SincronizacaoContent extends StatelessWidget {
                     .map((item) => SincronizacaoItemLista(
                         item: item,
                         safras: state.safras,
-                        safraSelecionada: state.safraSelecionada))
+                        safraSelecionada: state.safraSelecionada,
+                        abrirFiltros: item.filterNivel2
+                            ? () => _abrirFiltros(context, state.filtroNivel2)
+                            : null))
                     .toList()),
             Align(
               alignment: Alignment.bottomCenter,
@@ -78,6 +80,53 @@ class SincronizacaoContent extends StatelessWidget {
             ),
           ]);
         },
+      ),
+    );
+  }
+
+  void _abrirFiltros(BuildContext context, String filtroNivel2) {
+    final controller = TextEditingController(text: filtroNivel2);
+
+    showDialog(
+      context: context,
+      builder: (_) => AlertDialog(
+        title: Text('Filtar'),
+        content: Container(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              TextField(
+                inputFormatters: [
+                  FilteringTextInputFormatter.allow(RegExp(r'\d'))
+                ],
+                controller: controller,
+                keyboardType: TextInputType.numberWithOptions(
+                  decimal: false,
+                  signed: false,
+                ),
+                decoration: InputDecoration(labelText: 'Nivel2'),
+                onChanged: (value) =>
+                    BlocProvider.of<SincronizacaoBloc>(context)
+                        .add(AlteraFiltroNivel2(filtro: controller.text)),
+              ),
+            ],
+          ),
+        ),
+        actions: [
+          FlatButton(
+            child: Text('Limpar'),
+            textColor: Colors.red,
+            onPressed: () {
+              Navigator.of(context).pop();
+              BlocProvider.of<SincronizacaoBloc>(context)
+                  .add(AlteraFiltroNivel2(filtro: ''));
+            },
+          ),
+          FlatButton(
+            child: Text('Fechar'),
+            onPressed: () => Navigator.of(context).pop(),
+          ),
+        ],
       ),
     );
   }

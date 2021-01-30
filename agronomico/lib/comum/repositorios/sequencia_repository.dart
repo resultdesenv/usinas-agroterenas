@@ -54,7 +54,8 @@ class SincronizacaoSequenciaRepository extends SincronizacaoBase<Sequencia> {
     final dbInstance = await db.get();
     final sequenciaJson = await dbInstance.query('sequencia',
         where: "instancia = '${empresa.cdInstManfro}'");
-    if (sequenciaJson.length == 0) throw CustomException('Sequencia não encontrada');
+    if (sequenciaJson.length == 0)
+      throw CustomException('Sequencia não encontrada');
     return Sequencia.fromJson(sequenciaJson[0]);
   }
 
@@ -99,11 +100,13 @@ class SincronizacaoSequenciaRepository extends SincronizacaoBase<Sequencia> {
     String token, {
     String cdInstManfro,
     String cdSafra,
+    String nivel2,
   }) async {
     final dataInicial = DateTime.now();
     String dispositivoTexto =
         await preferenciaRepository.get(idPreferencia: 'dispositivo');
-    if (dispositivoTexto == null) throw CustomException('Dispositivo não cadastrado');
+    if (dispositivoTexto == null)
+      throw CustomException('Dispositivo não cadastrado');
     DispositivoModel dispositivoModel =
         DispositivoModel.fromJson(jsonDecode(dispositivoTexto));
     await _limpar();
@@ -128,7 +131,8 @@ class SincronizacaoSequenciaRepository extends SincronizacaoBase<Sequencia> {
   Future<void> _salvar(List<Sequencia> sequencias, Duration duracao) async {
     final dbInstancia = await db.get();
     for (final sequencia in sequencias) {
-      await dbInstancia.insert('sequencia', sequencia.toJson(), conflictAlgorithm: ConflictAlgorithm.replace);
+      await dbInstancia.insert('sequencia', sequencia.toJson(),
+          conflictAlgorithm: ConflictAlgorithm.replace);
     }
     await sincronizacaoHistoricoRepository.salvarDataAtualizacao(
         'sequencia', duracao, sequencias.length);

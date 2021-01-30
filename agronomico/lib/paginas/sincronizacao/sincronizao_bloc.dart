@@ -62,7 +62,7 @@ class SincronizacaoBloc extends Bloc<SincronizacaoEvent, SincronizacaoState> {
     if (event is SincronizarItem) {
       try {
         final novaListaComLoading = state.itensSincronizacao.map((item) {
-          if (item.tabela == event.historicoItemAtualizacaoModel.tabela)
+          if (item.nome == event.historicoItemAtualizacaoModel.nome)
             return item.copyWith(atualizando: true);
           return item;
         }).toList();
@@ -70,10 +70,12 @@ class SincronizacaoBloc extends Bloc<SincronizacaoEvent, SincronizacaoState> {
         yield state.copyWith(itensSincronizacao: novaListaComLoading);
 
         final token = await sincronizacaoAutenticacao.index();
-        await event.historicoItemAtualizacaoModel.repository.index(token,
-            cdInstManfro: event.empresaModel?.cdInstManfro,
-            cdSafra: state.safraSelecionada?.cdSafra?.toString());
-
+        await event.historicoItemAtualizacaoModel.repository.index(
+          token,
+          cdInstManfro: event.empresaModel?.cdInstManfro,
+          cdSafra: state.safraSelecionada?.cdSafra?.toString(),
+          nivel2: state.filtroNivel2,
+        );
         final historicoAtualizacao =
             await sincronizacaoHistoricoRepository.buscarHistorico();
 
@@ -83,7 +85,7 @@ class SincronizacaoBloc extends Bloc<SincronizacaoEvent, SincronizacaoState> {
             .toText();
 
         final novaListaSemLoading = novaListaComLoading.map((item) {
-          if (item.tabela == event.historicoItemAtualizacaoModel.tabela)
+          if (item.nome == event.historicoItemAtualizacaoModel.nome)
             return item.copyWith(
                 atualizando: false, atualizacao: novaAtualizacao);
           return item;
@@ -94,6 +96,7 @@ class SincronizacaoBloc extends Bloc<SincronizacaoEvent, SincronizacaoState> {
         yield state.copyWith(
             itensSincronizacao: novaListaSemLoading, safras: safras);
       } catch (e) {
+        print(e);
         yield state.copyWith(
             itensSincronizacao: state.itensSincronizacao
                 .map((e) => e.copyWith(atualizando: false))
@@ -104,7 +107,7 @@ class SincronizacaoBloc extends Bloc<SincronizacaoEvent, SincronizacaoState> {
 
     if (event is SincronizarTudo) {
       print('SincronizarTudo');
-      for(final emp in event.itensSincronizacao) {
+      for (final emp in event.itensSincronizacao) {
         try {
           final novaListaComLoading = state.itensSincronizacao.map((item) {
             if (item.tabela == emp.tabela)
@@ -120,11 +123,10 @@ class SincronizacaoBloc extends Bloc<SincronizacaoEvent, SincronizacaoState> {
               cdSafra: state.safraSelecionada?.cdSafra?.toString());
 
           final historicoAtualizacao =
-          await sincronizacaoHistoricoRepository.buscarHistorico();
+              await sincronizacaoHistoricoRepository.buscarHistorico();
 
           final novaAtualizacao = historicoAtualizacao
-              .firstWhere((item) =>
-          item.tabela == emp.tabela)
+              .firstWhere((item) => item.tabela == emp.tabela)
               .toText();
 
           final novaListaSemLoading = novaListaComLoading.map((item) {
@@ -145,7 +147,6 @@ class SincronizacaoBloc extends Bloc<SincronizacaoEvent, SincronizacaoState> {
                   .toList(),
               mensagem: e.toString());
         }
-
       }
     }
 
@@ -154,6 +155,10 @@ class SincronizacaoBloc extends Bloc<SincronizacaoEvent, SincronizacaoState> {
           idPreferencia: 'safra',
           valorPreferencia: jsonEncode(event.safra.toJson()));
       yield state.copyWith(safraSelecionada: event.safra);
+    }
+
+    if (event is AlteraFiltroNivel2) {
+      yield state.copyWith(filtroNivel2: event.filtro);
     }
   }
 }

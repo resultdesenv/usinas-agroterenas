@@ -25,13 +25,12 @@ class SincronizacaoEmpresaRepository implements SincronizacaoBase<Usuario> {
     String token, {
     String cdInstManfro,
     String cdSafra,
+    String nivel2,
   }) async {
     final dataInicial = DateTime.now();
     await limpar();
     final usuarios = await buscar(token);
-    await salvar(
-        usuarios,
-        dataInicial);
+    await salvar(usuarios, dataInicial);
   }
 
   Future<void> limpar() async {
@@ -56,8 +55,10 @@ class SincronizacaoEmpresaRepository implements SincronizacaoBase<Usuario> {
       await dbInstancia.insert('empresa', empresa.toJson());
     }
     await sincronizacaoHistoricoRepository.salvarDataAtualizacao(
-        'empresa', Duration(
-        milliseconds: DateTime.now().millisecondsSinceEpoch -
-            dataInicial.millisecondsSinceEpoch), empresas.length);
+        'empresa',
+        Duration(
+            milliseconds: DateTime.now().millisecondsSinceEpoch -
+                dataInicial.millisecondsSinceEpoch),
+        empresas.length);
   }
 }

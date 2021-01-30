@@ -27,13 +27,12 @@ class SincronizacaoUsuarioEmpresaRepository
     String token, {
     String cdInstManfro,
     String cdSafra,
+    String nivel2,
   }) async {
     final dataInicial = DateTime.now();
     await limpar();
     final usuarioEmpresa = await buscar(token);
-    await salvar(
-        usuarioEmpresa,
-        dataInicial);
+    await salvar(usuarioEmpresa, dataInicial);
   }
 
   Future<void> limpar() async {
@@ -60,8 +59,10 @@ class SincronizacaoUsuarioEmpresaRepository
       await dbInstancia.insert('usuario_emp', usuarioEmpresa.toJson());
     }
     await sincronizacaoHistoricoRepository.salvarDataAtualizacao(
-        'usuario_emp', Duration(
-        milliseconds: DateTime.now().millisecondsSinceEpoch -
-            dataInicial.millisecondsSinceEpoch), usuarioEmpresas.length);
+        'usuario_emp',
+        Duration(
+            milliseconds: DateTime.now().millisecondsSinceEpoch -
+                dataInicial.millisecondsSinceEpoch),
+        usuarioEmpresas.length);
   }
 }

@@ -52,34 +52,18 @@ class MenuSincronizacao extends StatelessWidget {
       onTap: () => navegar(context: context, pagina: pagina),
       child: Card(
           child: Column(children: <Widget>[
-            Expanded(
-                child: Container(
-                    color: corIcone,
-                    child:
+        Expanded(
+            child: Container(
+                color: corIcone,
+                child:
                     Center(child: Icon(icone, size: 48, color: Colors.white)))),
-            Container(
-                width: double.infinity,
-                height: 48.0,
-                color: Colors.white24,
-                padding: EdgeInsets.symmetric(horizontal: 8.0),
-                child: Center(child: Text(titulo)))
-          ])),
-    );
-    return Card(
-      child: Container(
-        child: FlatButton(
-          onPressed: () => navegar(context: context, pagina: pagina),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text(titulo, style: TextStyle(fontSize: 14)),
-              Padding(
-                  padding: EdgeInsets.only(top: 8),
-                  child: Icon(icone, size: 32, color: corIcone))
-            ],
-          ),
-        ),
-      ),
+        Container(
+            width: double.infinity,
+            height: 48.0,
+            color: Colors.white24,
+            padding: EdgeInsets.symmetric(horizontal: 8.0),
+            child: Center(child: Text(titulo)))
+      ])),
     );
   }
 }

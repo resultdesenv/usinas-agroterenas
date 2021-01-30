@@ -26,6 +26,7 @@ class SincronizacaoSafraRepository implements SincronizacaoBase<Usuario> {
     String token, {
     String cdInstManfro,
     String cdSafra,
+    String nivel2,
   }) async {
     final dataInicial = DateTime.now();
     await limpar();
@@ -56,8 +57,10 @@ class SincronizacaoSafraRepository implements SincronizacaoBase<Usuario> {
       await dbInstancia.insert('safra', safra.toJson());
     }
     await sincronizacaoHistoricoRepository.salvarDataAtualizacao(
-        'safra', Duration(
-        milliseconds: DateTime.now().millisecondsSinceEpoch -
-            dataInicial.millisecondsSinceEpoch), safras.length);
+        'safra',
+        Duration(
+            milliseconds: DateTime.now().millisecondsSinceEpoch -
+                dataInicial.millisecondsSinceEpoch),
+        safras.length);
   }
 }

@@ -10,16 +10,24 @@ class SincronizacaoState extends Equatable {
   final List<HistoricoItemAtualizacaoModel> itensSincronizacao;
   final List<SafraModel> safras;
   final SafraModel safraSelecionada;
+  final String filtroNivel2;
 
-  SincronizacaoState(
-      {this.carregando = false,
-      this.itensSincronizacao = const [],
-      this.safras = const [],
-      this.safraSelecionada,
-      this.mensagem});
+  SincronizacaoState({
+    this.carregando = false,
+    this.itensSincronizacao = const [],
+    this.safras = const [],
+    this.safraSelecionada,
+    this.mensagem,
+    this.filtroNivel2,
+  });
 
-  List<Object> get props =>
-      [mensagem, carregando, itensSincronizacao, safraSelecionada];
+  List<Object> get props => [
+        mensagem,
+        carregando,
+        itensSincronizacao,
+        safraSelecionada,
+        filtroNivel2,
+      ];
 
   SincronizacaoState copyWith({
     String mensagem,
@@ -27,12 +35,13 @@ class SincronizacaoState extends Equatable {
     List<HistoricoItemAtualizacaoModel> itensSincronizacao,
     List<SafraModel> safras,
     SafraModel safraSelecionada,
+    String filtroNivel2,
   }) =>
       SincronizacaoState(
-        mensagem: mensagem,
-        carregando: carregando == null ? this.carregando : carregando,
-        itensSincronizacao: itensSincronizacao ?? this.itensSincronizacao,
-        safras: safras ?? this.safras,
-        safraSelecionada: safraSelecionada ?? this.safraSelecionada,
-      );
+          mensagem: mensagem,
+          carregando: carregando == null ? this.carregando : carregando,
+          itensSincronizacao: itensSincronizacao ?? this.itensSincronizacao,
+          safras: safras ?? this.safras,
+          safraSelecionada: safraSelecionada ?? this.safraSelecionada,
+          filtroNivel2: filtroNivel2 ?? this.filtroNivel2);
 }

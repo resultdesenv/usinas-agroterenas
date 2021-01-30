@@ -9,6 +9,7 @@ import 'package:agronomico/comum/sincronizacao/sincronizacao_autenticacao.dart';
 import 'package:agronomico/comum/sincronizacao/sincronizacao_empresa_repository.dart';
 import 'package:agronomico/comum/sincronizacao/sincronizacao_historico_repository.dart';
 import 'package:agronomico/comum/sincronizacao/sincronizacao_safra_repository.dart';
+import 'package:agronomico/comum/sincronizacao/sincronizacao_upnivel3_local_repository.dart';
 import 'package:agronomico/comum/sincronizacao/sincronizacao_upnivel3_repository.dart';
 import 'package:agronomico/comum/sincronizacao/sincronizacao_usuario_empresa_repository.dart';
 import 'package:agronomico/comum/sincronizacao/sincronizacao_usuario_repository.dart';
@@ -89,6 +90,17 @@ class SincronizacaoPage extends StatelessWidget {
                   nome: 'Área Nivel3 Safra - Estimativa',
                   tabela: 'upnivel3',
                   repository: SincronizacaoUpNivel3Repository(
+                    db: Db(),
+                    sincronizacaoHistoricoRepository:
+                        SincronizacaoHistoricoRepository(db: Db()),
+                    dio: dio,
+                  ),
+                ),
+                HistoricoItemAtualizacaoModel(
+                  nome: 'Área Nivel3 Safra - Local',
+                  tabela: 'upnivel3',
+                  filterNivel2: true,
+                  repository: SincronizacaoUpNivel3LocalRepository(
                     db: Db(),
                     sincronizacaoHistoricoRepository:
                         SincronizacaoHistoricoRepository(db: Db()),

@@ -5,6 +5,7 @@ abstract class SincronizacaoBase<Model> {
     String token, {
     String cdInstManfro,
     String cdSafra,
+    String nivel2,
   });
 
   updateDio(Dio dio);
