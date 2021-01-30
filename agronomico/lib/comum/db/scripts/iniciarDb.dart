@@ -1,8 +1,10 @@
+import 'package:agronomico/comum/db/scripts/apont_broca.dart';
 import 'package:agronomico/comum/db/scripts/empresa.dart';
 import 'package:agronomico/comum/db/scripts/estimativa.dart';
 import 'package:agronomico/comum/db/scripts/preferencia.dart';
 import 'package:agronomico/comum/db/scripts/safra.dart';
 import 'package:agronomico/comum/db/scripts/sequencia.dart';
+import 'package:agronomico/comum/db/scripts/tipo_fitossanidade.dart';
 import 'package:agronomico/comum/db/scripts/upnivel3.dart';
 import 'package:agronomico/comum/db/scripts/usuario.dart';
 import 'package:agronomico/comum/db/scripts/usuarioSalvos.dart';
@@ -31,6 +33,8 @@ class IniciarDb {
       await db.execute(tabelaUpnivel3);
       await db.execute(tabelaPreferencia);
       await db.execute(historicoSincronizacao);
+      await db.execute(tabelaFitossanidade);
+      await db.execute(tabelaApontBroca);
     } catch (e) {
       print(e);
     }
