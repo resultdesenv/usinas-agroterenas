@@ -20,12 +20,20 @@ class UpNivel3Bloc extends Bloc<UpNivel3Event, UpNivel3State> {
   final PreferenciaRepository preferenciaRepository;
   final RepositorioEstimativa estimativaRepository;
   final SincronizacaoSequenciaRepository sequenciaRepository;
+  final Function({
+    int cdFunc,
+    int noSeq,
+    int noBoletim,
+    int dispositivo,
+    List<UpNivel3Model> upniveis,
+  }) callback;
 
   UpNivel3Bloc({
     @required this.upNivel3ConsultaRepository,
     @required this.preferenciaRepository,
     @required this.estimativaRepository,
     @required this.sequenciaRepository,
+    @required this.callback,
   }) : super(UpNivel3State());
 
   @override
@@ -146,37 +154,47 @@ class UpNivel3Bloc extends Bloc<UpNivel3Event, UpNivel3State> {
             BaseInherited.of(evento.context).usuarioAutenticada.cdFunc;
         String mensagemInicial;
 
-        for (var item in state.selecionadas) {
-          final existeEstimativa = await estimativaRepository.get(filtros: {
-            'cdSafra': item.cdSafra,
-            'cdUpnivel1': item.cdUpnivel1,
-            'cdUpnivel2': item.cdUpnivel2,
-            'cdUpnivel3': item.cdUpnivel3,
-            'instancia': empresa.cdInstManfro,
-          }).then((value) =>
-              value.length > 0 && !value.every((item) => item.status == 'I'));
+        if (callback != null) {
+          callback(
+            cdFunc: cdFunc,
+            noSeq: ++noSeqAtual,
+            noBoletim: 10000 + sequencia.sequencia + 1,
+            dispositivo: dispositivo['idDispositivo'],
+            upniveis: state.selecionadas,
+          );
+        } else {
+          for (var item in state.selecionadas) {
+            final existeEstimativa = await estimativaRepository.get(filtros: {
+              'cdSafra': item.cdSafra,
+              'cdUpnivel1': item.cdUpnivel1,
+              'cdUpnivel2': item.cdUpnivel2,
+              'cdUpnivel3': item.cdUpnivel3,
+              'instancia': empresa.cdInstManfro,
+            }).then((value) =>
+                value.length > 0 && !value.every((item) => item.status == 'I'));
 
-          if (existeEstimativa) {
-            mensagemInicial =
-                'Existe estimativa não sincronizada para alguns registros. Efetue a sincronização!';
-          } else {
-            estimativas.add(item.gerarEstimativa(
-              cdFunc: cdFunc,
-              noSeq: ++noSeqAtual,
-              noBoletim: 10000 + sequencia.sequencia + 1,
-              dispositivo: dispositivo['idDispositivo'],
-            ));
+            if (existeEstimativa) {
+              mensagemInicial =
+                  'Existe estimativa não sincronizada para alguns registros. Efetue a sincronização!';
+            } else {
+              estimativas.add(item.gerarEstimativa(
+                cdFunc: cdFunc,
+                noSeq: ++noSeqAtual,
+                noBoletim: 10000 + sequencia.sequencia + 1,
+                dispositivo: dispositivo['idDispositivo'],
+              ));
+            }
           }
-        }
 
-        navegar(
-          context: evento.context,
-          pagina: ApontamentoEstimativaPage(
-            apontamentos: estimativas,
-            criacao: true,
-            mensagemInicial: mensagemInicial,
-          ),
-        );
+          navegar(
+            context: evento.context,
+            pagina: ApontamentoEstimativaPage(
+              apontamentos: estimativas,
+              criacao: true,
+              mensagemInicial: mensagemInicial,
+            ),
+          );
+        }
       } catch (e) {
         print(e);
         yield state.juntar(mensagemErro: e.toString());

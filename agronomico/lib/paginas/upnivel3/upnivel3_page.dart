@@ -1,5 +1,6 @@
 import 'package:agronomico/base/base_inherited.dart';
 import 'package:agronomico/comum/db/db.dart';
+import 'package:agronomico/comum/modelo/upnivel3_model.dart';
 import 'package:agronomico/comum/repositorios/upnivel3_consulta_repository.dart';
 import 'package:agronomico/comum/repositorios/preferencia_repository.dart';
 import 'package:agronomico/comum/repositorios/repositorio_estimativa.dart';
@@ -13,8 +14,15 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 class UpNivel3Page extends StatefulWidget {
   final bool selecaoMultipla;
+  final Function({
+    int cdFunc,
+    int noSeq,
+    int noBoletim,
+    int dispositivo,
+    List<UpNivel3Model> upniveis,
+  }) callback;
 
-  UpNivel3Page({this.selecaoMultipla = false});
+  UpNivel3Page({this.selecaoMultipla = false, this.callback});
 
   @override
   _UpNivel3PageState createState() => _UpNivel3PageState();
@@ -38,6 +46,7 @@ class _UpNivel3PageState extends State<UpNivel3Page> {
 
     return BlocProvider(
       create: (context) => UpNivel3Bloc(
+        callback: widget.callback,
         sequenciaRepository: SincronizacaoSequenciaRepository(
           db: Db(),
           dio: dio,

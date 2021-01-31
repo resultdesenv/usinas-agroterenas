@@ -8,22 +8,27 @@ class UpNivel3Tile extends StatelessWidget {
   final Function(bool) onSelectionChange;
   final UpNivel3Model upnivel3;
   final bool selecaoMultipla;
+  final bool disabled;
 
   UpNivel3Tile({
     @required this.onSelectionChange,
     @required this.upnivel3,
     @required this.selecaoMultipla,
     this.selected = false,
+    this.disabled = false,
   });
 
   @override
   Widget build(BuildContext context) {
     return Container(
       child: ExpansionTile(
-        leading: selecaoMultipla
-            ? Checkbox(value: selected, onChanged: onSelectionChange)
-            : null,
-        title: UpNivel3MontaTabela(upnivel3: upnivel3),
+        leading: Checkbox(
+          value: selected,
+          onChanged: (value) {
+            if (!disabled || !value) onSelectionChange(value);
+          },
+        ),
+        title: UpNivel3MontaTabela(upnivel3: upnivel3, disabled: disabled),
         tilePadding: EdgeInsets.only(left: 8, right: 0),
         trailing: Container(width: 1, height: 1),
         childrenPadding: EdgeInsets.all(16),

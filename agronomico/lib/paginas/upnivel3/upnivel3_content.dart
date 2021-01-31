@@ -11,7 +11,10 @@ class UpNivel3Content extends StatelessWidget {
   final bool selecaoMultipla;
   final scaffoldKey;
 
-  UpNivel3Content({@required this.selecaoMultipla, @required this.scaffoldKey});
+  UpNivel3Content({
+    @required this.selecaoMultipla,
+    @required this.scaffoldKey,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -61,13 +64,20 @@ class UpNivel3Content extends StatelessWidget {
                               children: [
                                 Padding(
                                   padding: EdgeInsets.only(right: 16, left: 8),
-                                  child: Checkbox(
-                                    value: estado.selecionadas.length ==
-                                        estado.lista.length,
-                                    onChanged: (valor) => context
-                                        .bloc<UpNivel3Bloc>()
-                                        .add(CheckAllUpNivel3(valor: valor)),
-                                  ),
+                                  child: selecaoMultipla
+                                      ? Checkbox(
+                                          value: estado.selecionadas.length ==
+                                              estado.lista.length,
+                                          onChanged: (valor) => context
+                                              .bloc<UpNivel3Bloc>()
+                                              .add(
+                                                CheckAllUpNivel3(valor: valor),
+                                              ),
+                                        )
+                                      : SizedBox(
+                                          height: 48,
+                                          width: 48,
+                                        ),
                                 ),
                                 Expanded(
                                   child: Padding(
@@ -136,14 +146,18 @@ class UpNivel3Content extends StatelessWidget {
                               itemBuilder: (context, indice) => UpNivel3Tile(
                                 selecaoMultipla: selecaoMultipla,
                                 upnivel3: estado.lista[indice],
+                                disabled: estado.selecionadas.length > 0 &&
+                                    !selecaoMultipla &&
+                                    !estado.selecionadas
+                                        .contains(estado.lista[indice]),
                                 selected: estado.selecionadas
                                     .contains(estado.lista[indice]),
                                 onSelectionChange: (__) {
-                                  context.bloc<UpNivel3Bloc>().add(
-                                        MudaSelecaoUpNivel3(
-                                          upnivel3: estado.lista[indice],
-                                        ),
-                                      );
+                                  context
+                                      .bloc<UpNivel3Bloc>()
+                                      .add(MudaSelecaoUpNivel3(
+                                        upnivel3: estado.lista[indice],
+                                      ));
                                 },
                               ),
                             ),
