@@ -22,7 +22,6 @@ class UpNivel3Bloc extends Bloc<UpNivel3Event, UpNivel3State> {
   final SincronizacaoSequenciaRepository sequenciaRepository;
   final Function({
     int cdFunc,
-    int noSeq,
     int noBoletim,
     int dispositivo,
     List<UpNivel3Model> upniveis,
@@ -157,7 +156,6 @@ class UpNivel3Bloc extends Bloc<UpNivel3Event, UpNivel3State> {
         if (callback != null) {
           callback(
             cdFunc: cdFunc,
-            noSeq: ++noSeqAtual,
             noBoletim: 10000 + sequencia.sequencia + 1,
             dispositivo: dispositivo['idDispositivo'],
             upniveis: state.selecionadas,

@@ -1,8 +1,7 @@
 import 'dart:convert';
-
+import 'package:agronomico/comum/modelo/apont_broca_model.dart';
+import 'package:agronomico/comum/repositorios/apont_broca_consulta_repository.dart';
 import 'package:agronomico/comum/repositorios/preferencia_repository.dart';
-import 'package:agronomico/comum/repositorios/repositorio_estimativa.dart';
-import 'package:agronomico/comum/repositorios/sequencia_repository.dart';
 import 'package:agronomico/paginas/apontamento_broca_lista/apontamento_broca_lista_event.dart';
 import 'package:agronomico/paginas/apontamento_broca_lista/apontamento_broca_lista_state.dart';
 import 'package:bloc/bloc.dart';
@@ -10,13 +9,11 @@ import 'package:flutter/foundation.dart';
 
 class ApontamentoBrocaListaBloc
     extends Bloc<ApontamentoBrocaListaEvent, ApontamentoBrocaListaState> {
-  final RepositorioEstimativa repositorioEstimativa;
+  final ApontBrocaConsultaRepository repositorioBroca;
   final PreferenciaRepository preferenciaRepository;
-  final SincronizacaoSequenciaRepository sequenciaRepository;
 
   ApontamentoBrocaListaBloc({
-    @required this.repositorioEstimativa,
-    @required this.sequenciaRepository,
+    @required this.repositorioBroca,
     @required this.preferenciaRepository,
   }) : super(ApontamentoBrocaListaState());
 
@@ -47,7 +44,7 @@ class ApontamentoBrocaListaBloc
     if (event is BuscaSafra) {
       final listaDropDown = state.listaDropDown;
       final filtros = state.filtros;
-      final safra = await repositorioEstimativa.buscaSafra(
+      final safra = await repositorioBroca.buscaSafra(
         up1: event.up1,
       );
       listaDropDown['cdSafra'] = safra;
@@ -63,7 +60,7 @@ class ApontamentoBrocaListaBloc
     if (event is BuscaUpnivel2) {
       final listaDropDown = state.listaDropDown;
       final filtros = state.filtros;
-      final up2 = await repositorioEstimativa.buscaUp2(
+      final up2 = await repositorioBroca.buscaUp2(
         safra: event.safra,
       );
 
@@ -80,7 +77,7 @@ class ApontamentoBrocaListaBloc
     if (event is BuscaUpnivel3) {
       final listaDropDown = state.listaDropDown;
       final filtros = state.filtros;
-      final up3 = await repositorioEstimativa.buscaUp3(
+      final up3 = await repositorioBroca.buscaUp3(
         up2: event.up2,
       );
       listaDropDown['cdUpnivel3'] = up3;
@@ -93,8 +90,26 @@ class ApontamentoBrocaListaBloc
     }
 
     if (event is MontaBoletimBroca) {
-      print(
-          'gerar 100 sequencias e ja salvar, depois mandar elas pra tela de form');
+      try {
+        int noSeqAtual = 0;
+        final List<ApontBrocaModel> apontBrocas = List(100)
+            .map((_) => ApontBrocaModel.fromUpnivel3(
+                  event.upniveis.first,
+                  noBoletin: event.noBoletim,
+                  noSequencia: ++noSeqAtual,
+                  dispositivo: event.dispositivo,
+                  cdFunc: event.cdFunc,
+                ))
+            .toList();
+        await repositorioBroca.salvar(apontBrocas);
+        // navegar(
+        //   context: event.context,
+        //   pagina: ApontamentoBrocaForm(brocas: apontBrocas),
+        // );
+      } catch (e) {
+        print(e);
+        yield state.juntar(mensagemErro: e.toString());
+      }
     }
   }
 

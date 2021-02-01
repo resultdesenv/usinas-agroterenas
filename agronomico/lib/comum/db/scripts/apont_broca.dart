@@ -10,6 +10,7 @@ const tabelaApontBroca = '''
     cdUpnivel1 TEXT NOT NULL,
     cdUpnivel2 TEXT NOT NULL,
     cdUpnivel3 TEXT NOT NULL,
+    cdFitoss INTEGER,
     qtBrocados REAL,
     qtCanaPodr REAL,
     qtCanas REAL,

@@ -3,6 +3,7 @@ import 'package:agronomico/comum/componentes/drawer_filtros.dart';
 import 'package:agronomico/comum/componentes/drawer_menu.dart';
 import 'package:agronomico/comum/modelo/upnivel3_model.dart';
 import 'package:agronomico/comum/utilidades/navegacao.dart';
+import 'package:agronomico/paginas/apontamento_broca_form/apontamento_broca_form_page.dart';
 import 'package:agronomico/paginas/apontamento_broca_lista/apontamento_broca_lista_bloc.dart';
 import 'package:agronomico/paginas/apontamento_broca_lista/apontamento_broca_lista_event.dart';
 import 'package:agronomico/paginas/apontamento_broca_lista/apontamento_broca_lista_state.dart';
@@ -37,19 +38,17 @@ class ApontamentoBrocaListaContent extends StatelessWidget {
                   pagina: UpNivel3Page(
                     callback: ({
                       int cdFunc,
-                      int noSeq,
                       int noBoletim,
                       int dispositivo,
                       List<UpNivel3Model> upniveis,
                     }) =>
-                        context
-                            .bloc<ApontamentoBrocaListaBloc>()
-                            .add(MontaBoletimBroca(
+                        navegar(
+                            context: context,
+                            pagina: ApontamentoBrocaFormPage(
                               cdFunc: cdFunc,
-                              noSeq: noSeq,
-                              dispositivo: dispositivo,
                               noBoletim: noBoletim,
-                              upniveis: upniveis,
+                              dispositivo: dispositivo,
+                              upnivel3: upniveis.first,
                             )),
                   ),
                 ),

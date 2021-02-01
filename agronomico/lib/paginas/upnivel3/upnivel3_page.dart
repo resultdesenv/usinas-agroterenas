@@ -16,7 +16,6 @@ class UpNivel3Page extends StatefulWidget {
   final bool selecaoMultipla;
   final Function({
     int cdFunc,
-    int noSeq,
     int noBoletim,
     int dispositivo,
     List<UpNivel3Model> upniveis,

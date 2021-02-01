@@ -40,16 +40,16 @@ class BuscaUpnivel3 extends ApontamentoBrocaListaEvent {
 
 class MontaBoletimBroca extends ApontamentoBrocaListaEvent {
   final int cdFunc;
-  final int noSeq;
   final int noBoletim;
   final int dispositivo;
   final List<UpNivel3Model> upniveis;
+  final BuildContext context;
 
   MontaBoletimBroca({
     @required this.cdFunc,
     @required this.dispositivo,
     @required this.noBoletim,
-    @required this.noSeq,
     @required this.upniveis,
+    @required this.context,
   });
 }

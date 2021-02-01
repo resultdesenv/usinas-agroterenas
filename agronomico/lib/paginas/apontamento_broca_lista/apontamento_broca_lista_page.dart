@@ -1,7 +1,7 @@
 import 'package:agronomico/base/base_inherited.dart';
 import 'package:agronomico/comum/db/db.dart';
+import 'package:agronomico/comum/repositorios/apont_broca_consulta_repository.dart';
 import 'package:agronomico/comum/repositorios/preferencia_repository.dart';
-import 'package:agronomico/comum/repositorios/repositorio_estimativa.dart';
 import 'package:agronomico/comum/repositorios/sequencia_repository.dart';
 import 'package:agronomico/comum/sincronizacao/sincronizacao_historico_repository.dart';
 import 'package:agronomico/paginas/apontamento_broca_lista/apontamento_broca_lista_bloc.dart';
@@ -32,15 +32,8 @@ class _ApontamentoBrocaListaPageState extends State<ApontamentoBrocaListaPage> {
   Widget build(BuildContext context) {
     return BlocProvider<ApontamentoBrocaListaBloc>(
       create: (_) => ApontamentoBrocaListaBloc(
-        repositorioEstimativa: RepositorioEstimativa(db: Db()),
+        repositorioBroca: ApontBrocaConsultaRepository(db: Db()),
         preferenciaRepository: PreferenciaRepository(db: Db()),
-        sequenciaRepository: SincronizacaoSequenciaRepository(
-          db: Db(),
-          dio: BaseInherited.of(context).dio,
-          preferenciaRepository: PreferenciaRepository(db: Db()),
-          sincronizacaoHistoricoRepository:
-              SincronizacaoHistoricoRepository(db: Db()),
-        ),
       ),
       child: Scaffold(
         body: ApontamentoBrocaListaContent(scaffoldKey: scaffoldKey),
