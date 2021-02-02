@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="17f211c3-634b-44f2-9223-bbc7e69ecc30" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/agronomico/lib/comum/componentes/drawer_filtros.dart" beforeDir="false" afterPath="$PROJECT_DIR$/agronomico/lib/comum/componentes/drawer_filtros.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/agronomico/lib/paginas/sincronizacao/sincronizao_content.dart" beforeDir="false" afterPath="$PROJECT_DIR$/agronomico/lib/paginas/sincronizacao/sincronizao_content.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/agronomico/lib/paginas/sincronizacao/sincronizao_page.dart" beforeDir="false" afterPath="$PROJECT_DIR$/agronomico/lib/paginas/sincronizacao/sincronizao_page.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/agronomico/lib/paginas/upnivel3/upnivel3_bloc.dart" beforeDir="false" afterPath="$PROJECT_DIR$/agronomico/lib/paginas/upnivel3/upnivel3_bloc.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/agronomico/lib/paginas/upnivel3/upnivel3_content.dart" beforeDir="false" afterPath="$PROJECT_DIR$/agronomico/lib/paginas/upnivel3/upnivel3_content.dart" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="ProjectId" id="1ng178Jiz05G0zScxvLo6kfhjlZ" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="settings.editor.selected.configurable" value="AndroidSdkUpdater" />
+  </component>
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="17f211c3-634b-44f2-9223-bbc7e69ecc30" name="Default Changelist" comment="" />
+      <created>1611796751784</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1611796751784</updated>
+    </task>
+    <servers />
+  </component>
+  <component name="WindowStateProjectService">
+    <state x="166" y="147" width="1090" height="501" key="AVDManager" timestamp="1611797222087">
+      <screen x="56" y="27" width="1310" height="741" />
+    </state>
+    <state x="166" y="147" width="1090" height="501" key="AVDManager/56.27.1310.741/1366.0.1024.768@56.27.1310.741" timestamp="1611797222087" />
+    <state x="56" y="31" width="1022" height="737" key="SettingsEditor" timestamp="1611855690829">
+      <screen x="56" y="27" width="1310" height="741" />
+    </state>
+    <state x="56" y="31" width="1022" height="737" key="SettingsEditor/56.27.1310.741/1366.0.1024.768@56.27.1310.741" timestamp="1611855690829" />
+  </component>
+</project>
