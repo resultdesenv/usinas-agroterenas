@@ -7,6 +7,7 @@ import 'package:agronomico/paginas/apontamento_broca_form/apontamento_broca_form
 import 'package:agronomico/paginas/apontamento_broca_lista/apontamento_broca_lista_bloc.dart';
 import 'package:agronomico/paginas/apontamento_broca_lista/apontamento_broca_lista_event.dart';
 import 'package:agronomico/paginas/apontamento_broca_lista/apontamento_broca_lista_state.dart';
+import 'package:agronomico/paginas/apontamento_broca_lista/apontamento_broca_lista_tile.dart';
 import 'package:agronomico/paginas/upnivel3/upnivel3_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -63,8 +64,165 @@ class ApontamentoBrocaListaContent extends StatelessWidget {
               ),
             ],
           ),
-          body: Center(
-            child: Text('Brocas'),
+          body: state.carregando
+              ? Center(child: CircularProgressIndicator())
+              : state.brocas.length == 0
+                  ? Center(child: Text('Nenhum registro encontrado.'))
+                  : Column(
+                      children: [
+                        Container(
+                          color: Colors.grey[200],
+                          child: Row(
+                            children: [
+                              Padding(
+                                padding: EdgeInsets.only(right: 16, left: 8),
+                                child: SizedBox(width: 48, height: 48),
+                              ),
+                              Expanded(
+                                child: Padding(
+                                  padding: EdgeInsets.only(right: 16),
+                                  child: Table(
+                                    children: [
+                                      TableRow(
+                                        children: [
+                                          TableCell(
+                                            child: Text(
+                                              'Boletim',
+                                              style: TextStyle(
+                                                fontSize: 10,
+                                                fontWeight: FontWeight.w500,
+                                              ),
+                                            ),
+                                          ),
+                                          TableCell(
+                                            child: Text(
+                                              'Coletor',
+                                              style: TextStyle(
+                                                fontSize: 10,
+                                                fontWeight: FontWeight.w500,
+                                              ),
+                                            ),
+                                          ),
+                                          TableCell(
+                                            child: Text(
+                                              'Safra',
+                                              style: TextStyle(
+                                                fontSize: 10,
+                                                fontWeight: FontWeight.w500,
+                                              ),
+                                            ),
+                                          ),
+                                          TableCell(
+                                            child: Text(
+                                              'Up1',
+                                              style: TextStyle(
+                                                fontSize: 10,
+                                                fontWeight: FontWeight.w500,
+                                              ),
+                                            ),
+                                          ),
+                                          TableCell(
+                                            child: Text(
+                                              'Up2',
+                                              style: TextStyle(
+                                                fontSize: 10,
+                                                fontWeight: FontWeight.w500,
+                                              ),
+                                            ),
+                                          ),
+                                          TableCell(
+                                            child: Text(
+                                              'Up3',
+                                              style: TextStyle(
+                                                fontSize: 10,
+                                                fontWeight: FontWeight.w500,
+                                              ),
+                                            ),
+                                          ),
+                                          TableCell(
+                                            child: Text(
+                                              '',
+                                              style: TextStyle(
+                                                fontSize: 10,
+                                                fontWeight: FontWeight.w500,
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        Expanded(
+                          child: ListView.builder(
+                            itemCount: state.brocas.length,
+                            itemBuilder: (context, index) =>
+                                ApontamentoBrocaListaTile(
+                              broca: state.brocas[index],
+                              selecionado:
+                                  state.brocaSelecionada == state.brocas[index],
+                              alteraSelecao: (value) => context
+                                  .bloc<ApontamentoBrocaListaBloc>()
+                                  .add(AlteraSelecaoBroca(
+                                      value: value,
+                                      broca: state.brocas[index])),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+          floatingActionButton: Stack(
+            overflow: Overflow.visible,
+            children: <Widget>[
+              AnimatedPositioned(
+                curve: Curves.easeInOut,
+                duration: Duration(milliseconds: 380),
+                bottom: state.brocaSelecionada != null ? 74 : -84,
+                right: 5,
+                child: FloatingActionButton(
+                  tooltip: 'Remover Sequencias',
+                  heroTag: null,
+                  onPressed: () => _confirmacaoExclusao(context),
+                  backgroundColor: Colors.red,
+                  child: Icon(Icons.delete),
+                ),
+              ),
+              AnimatedPositioned(
+                curve: Curves.easeInOut,
+                duration: Duration(milliseconds: 380),
+                bottom: state.brocaSelecionada != null ? 0 : -84,
+                right: 0,
+                child: AnimatedContainer(
+                  duration: Duration(milliseconds: 380),
+                  height: state.brocaSelecionada != null ? 64 : null,
+                  width: state.brocaSelecionada != null ? 64 : null,
+                  child: FloatingActionButton(
+                    tooltip: 'Editar Sequencias',
+                    heroTag: null,
+                    onPressed: () async {
+                      await navegar(
+                        context: context,
+                        pagina: ApontamentoBrocaFormPage(
+                          noBoletim: state.brocaSelecionada.noBoletim,
+                          novoApontamento: false,
+                        ),
+                      );
+                      context
+                          .bloc<ApontamentoBrocaListaBloc>()
+                          .add(BuscaListaBroca(
+                            filtros: state.filtros,
+                            salvaFiltros: false,
+                          ));
+                    },
+                    child: Icon(Icons.edit),
+                  ),
+                ),
+              ),
+            ],
           ),
           drawer: DrawerMenu(),
           endDrawer: DrawerFiltros(
@@ -104,6 +262,32 @@ class ApontamentoBrocaListaContent extends StatelessWidget {
           ),
         );
       },
+    );
+  }
+
+  void _confirmacaoExclusao(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (_) => AlertDialog(
+        title: Text('Você tem certeza?'),
+        content: Text('Deseja EXCLUIR o apontamento selecionado?'),
+        actions: [
+          FlatButton(
+            child: Text('Voltar'),
+            onPressed: () => Navigator.of(context).pop(),
+          ),
+          FlatButton(
+            child: Text(
+              'Continuar',
+              style: TextStyle(color: Colors.red),
+            ),
+            onPressed: () {
+              context.bloc<ApontamentoBrocaListaBloc>().add(RemoverBrocas());
+              Navigator.of(context).pop();
+            },
+          ),
+        ],
+      ),
     );
   }
 }

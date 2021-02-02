@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'package:agronomico/comum/modelo/apont_broca_model.dart';
 import 'package:agronomico/comum/repositorios/apont_broca_consulta_repository.dart';
 import 'package:agronomico/comum/repositorios/preferencia_repository.dart';
 import 'package:agronomico/paginas/apontamento_broca_lista/apontamento_broca_lista_event.dart';
@@ -19,15 +18,33 @@ class ApontamentoBrocaListaBloc
 
   @override
   Stream<ApontamentoBrocaListaState> mapEventToState(
-      ApontamentoBrocaListaEvent event) async* {
+    ApontamentoBrocaListaEvent event,
+  ) async* {
     if (event is BuscaListaBroca) {
-      if (event.salvaFiltros) {
-        await preferenciaRepository.salvar(
-          idPreferencia: 'estimativaLista',
-          valorPreferencia: json.encode(event.filtros),
+      yield state.juntar(
+        carregando: true,
+        apagaSelecao: true,
+      );
+      try {
+        if (event.salvaFiltros) {
+          await preferenciaRepository.salvar(
+            idPreferencia: 'estimativaLista',
+            valorPreferencia: json.encode(event.filtros),
+          );
+        }
+
+        final brocas = await repositorioBroca.resumos(
+            filtros: _formataFiltros(event.filtros));
+
+        yield state.juntar(
+          filtros: event.filtros,
+          carregando: false,
+          brocas: brocas,
         );
+      } catch (e) {
+        print(e);
+        yield state.juntar(mensagemErro: e.toString(), carregando: false);
       }
-      yield state.juntar(filtros: event.filtros);
     }
 
     if (event is AlterarFiltroBroca) {
@@ -89,26 +106,28 @@ class ApontamentoBrocaListaBloc
       });
     }
 
-    if (event is MontaBoletimBroca) {
+    if (event is AlteraSelecaoBroca) {
+      yield state.juntar(
+          brocaSelecionada: event.broca, apagaSelecao: !event.value);
+    }
+
+    if (event is RemoverBrocas) {
+      yield state.juntar(carregando: true);
       try {
-        int noSeqAtual = 0;
-        final List<ApontBrocaModel> apontBrocas = List(100)
-            .map((_) => ApontBrocaModel.fromUpnivel3(
-                  event.upniveis.first,
-                  noBoletin: event.noBoletim,
-                  noSequencia: ++noSeqAtual,
-                  dispositivo: event.dispositivo,
-                  cdFunc: event.cdFunc,
-                ))
-            .toList();
-        await repositorioBroca.salvar(apontBrocas);
-        // navegar(
-        //   context: event.context,
-        //   pagina: ApontamentoBrocaForm(brocas: apontBrocas),
-        // );
+        await repositorioBroca
+            .removerPorBoletim(state.brocaSelecionada.noBoletim);
+        final brocas = await repositorioBroca.resumos(
+          filtros: _formataFiltros(state.filtros),
+        );
+
+        yield state.juntar(
+          carregando: false,
+          brocas: brocas,
+          apagaSelecao: true,
+        );
       } catch (e) {
         print(e);
-        yield state.juntar(mensagemErro: e.toString());
+        yield state.juntar(mensagemErro: e.toString(), carregando: false);
       }
     }
   }
@@ -121,9 +140,9 @@ class ApontamentoBrocaListaBloc
       final dataInicio = ">= date('${valores['dtInicio']}') ";
       final dataFinal = "<= date('${valores['dtFim']}')";
 
-      filtrosFormatados['date(dtHistorico)'] =
+      filtrosFormatados['date(dtOperacao)'] =
           "${valores['dtInicio'] != null ? dataInicio : " "}"
-          "${valores['dtInicio'] != null && valores['dtFim'] != null ? " AND date(dtUltimoCorte) " : ""} "
+          "${valores['dtInicio'] != null && valores['dtFim'] != null ? " AND date(dtOperacao) " : ""} "
           "${valores['dtFim'] != null ? dataFinal : ""}";
     }
 

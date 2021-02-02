@@ -41,15 +41,17 @@ class ApontamentoBrocaFormBloc
                   ))
               .toList();
         } else {
-          final filtros = Map();
+          final Map<String, dynamic> filtros = Map();
           filtros['noBoletim'] = event.noBoletim;
           brocas = await repositorioBroca.get(filtros: filtros);
         }
-
         yield state.juntar(
           brocas: brocas,
           carregando: false,
           tiposFitossanidade: tiposFitossanidade,
+          novoApontamento: event.novoApontamento,
+          tipoFitossanidade:
+              brocas.first != null ? brocas.first.cdFitoss : null,
         );
       } catch (e) {
         print(e);
@@ -61,20 +63,47 @@ class ApontamentoBrocaFormBloc
     }
 
     if (event is AlteraTipoBroca) {
-      try {
-        final brocas = state.brocas
-            .map((broca) => broca.juntar(cdFitoss: event.cdFitoss))
-            .toList();
-        yield state.juntar(brocas: brocas);
-      } catch (e) {
-        yield state.juntar(mensagemErro: e.toString());
-      }
+      final brocas =
+          event.brocas.map((e) => e.juntar(cdFitoss: event.cdFitoss)).toList();
+      yield state.juntar(brocas: brocas);
     }
 
     if (event is AlteraApontamento) {
       final brocas = state.brocas;
       brocas[event.indiceBroca] = event.broca;
       yield state.juntar(brocas: brocas);
+    }
+
+    if (event is SalvarApontamentos) {
+      yield state.juntar(carregando: true);
+      try {
+        double qtCanasbroc = 0;
+        event.brocas.forEach((e) {
+          if (e.qtBrocados > 0) qtCanasbroc++;
+        });
+
+        final brocas = event.brocas
+            .map((e) => e.juntar(
+                  qtCanasbroc: qtCanasbroc,
+                  qtCanas: event.brocas.length.toDouble(),
+                ))
+            .toList();
+        await repositorioBroca.salvar(brocas);
+
+        if (state.novoApontamento) {
+          final sequencia = await repositorioSequencia.buscarSequencia(
+            empresa: event.empresa,
+          );
+          await repositorioSequencia.salvarSequencia(
+            sequencia: sequencia.juntar(sequencia: sequencia.sequencia + 1),
+          );
+        }
+
+        yield state.juntar(carregando: false, voltarParaListagem: true);
+      } catch (e) {
+        print(e);
+        yield state.juntar(carregando: false, mensagemErro: e.toString());
+      }
     }
   }
 }

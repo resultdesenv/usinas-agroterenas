@@ -10,3 +10,16 @@ Future navegar({@required BuildContext context, @required Widget pagina}) {
     ),
   );
 }
+
+Future navegarReplace({
+  @required BuildContext context,
+  @required Widget pagina,
+}) {
+  return Navigator.pushReplacement(
+    context,
+    PageTransition(
+      type: PageTransitionType.rightToLeft,
+      child: pagina,
+    ),
+  );
+}

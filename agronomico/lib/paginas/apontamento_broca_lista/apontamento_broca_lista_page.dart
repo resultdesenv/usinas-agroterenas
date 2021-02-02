@@ -1,9 +1,6 @@
-import 'package:agronomico/base/base_inherited.dart';
 import 'package:agronomico/comum/db/db.dart';
 import 'package:agronomico/comum/repositorios/apont_broca_consulta_repository.dart';
 import 'package:agronomico/comum/repositorios/preferencia_repository.dart';
-import 'package:agronomico/comum/repositorios/sequencia_repository.dart';
-import 'package:agronomico/comum/sincronizacao/sincronizacao_historico_repository.dart';
 import 'package:agronomico/paginas/apontamento_broca_lista/apontamento_broca_lista_bloc.dart';
 import 'package:agronomico/paginas/apontamento_broca_lista/apontamento_broca_lista_content.dart';
 import 'package:flutter/cupertino.dart';

@@ -9,20 +9,19 @@ class ApontamentoBrocaFormItem extends StatelessWidget {
   final Function(ApontBrocaModel) onChanged;
   final focusTotal = FocusNode();
   final focusBrocados = FocusNode();
+  final controllerTotal;
+  final controllerBrocados;
 
   ApontamentoBrocaFormItem({
     @required this.broca,
-    @required this.indiceBroca,
-    @required this.onChanged,
+    this.indiceBroca,
+    this.onChanged,
+    @required this.controllerTotal,
+    @required this.controllerBrocados,
   });
 
   @override
   Widget build(BuildContext context) {
-    final controllerTotal =
-        TextEditingController(text: broca.qtEntrenos.toString());
-    final controllerBrocados =
-        TextEditingController(text: broca.qtBrocados.toString());
-
     focusTotal.addListener(() {
       controllerTotal.selection = TextSelection(
         baseOffset: 0,
@@ -36,60 +35,54 @@ class ApontamentoBrocaFormItem extends StatelessWidget {
       );
     });
 
-    return Card(
-      margin: EdgeInsets.only(bottom: 16),
+    return Container(
+      margin: EdgeInsets.only(bottom: 8),
+      decoration: BoxDecoration(
+        border: Border.all(color: Colors.grey),
+        borderRadius: BorderRadius.all(Radius.circular(5)),
+      ),
       child: Padding(
-        padding: EdgeInsets.all(16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+        padding: EdgeInsets.all(8),
+        child: Row(
           children: [
             Text(
               'Cana ${broca.noSequencia}',
               style: TextStyle(fontSize: 16, color: Colors.black54),
             ),
-            Row(
-              children: [
-                Expanded(
-                  child: TextFormField(
-                    controller: controllerTotal,
-                    focusNode: focusTotal,
-                    textInputAction: TextInputAction.next,
-                    keyboardType:
-                        TextInputType.numberWithOptions(decimal: true),
-                    decoration: InputDecoration(labelText: 'Total'),
-                    inputFormatters: [
-                      FilteringTextInputFormatter.allow(RegExp(r'[\d.]'))
-                    ],
-                    onChanged: (value) => onChanged(
-                      broca.juntar(
-                          qtEntrenos:
-                              double.tryParse(value) ?? broca.qtEntrenos),
-                    ),
-                  ),
-                ),
-                SizedBox(width: 16),
-                Expanded(
-                  child: TextFormField(
-                    controller: controllerBrocados,
-                    focusNode: focusBrocados,
-                    textInputAction: TextInputAction.next,
-                    keyboardType: TextInputType.number,
-                    decoration: InputDecoration(labelText: 'Brocados'),
-                    inputFormatters: [
-                      FilteringTextInputFormatter.allow(RegExp(r'[\d.]'))
-                    ],
-                    onChanged: (value) => onChanged(
-                      broca.juntar(
-                          qtBrocados:
-                              double.tryParse(value) ?? broca.qtBrocados),
-                    ),
-                  ),
-                ),
-              ],
-            )
+            SizedBox(width: 16),
+            Expanded(
+              child: TextFormField(
+                controller: controllerTotal,
+                focusNode: focusTotal,
+                textInputAction: TextInputAction.next,
+                keyboardType: TextInputType.number,
+                decoration: InputDecoration(labelText: 'Total'),
+                inputFormatters: [
+                  FilteringTextInputFormatter.allow(RegExp(r'[\d]'))
+                ],
+              ),
+            ),
+            SizedBox(width: 16),
+            Expanded(
+              child: TextFormField(
+                controller: controllerBrocados,
+                focusNode: focusBrocados,
+                textInputAction: TextInputAction.next,
+                keyboardType: TextInputType.number,
+                decoration: InputDecoration(labelText: 'Brocados'),
+                inputFormatters: [
+                  FilteringTextInputFormatter.allow(RegExp(r'[\d]')),
+                ],
+              ),
+            ),
           ],
         ),
       ),
     );
   }
+
+  ApontBrocaModel get valores => broca.juntar(
+        qtBrocados: double.tryParse(controllerBrocados.text) ?? 0,
+        qtEntrenos: double.tryParse(controllerTotal.text) ?? 0,
+      );
 }

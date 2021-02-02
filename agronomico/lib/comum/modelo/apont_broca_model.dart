@@ -150,19 +150,20 @@ class ApontBrocaModel extends Equatable {
         dtOperacao: Moment.now().format('yyyy-MM-dd'),
         dtStatus: Moment.now().format('yyyy-MM-dd'),
         hrOperacao: Moment.now().format('yyyy-MM-dd HH:mm:ss'),
-        instancia: upnivel.instancia,
+        // TODO: Remover o mock namar
+        instancia: upnivel.instancia ?? 'NAMAR',
         noBoletim: noBoletin,
-        noColetor: 0,
+        noColetor: dispositivo,
         noSequencia: noSequencia,
         qtBrocados: 0,
+        qtEntrenos: 0,
         qtCanaPodr: 0,
         qtCanas: 0,
         qtCanasbroc: 0,
         qtEntrPodr: 0,
-        qtEntrenos: 0,
         qtMedia: 0,
         status: 'P',
-        versao: '1',
+        versao: null,
       );
 
   Map<String, dynamic> get toJson => {

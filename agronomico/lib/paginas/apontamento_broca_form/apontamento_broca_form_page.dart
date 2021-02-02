@@ -18,12 +18,14 @@ class ApontamentoBrocaFormPage extends StatelessWidget {
   final int dispositivo;
   final int noBoletim;
   final UpNivel3Model upnivel3;
+  final bool novoApontamento;
 
   ApontamentoBrocaFormPage({
-    @required this.upnivel3,
+    this.upnivel3,
     this.cdFunc,
     this.dispositivo,
     this.noBoletim,
+    this.novoApontamento = true,
   });
 
   @override
@@ -44,7 +46,7 @@ class ApontamentoBrocaFormPage extends StatelessWidget {
           dispositivo: dispositivo,
           noBoletim: noBoletim,
           upnivel3: upnivel3,
-        )),
+          novoApontamento: novoApontamento)),
       child: Scaffold(
         body: ApontamentoBrocaFormContent(),
       ),

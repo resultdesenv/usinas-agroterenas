@@ -1,4 +1,5 @@
 import 'package:agronomico/comum/modelo/apont_broca_model.dart';
+import 'package:agronomico/comum/modelo/empresa_model.dart';
 import 'package:agronomico/comum/modelo/upnivel3_model.dart';
 import 'package:flutter/cupertino.dart';
 
@@ -22,8 +23,9 @@ class IniciarFormBrocas extends ApontamentoBrocaFormEvent {
 
 class AlteraTipoBroca extends ApontamentoBrocaFormEvent {
   final int cdFitoss;
+  final List<ApontBrocaModel> brocas;
 
-  AlteraTipoBroca({@required this.cdFitoss});
+  AlteraTipoBroca({@required this.cdFitoss, @required this.brocas});
 }
 
 class AlteraApontamento extends ApontamentoBrocaFormEvent {
@@ -34,4 +36,11 @@ class AlteraApontamento extends ApontamentoBrocaFormEvent {
     @required this.indiceBroca,
     @required this.broca,
   });
+}
+
+class SalvarApontamentos extends ApontamentoBrocaFormEvent {
+  final EmpresaModel empresa;
+  final List<ApontBrocaModel> brocas;
+
+  SalvarApontamentos({@required this.empresa, @required this.brocas});
 }

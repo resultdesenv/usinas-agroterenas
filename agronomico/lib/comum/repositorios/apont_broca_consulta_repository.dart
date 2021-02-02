@@ -21,9 +21,49 @@ class ApontBrocaConsultaRepository {
                   : '$e ${filtros[e]}')
               .join(' AND ')
           : null,
+      orderBy: 'noSequencia ASC',
     );
 
     return lista.map((e) => ApontBrocaModel.fromJson(e)).toList();
+  }
+
+  Future<List<ApontBrocaModel>> resumos({
+    Map<String, dynamic> filtros,
+  }) async {
+    final banco = await db.get();
+    final lista = await banco
+        .query(
+          'apont_broca',
+          where: filtros != null && filtros.keys.length > 0
+              ? filtros.keys
+                  .map((e) => !['status', 'date(dtOperacao)'].contains(e)
+                      ? "$e = '${filtros[e]}'"
+                      : '$e ${filtros[e]}')
+                  .join(' AND ')
+              : null,
+          orderBy: 'noBoletim ASC',
+        )
+        .then((l) => l.map((e) => ApontBrocaModel.fromJson(e)).toList());
+    final List<ApontBrocaModel> listaAuxiliar = [];
+
+    lista.forEach((broca) {
+      final int indiceResumo = listaAuxiliar.indexWhere(
+        (e) => e.noBoletim == broca.noBoletim,
+      );
+      if (indiceResumo != -1) {
+        final resumo = listaAuxiliar[indiceResumo];
+        listaAuxiliar[indiceResumo] = listaAuxiliar[indiceResumo].juntar(
+          qtBrocados: resumo.qtBrocados + broca.qtBrocados,
+          qtCanaPodr: resumo.qtCanaPodr + broca.qtCanaPodr,
+          qtEntrPodr: resumo.qtEntrPodr + broca.qtEntrPodr,
+        );
+        return;
+      }
+
+      listaAuxiliar.add(broca);
+    });
+
+    return listaAuxiliar;
   }
 
   Future<List<String>> buscaUp1() async {
@@ -190,5 +230,11 @@ class ApontBrocaConsultaRepository {
       );
     }
     return true;
+  }
+
+  Future removerPorBoletim(int boletim) async {
+    final banco = await db.get();
+    await banco
+        .delete('apont_broca', where: 'noBoletim = ?', whereArgs: [boletim]);
   }
 }

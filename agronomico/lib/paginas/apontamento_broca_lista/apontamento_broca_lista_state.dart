@@ -6,12 +6,14 @@ import 'package:flutter/foundation.dart';
 class ApontamentoBrocaListaState extends Equatable {
   final bool carregando;
   final List<ApontBrocaModel> brocas;
+  final ApontBrocaModel brocaSelecionada;
   final String mensagemErro;
   final Map<String, dynamic> filtros;
   final Map<String, List<String>> listaDropDown;
 
   ApontamentoBrocaListaState({
     this.carregando = false,
+    this.brocaSelecionada,
     this.brocas = const [],
     this.mensagemErro,
     this.filtros = const {},
@@ -21,9 +23,11 @@ class ApontamentoBrocaListaState extends Equatable {
   ApontamentoBrocaListaState juntar({
     bool carregando,
     List<ApontBrocaModel> brocas,
+    ApontBrocaModel brocaSelecionada,
     String mensagemErro,
     Map<String, dynamic> filtros,
     Map<String, List<String>> listaDropDown,
+    bool apagaSelecao = false,
   }) {
     return ApontamentoBrocaListaState(
       brocas: brocas ?? this.brocas,
@@ -31,6 +35,9 @@ class ApontamentoBrocaListaState extends Equatable {
       filtros: filtros ?? this.filtros,
       listaDropDown: listaDropDown ?? this.listaDropDown,
       mensagemErro: mensagemErro ?? null,
+      brocaSelecionada: apagaSelecao != null && apagaSelecao
+          ? null
+          : brocaSelecionada ?? this.brocaSelecionada,
     );
   }
 
@@ -41,5 +48,6 @@ class ApontamentoBrocaListaState extends Equatable {
         mensagemErro,
         filtros,
         listaDropDown,
+        brocaSelecionada,
       ];
 }

@@ -6,18 +6,17 @@ import 'package:flutter/widgets.dart';
 class ApontamentoBrocaFormHeader extends StatelessWidget {
   final Function(int) onChanged;
   final ApontBrocaModel broca;
-  final List<TipoFitossanidadeModel> tiposFItossanidade;
+  final List<TipoFitossanidadeModel> tiposFitossanidade;
 
   ApontamentoBrocaFormHeader({
     @required this.onChanged,
     @required this.broca,
-    @required this.tiposFItossanidade,
+    @required this.tiposFitossanidade,
   });
 
   @override
   Widget build(BuildContext context) {
     return Card(
-      margin: EdgeInsets.only(bottom: 16),
       child: Padding(
         padding: EdgeInsets.all(8),
         child: Column(
@@ -60,7 +59,7 @@ class ApontamentoBrocaFormHeader extends StatelessWidget {
                 labelText: 'Tipo de Broca',
               ),
               value: broca.cdFitoss,
-              items: tiposFItossanidade
+              items: tiposFitossanidade
                   .map((tipo) => DropdownMenuItem(
                         child: Text(tipo.deFitoss),
                         value: tipo.cdFitoss,

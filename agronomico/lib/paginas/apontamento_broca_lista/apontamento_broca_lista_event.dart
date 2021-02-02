@@ -1,5 +1,5 @@
-import 'package:agronomico/comum/modelo/upnivel3_model.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:agronomico/comum/modelo/apont_broca_model.dart';
+import 'package:flutter/foundation.dart';
 
 abstract class ApontamentoBrocaListaEvent {}
 
@@ -38,18 +38,11 @@ class BuscaUpnivel3 extends ApontamentoBrocaListaEvent {
   BuscaUpnivel3({@required this.up2});
 }
 
-class MontaBoletimBroca extends ApontamentoBrocaListaEvent {
-  final int cdFunc;
-  final int noBoletim;
-  final int dispositivo;
-  final List<UpNivel3Model> upniveis;
-  final BuildContext context;
+class AlteraSelecaoBroca extends ApontamentoBrocaListaEvent {
+  final ApontBrocaModel broca;
+  final bool value;
 
-  MontaBoletimBroca({
-    @required this.cdFunc,
-    @required this.dispositivo,
-    @required this.noBoletim,
-    @required this.upniveis,
-    @required this.context,
-  });
+  AlteraSelecaoBroca({@required this.broca, @required this.value});
 }
+
+class RemoverBrocas extends ApontamentoBrocaListaEvent {}
