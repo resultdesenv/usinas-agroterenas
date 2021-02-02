@@ -227,6 +227,7 @@ class ApontamentoBrocaListaContent extends StatelessWidget {
           drawer: DrawerMenu(),
           endDrawer: DrawerFiltros(
             estimativa: true,
+            filtrarData: false,
             filtros: state.filtros,
             listaSafra: state.listaDropDown['cdSafra'] ?? [],
             listaUp1: state.listaDropDown['cdUpnivel1'] ?? [],

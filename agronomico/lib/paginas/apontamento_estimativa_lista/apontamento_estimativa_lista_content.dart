@@ -214,6 +214,7 @@ class ApontamentoEstimativaListaContent extends StatelessWidget {
           drawer: DrawerMenu(),
           endDrawer: DrawerFiltros(
             estimativa: true,
+            filtrarData: false,
             filtros: estado.filtros,
             listaSafra: estado.listaDropDown['cdSafra'] ?? [],
             listaUp1: estado.listaDropDown['cdUpnivel1'] ?? [],
