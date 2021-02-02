@@ -11,12 +11,14 @@ class IniciarFormBrocas extends ApontamentoBrocaFormEvent {
   final int noBoletim;
   final int dispositivo;
   final bool novoApontamento;
+  final String instancia;
 
   IniciarFormBrocas({
     @required this.upnivel3,
     @required this.cdFunc,
     @required this.noBoletim,
     @required this.dispositivo,
+    @required this.instancia,
     this.novoApontamento = true,
   });
 }

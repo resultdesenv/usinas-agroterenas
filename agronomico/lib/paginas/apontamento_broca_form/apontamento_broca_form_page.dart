@@ -30,6 +30,8 @@ class ApontamentoBrocaFormPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final instancia = BaseInherited.of(context).empresaAutenticada.cdInstManfro;
+
     return BlocProvider<ApontamentoBrocaFormBloc>(
       create: (_) => ApontamentoBrocaFormBloc(
         repositorioFitossanidade: TipoFitossanidadeConsultaRepository(db: Db()),
@@ -42,6 +44,7 @@ class ApontamentoBrocaFormPage extends StatelessWidget {
               SincronizacaoHistoricoRepository(db: Db()),
         ),
       )..add(IniciarFormBrocas(
+          instancia: instancia,
           cdFunc: cdFunc,
           dispositivo: dispositivo,
           noBoletim: noBoletim,

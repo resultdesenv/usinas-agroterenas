@@ -138,6 +138,7 @@ class ApontBrocaModel extends Equatable {
     @required int noSequencia,
     @required int dispositivo,
     @required int cdFunc,
+    @required String instancia,
   }) =>
       ApontBrocaModel(
         dispositivo: dispositivo,
@@ -150,8 +151,7 @@ class ApontBrocaModel extends Equatable {
         dtOperacao: Moment.now().format('yyyy-MM-dd'),
         dtStatus: Moment.now().format('yyyy-MM-dd'),
         hrOperacao: Moment.now().format('yyyy-MM-dd HH:mm:ss'),
-        // TODO: Remover o mock namar
-        instancia: upnivel.instancia ?? 'NAMAR',
+        instancia: instancia,
         noBoletim: noBoletin,
         noColetor: dispositivo,
         noSequencia: noSequencia,

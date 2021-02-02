@@ -35,6 +35,7 @@ class ApontamentoBrocaFormBloc
           brocas = List(100)
               .map((_) => ApontBrocaModel.fromUpnivel3(
                     event.upnivel3,
+                    instancia: event.instancia,
                     noBoletin: event.noBoletim,
                     noSequencia: ++noSeqAtual,
                     dispositivo: event.dispositivo,
