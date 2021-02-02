@@ -6,6 +6,7 @@ import 'package:agronomico/paginas/apontamento_broca_form/apontamento_broca_form
 import 'package:agronomico/paginas/apontamento_broca_form/apontamento_broca_form_state.dart';
 import 'package:bloc/bloc.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:simple_moment/simple_moment.dart';
 
 class ApontamentoBrocaFormBloc
     extends Bloc<ApontamentoBrocaFormEvent, ApontamentoBrocaFormState> {
@@ -86,6 +87,10 @@ class ApontamentoBrocaFormBloc
             .map((e) => e.juntar(
                   qtCanasbroc: qtCanasbroc,
                   qtCanas: event.brocas.length.toDouble(),
+                  dtOperacao: Moment.now().format('yyyy-MM-dd'),
+                  dtStatus: Moment.now().format('yyyy-MM-dd'),
+                  hrOperacao: Moment.now().format('yyyy-MM-dd HH:mm:ss'),
+                  status: 'P',
                 ))
             .toList();
         await repositorioBroca.salvar(brocas);
