@@ -79,15 +79,10 @@ class ApontamentoBrocaFormBloc
     if (event is SalvarApontamentos) {
       yield state.juntar(carregando: true);
       try {
-        double qtCanasbroc = 0;
-        event.brocas.forEach((e) {
-          if (e.qtBrocados > 0) qtCanasbroc++;
-        });
-
         final brocas = event.brocas
             .map((e) => e.juntar(
-                  qtCanasbroc: qtCanasbroc,
-                  qtCanas: event.brocas.length.toDouble(),
+                  qtCanasbroc: e.qtBrocados > 0 ? 1 : 0,
+                  qtCanas: 1,
                   dtOperacao: Moment.now().format('yyyy-MM-dd'),
                   dtStatus: Moment.now().format('yyyy-MM-dd'),
                   hrOperacao: Moment.now().format('yyyy-MM-dd HH:mm:ss'),
@@ -109,6 +104,45 @@ class ApontamentoBrocaFormBloc
       } catch (e) {
         print(e);
         yield state.juntar(carregando: false, mensagemErro: e.toString());
+      }
+    }
+
+    if (event is AlteraQuantidade) {
+      if (event.quantidade == 0) return;
+      if (event.quantidade <= event.brocas.length) {
+        yield state.juntar(brocas: event.brocas.sublist(0, event.quantidade));
+      } else {
+        final diferenca = event.quantidade - event.brocas.length;
+        int sequencia = event.brocas.length;
+
+        final novasBrocas = List(diferenca)
+            .map((_) => ApontBrocaModel(
+                  instancia: event.brocas.first?.instancia,
+                  noBoletim: event.brocas.first?.noBoletim,
+                  noSequencia: ++sequencia,
+                  dispositivo: event.brocas.first?.dispositivo,
+                  cdFunc: event.brocas.first?.cdFunc,
+                  cdFitoss: event.brocas.first?.cdFitoss,
+                  cdSafra: event.brocas.first?.cdSafra,
+                  cdUpnivel1: event.brocas.first?.cdUpnivel1,
+                  cdUpnivel2: event.brocas.first?.cdUpnivel2,
+                  cdUpnivel3: event.brocas.first?.cdUpnivel3,
+                  dtOperacao: null,
+                  dtStatus: null,
+                  hrOperacao: null,
+                  noColetor: event.brocas.first?.noColetor,
+                  qtBrocados: 0,
+                  qtCanas: 1,
+                  qtCanaPodr: 0,
+                  qtCanasbroc: 0,
+                  qtEntrPodr: 0,
+                  qtEntrenos: 0,
+                  qtMedia: 0,
+                  status: 'P',
+                  versao: null,
+                ))
+            .toList();
+        yield state.juntar(brocas: event.brocas + novasBrocas);
       }
     }
   }

@@ -26,28 +26,8 @@ class BrocaOutRepository extends SincronizacaoOutRepository {
       'apont_broca',
       where: 'status in (?, ?)',
       whereArgs: ['P', 'E'],
-    ).then((l) => l.map((e) => ApontBrocaModel.fromJson(e)).toList());
-
-    final List<ApontBrocaModel> listaAuxiliar = [];
-
-    res.forEach((broca) {
-      final int indiceResumo = listaAuxiliar.indexWhere(
-        (e) => e.noBoletim == broca.noBoletim,
-      );
-      if (indiceResumo != -1) {
-        final resumo = listaAuxiliar[indiceResumo];
-        listaAuxiliar[indiceResumo] = listaAuxiliar[indiceResumo].juntar(
-          qtBrocados: resumo.qtBrocados + broca.qtBrocados,
-          qtCanaPodr: resumo.qtCanaPodr + broca.qtCanaPodr,
-          qtEntrPodr: resumo.qtEntrPodr + broca.qtEntrPodr,
-        );
-        return;
-      }
-
-      listaAuxiliar.add(broca);
-    });
-
-    return listaAuxiliar.map((e) => e.toJson).toList();
+    );
+    return res;
   }
 
   Future<void> sincronizar({@required String token}) async {
@@ -64,7 +44,7 @@ class BrocaOutRepository extends SincronizacaoOutRepository {
       final inicioSincronizacao = DateTime.now();
       await dio.post(
         '/agt-api-pims/api/fitossanidade/insert',
-        data: itens,
+        data: itens.map((i) => {...i, 'noSequencia': i['noBoletim']}).toList(),
         options: Options(headers: {
           'authorization': 'Bearer $token',
         }),
@@ -113,11 +93,12 @@ class BrocaOutRepository extends SincronizacaoOutRepository {
         'apont_broca',
         item,
         where:
-            'instancia = ? AND noBoletim = ? AND cdUpnivel1 = ? AND cdUpnivel2 = ? AND cdUpnivel3 = ?',
-        conflictAlgorithm: ConflictAlgorithm.replace,
+            'dispositivo = ? AND instancia = ? AND noBoletim = ? AND noSequencia = ? AND cdUpnivel1 = ? AND cdUpnivel2 = ? AND cdUpnivel3 = ?',
         whereArgs: [
+          item['dispositivo'],
           item['instancia'],
           item['noBoletim'],
+          item['noSequencia'],
           item['cdUpnivel1'],
           item['cdUpnivel2'],
           item['cdUpnivel3'],

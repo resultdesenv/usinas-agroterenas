@@ -56,6 +56,9 @@ class ApontBrocaConsultaRepository {
           qtBrocados: resumo.qtBrocados + broca.qtBrocados,
           qtCanaPodr: resumo.qtCanaPodr + broca.qtCanaPodr,
           qtEntrPodr: resumo.qtEntrPodr + broca.qtEntrPodr,
+          qtCanas: resumo.qtCanas + broca.qtCanas,
+          qtCanasbroc: resumo.qtCanasbroc + broca.qtCanasbroc,
+          qtEntrenos: resumo.qtEntrenos + broca.qtEntrenos,
         );
         return;
       }

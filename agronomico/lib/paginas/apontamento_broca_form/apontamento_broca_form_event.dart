@@ -46,3 +46,10 @@ class SalvarApontamentos extends ApontamentoBrocaFormEvent {
 
   SalvarApontamentos({@required this.empresa, @required this.brocas});
 }
+
+class AlteraQuantidade extends ApontamentoBrocaFormEvent {
+  final int quantidade;
+  final List<ApontBrocaModel> brocas;
+
+  AlteraQuantidade({@required this.quantidade, @required this.brocas});
+}

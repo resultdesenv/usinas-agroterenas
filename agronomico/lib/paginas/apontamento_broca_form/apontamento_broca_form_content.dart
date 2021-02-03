@@ -65,17 +65,27 @@ class ApontamentoBrocaFormContent extends StatelessWidget {
                                 Padding(
                                   padding: EdgeInsets.symmetric(horizontal: 4),
                                   child: ApontamentoBrocaFormHeader(
-                                    broca: state.brocas.first,
-                                    tiposFitossanidade:
-                                        state.tiposFitossanidade,
-                                    onChanged: (cdFitoss) => context
-                                        .bloc<ApontamentoBrocaFormBloc>()
-                                        .add(AlteraTipoBroca(
-                                            cdFitoss: cdFitoss,
+                                      broca: state.brocas.first,
+                                      canas: state.brocas.length,
+                                      novoApontamento: state.novoApontamento,
+                                      tiposFitossanidade:
+                                          state.tiposFitossanidade,
+                                      onChanged: (cdFitoss) => context
+                                          .bloc<ApontamentoBrocaFormBloc>()
+                                          .add(AlteraTipoBroca(
+                                              cdFitoss: cdFitoss,
+                                              brocas: apontamentos
+                                                  .map((e) => e.valores)
+                                                  .toList())),
+                                      alterarQuantidade: (quantidade) => context
+                                          .bloc<ApontamentoBrocaFormBloc>()
+                                          .add(AlteraQuantidade(
                                             brocas: apontamentos
-                                                .map((e) => e.valores)
-                                                .toList())),
-                                  ),
+                                                .map((a) => a.valores)
+                                                .toList(),
+                                            quantidade:
+                                                int.tryParse(quantidade),
+                                          ))),
                                 ),
                                 Expanded(
                                   child: ListView.builder(
