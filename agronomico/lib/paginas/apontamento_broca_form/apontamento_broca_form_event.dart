@@ -43,8 +43,13 @@ class AlteraApontamento extends ApontamentoBrocaFormEvent {
 class SalvarApontamentos extends ApontamentoBrocaFormEvent {
   final EmpresaModel empresa;
   final List<ApontBrocaModel> brocas;
+  final bool voltar;
 
-  SalvarApontamentos({@required this.empresa, @required this.brocas});
+  SalvarApontamentos({
+    @required this.empresa,
+    @required this.brocas,
+    this.voltar = false,
+  });
 }
 
 class AlteraQuantidade extends ApontamentoBrocaFormEvent {

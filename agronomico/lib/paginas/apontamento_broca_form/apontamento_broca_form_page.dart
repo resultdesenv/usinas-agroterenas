@@ -36,6 +36,7 @@ class ApontamentoBrocaFormPage extends StatelessWidget {
       create: (_) => ApontamentoBrocaFormBloc(
         repositorioFitossanidade: TipoFitossanidadeConsultaRepository(db: Db()),
         repositorioBroca: ApontBrocaConsultaRepository(db: Db()),
+        repositorioPreferencia: PreferenciaRepository(db: Db()),
         repositorioSequencia: SincronizacaoSequenciaRepository(
           db: Db(),
           dio: BaseInherited.of(context).dio,

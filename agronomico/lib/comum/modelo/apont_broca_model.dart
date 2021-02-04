@@ -132,14 +132,13 @@ class ApontBrocaModel extends Equatable {
         dispositivo: json['dispositivo'],
       );
 
-  factory ApontBrocaModel.fromUpnivel3(
-    UpNivel3Model upnivel, {
-    @required int noBoletin,
-    @required int noSequencia,
-    @required int dispositivo,
-    @required int cdFunc,
-    @required String instancia,
-  }) =>
+  factory ApontBrocaModel.fromUpnivel3(UpNivel3Model upnivel,
+          {@required int noBoletin,
+          @required int noSequencia,
+          @required int dispositivo,
+          @required int cdFunc,
+          @required String instancia,
+          @required int cdFitoss}) =>
       ApontBrocaModel(
         dispositivo: dispositivo,
         cdFunc: cdFunc,
@@ -147,7 +146,7 @@ class ApontBrocaModel extends Equatable {
         cdUpnivel1: upnivel.cdUpnivel1,
         cdUpnivel2: upnivel.cdUpnivel2,
         cdUpnivel3: upnivel.cdUpnivel3,
-        cdFitoss: null,
+        cdFitoss: cdFitoss,
         dtOperacao: Moment.now().format('yyyy-MM-dd'),
         dtStatus: Moment.now().format('yyyy-MM-dd'),
         hrOperacao: Moment.now().format('yyyy-MM-dd HH:mm:ss'),

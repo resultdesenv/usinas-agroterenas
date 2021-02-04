@@ -26,7 +26,7 @@ class ApontamentoBrocaFormContent extends StatelessWidget {
           Scaffold.of(context).showSnackBar(snack);
         }
 
-        if (state.voltarParaListagem) {
+        if (state.voltarParaListagem != null && state.voltarParaListagem) {
           if (state.novoApontamento)
             navegar(context: context, pagina: ApontamentoBrocaListaPage());
           else
@@ -39,10 +39,10 @@ class ApontamentoBrocaFormContent extends StatelessWidget {
               .map((e) => ApontamentoBrocaFormItem(
                     broca: e,
                     controllerTotal: TextEditingController(
-                      text: e.qtEntrenos.toInt().toString(),
+                      text: e.qtEntrenos.toInt().toString().padLeft(2, '0'),
                     ),
                     controllerBrocados: TextEditingController(
-                      text: e.qtBrocados.toInt().toString(),
+                      text: e.qtBrocados.toInt().toString().padLeft(2, '0'),
                     ),
                   ))
               .toList();
@@ -89,6 +89,7 @@ class ApontamentoBrocaFormContent extends StatelessWidget {
                                 ),
                                 Expanded(
                                   child: ListView.builder(
+                                    addAutomaticKeepAlives: true,
                                     itemCount: apontamentos.length,
                                     padding: EdgeInsets.all(8),
                                     itemBuilder: (_, index) =>
@@ -99,7 +100,7 @@ class ApontamentoBrocaFormContent extends StatelessWidget {
                             : [],
                       ),
               ),
-              backgroundColor: Color(0xFFEAEAEA),
+              backgroundColor: Color(0xFFFAFAFA),
               floatingActionButton: FloatingActionButton(
                 child: Icon(Icons.save),
                 onPressed: () => context
@@ -140,6 +141,7 @@ class ApontamentoBrocaFormContent extends StatelessWidget {
                     SalvarApontamentos(
                       empresa: BaseInherited.of(context).empresaAutenticada,
                       brocas: brocas,
+                      voltar: true,
                     ),
                   );
             },

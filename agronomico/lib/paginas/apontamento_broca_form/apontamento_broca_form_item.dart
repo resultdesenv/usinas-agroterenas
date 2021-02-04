@@ -11,6 +11,21 @@ class ApontamentoBrocaFormItem extends StatelessWidget {
   final focusBrocados = FocusNode();
   final controllerTotal;
   final controllerBrocados;
+  final inputFormatters = [
+    FilteringTextInputFormatter.allow(RegExp(r'[\d]')),
+    LengthLimitingTextInputFormatter(2),
+    TextInputFormatter.withFunction((_, novo) {
+      print(novo.text);
+      return TextEditingValue(
+        text: novo.text.isEmpty
+            ? ''
+            : int.tryParse(novo.text) > 50
+                ? '50'
+                : novo.text,
+        selection: TextSelection.collapsed(offset: novo.text.length),
+      );
+    }),
+  ];
 
   ApontamentoBrocaFormItem({
     @required this.broca,
@@ -36,10 +51,8 @@ class ApontamentoBrocaFormItem extends StatelessWidget {
     });
 
     return Container(
-      margin: EdgeInsets.only(bottom: 8),
       decoration: BoxDecoration(
-        border: Border.all(color: Colors.grey),
-        borderRadius: BorderRadius.all(Radius.circular(5)),
+        border: Border(bottom: BorderSide(color: Colors.black38)),
       ),
       child: Padding(
         padding: EdgeInsets.all(8),
@@ -57,9 +70,8 @@ class ApontamentoBrocaFormItem extends StatelessWidget {
                 textInputAction: TextInputAction.next,
                 keyboardType: TextInputType.number,
                 decoration: InputDecoration(labelText: 'Total'),
-                inputFormatters: [
-                  FilteringTextInputFormatter.allow(RegExp(r'[\d]'))
-                ],
+                onChanged: (value) => _onChanged(context, value),
+                inputFormatters: inputFormatters,
               ),
             ),
             SizedBox(width: 16),
@@ -70,9 +82,8 @@ class ApontamentoBrocaFormItem extends StatelessWidget {
                 textInputAction: TextInputAction.next,
                 keyboardType: TextInputType.number,
                 decoration: InputDecoration(labelText: 'Brocados'),
-                inputFormatters: [
-                  FilteringTextInputFormatter.allow(RegExp(r'[\d]')),
-                ],
+                onChanged: (value) => _onChanged(context, value),
+                inputFormatters: inputFormatters,
               ),
             ),
           ],
@@ -85,4 +96,8 @@ class ApontamentoBrocaFormItem extends StatelessWidget {
         qtBrocados: double.tryParse(controllerBrocados.text) ?? 0,
         qtEntrenos: double.tryParse(controllerTotal.text) ?? 0,
       );
+
+  void _onChanged(BuildContext context, String value) {
+    if (value.length == 2) FocusScope.of(context).nextFocus();
+  }
 }

@@ -1,5 +1,6 @@
 import 'package:agronomico/comum/modelo/apont_broca_model.dart';
 import 'package:agronomico/comum/repositorios/apont_broca_consulta_repository.dart';
+import 'package:agronomico/comum/repositorios/preferencia_repository.dart';
 import 'package:agronomico/comum/repositorios/sequencia_repository.dart';
 import 'package:agronomico/comum/repositorios/tipo_fitossanidade_consulta_repository.dart';
 import 'package:agronomico/paginas/apontamento_broca_form/apontamento_broca_form_event.dart';
@@ -13,11 +14,13 @@ class ApontamentoBrocaFormBloc
   final ApontBrocaConsultaRepository repositorioBroca;
   final SincronizacaoSequenciaRepository repositorioSequencia;
   final TipoFitossanidadeConsultaRepository repositorioFitossanidade;
+  final PreferenciaRepository repositorioPreferencia;
 
   ApontamentoBrocaFormBloc({
     @required this.repositorioBroca,
     @required this.repositorioSequencia,
     @required this.repositorioFitossanidade,
+    @required this.repositorioPreferencia,
   }) : super(ApontamentoBrocaFormState());
 
   @override
@@ -28,11 +31,22 @@ class ApontamentoBrocaFormBloc
       try {
         yield state.juntar(carregando: true);
         final tiposFitossanidade = await repositorioFitossanidade.get();
+        final prefFitoss = await repositorioPreferencia.get(
+          idPreferencia: 'tipo-fitossanidade',
+        );
+        final cdFitoss =
+            (prefFitoss != null ? int.tryParse(prefFitoss) : prefFitoss) ??
+                tiposFitossanidade?.first?.cdFitoss;
         List<ApontBrocaModel> brocas;
 
         if (event.novoApontamento) {
+          final prefCana = await repositorioPreferencia.get(
+            idPreferencia: 'quantidade-canas',
+          );
+          final qtCana =
+              (prefCana != null ? int.tryParse(prefCana) : prefCana) ?? 100;
           int noSeqAtual = 0;
-          brocas = List(100)
+          brocas = List(qtCana)
               .map((_) => ApontBrocaModel.fromUpnivel3(
                     event.upnivel3,
                     instancia: event.instancia,
@@ -40,6 +54,7 @@ class ApontamentoBrocaFormBloc
                     noSequencia: ++noSeqAtual,
                     dispositivo: event.dispositivo,
                     cdFunc: event.cdFunc,
+                    cdFitoss: cdFitoss,
                   ))
               .toList();
         } else {
@@ -65,9 +80,19 @@ class ApontamentoBrocaFormBloc
     }
 
     if (event is AlteraTipoBroca) {
-      final brocas =
-          event.brocas.map((e) => e.juntar(cdFitoss: event.cdFitoss)).toList();
-      yield state.juntar(brocas: brocas);
+      try {
+        final brocas = event.brocas
+            .map((e) => e.juntar(cdFitoss: event.cdFitoss))
+            .toList();
+        yield state.juntar(brocas: brocas);
+        await repositorioPreferencia.salvar(
+          idPreferencia: 'tipo-fitossanidade',
+          valorPreferencia: event.cdFitoss,
+        );
+      } catch (e) {
+        print(e);
+        yield state.juntar(mensagemErro: e.toString());
+      }
     }
 
     if (event is AlteraApontamento) {
@@ -78,17 +103,17 @@ class ApontamentoBrocaFormBloc
 
     if (event is SalvarApontamentos) {
       yield state.juntar(carregando: true);
+      final brocas = event.brocas
+          .map((e) => e.juntar(
+                qtCanasbroc: e.qtBrocados > 0 ? 1 : 0,
+                qtCanas: 1,
+                dtOperacao: Moment.now().format('yyyy-MM-dd'),
+                dtStatus: Moment.now().format('yyyy-MM-dd'),
+                hrOperacao: Moment.now().format('yyyy-MM-dd HH:mm:ss'),
+                status: 'P',
+              ))
+          .toList();
       try {
-        final brocas = event.brocas
-            .map((e) => e.juntar(
-                  qtCanasbroc: e.qtBrocados > 0 ? 1 : 0,
-                  qtCanas: 1,
-                  dtOperacao: Moment.now().format('yyyy-MM-dd'),
-                  dtStatus: Moment.now().format('yyyy-MM-dd'),
-                  hrOperacao: Moment.now().format('yyyy-MM-dd HH:mm:ss'),
-                  status: 'P',
-                ))
-            .toList();
         await repositorioBroca.salvar(brocas);
 
         if (state.novoApontamento) {
@@ -100,10 +125,15 @@ class ApontamentoBrocaFormBloc
           );
         }
 
-        yield state.juntar(carregando: false, voltarParaListagem: true);
+        yield state.juntar(
+          carregando: false,
+          voltarParaListagem: event.voltar,
+          brocas: brocas,
+        );
       } catch (e) {
         print(e);
-        yield state.juntar(carregando: false, mensagemErro: e.toString());
+        yield state.juntar(
+            carregando: false, mensagemErro: e.toString(), brocas: brocas);
       }
     }
 
@@ -143,6 +173,15 @@ class ApontamentoBrocaFormBloc
                 ))
             .toList();
         yield state.juntar(brocas: event.brocas + novasBrocas);
+      }
+      try {
+        await repositorioPreferencia.salvar(
+          idPreferencia: 'quantidade-canas',
+          valorPreferencia: event.quantidade,
+        );
+      } catch (e) {
+        print(e);
+        yield state.juntar(mensagemErro: e.toString());
       }
     }
   }
