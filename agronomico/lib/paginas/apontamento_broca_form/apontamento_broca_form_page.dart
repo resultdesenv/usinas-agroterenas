@@ -50,7 +50,8 @@ class ApontamentoBrocaFormPage extends StatelessWidget {
           dispositivo: dispositivo,
           noBoletim: noBoletim,
           upnivel3: upnivel3,
-          novoApontamento: novoApontamento)),
+          novoApontamento: novoApontamento,
+          empresa: BaseInherited.of(context).empresaAutenticada)),
       child: Scaffold(
         body: ApontamentoBrocaFormContent(),
       ),

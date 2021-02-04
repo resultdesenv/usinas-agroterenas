@@ -72,13 +72,17 @@ class SincronizacaoUpNivel3LocalRepository
     DateTime dataInicial,
   ) async {
     final dbInstancia = await db.get();
+    final batch = dbInstancia.batch();
+
     for (final upnivel in upnivels) {
-      await dbInstancia.insert(
+      batch.insert(
         'upnivel3',
         upnivel.toJson(),
         conflictAlgorithm: ConflictAlgorithm.replace,
       );
     }
+    await batch.commit(noResult: true);
+
     await sincronizacaoHistoricoRepository.salvarDataAtualizacao(
       'upnivel3',
       Duration(

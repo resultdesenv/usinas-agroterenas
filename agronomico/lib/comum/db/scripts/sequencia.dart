@@ -1,9 +1,10 @@
 const tabelaSequencia = '''
   CREATE TABLE sequencia (
-    instancia TEXT PRIMARY KEY,
+    instancia TEXT,
     aplicacao TEXT,
     idDispositivo TEXT,
     sequencia INTEGER,
-    idAplicacao INTEGER
+    idAplicacao INTEGER,
+    PRIMARY KEY (instancia, idAplicacao)
   )
 ''';

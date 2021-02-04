@@ -156,7 +156,6 @@ class UpNivel3Bloc extends Bloc<UpNivel3Event, UpNivel3State> {
         if (callback != null) {
           callback(
             cdFunc: cdFunc,
-            noBoletim: 10000 + sequencia.sequencia + 1,
             dispositivo: dispositivo['idDispositivo'],
             upniveis: state.selecionadas,
           );

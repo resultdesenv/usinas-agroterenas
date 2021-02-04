@@ -51,6 +51,10 @@ class ApontamentoBrocaFormBloc
           if (event.novoApontamento && brocas.length > 0) {
             mensagemErro = 'Esse talhão ja possui um apontamento, abrindo...';
           } else {
+            final sequencia = await repositorioSequencia.buscarSequencia(
+              empresa: event.empresa,
+              aplicacao: 116,
+            );
             final prefCana = await repositorioPreferencia.get(
               idPreferencia: 'quantidade-canas',
             );
@@ -61,7 +65,7 @@ class ApontamentoBrocaFormBloc
                 .map((_) => ApontBrocaModel.fromUpnivel3(
                       event.upnivel3,
                       instancia: event.instancia,
-                      noBoletin: event.noBoletim,
+                      noBoletin: 10000 + sequencia.sequencia + 1,
                       noSequencia: ++noSeqAtual,
                       dispositivo: event.dispositivo,
                       cdFunc: event.cdFunc,
@@ -74,8 +78,6 @@ class ApontamentoBrocaFormBloc
           filtros['noBoletim'] = event.noBoletim;
           brocas = await repositorioBroca.get(filtros: filtros);
         }
-        print('event.novoApontamento');
-        print(event.novoApontamento);
         yield state.juntar(
           brocas: brocas,
           carregando: false,

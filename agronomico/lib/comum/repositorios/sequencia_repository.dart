@@ -50,10 +50,14 @@ class SincronizacaoSequenciaRepository extends SincronizacaoBase<Sequencia> {
     return sequencia;
   }
 
-  Future<Sequencia> buscarSequencia({EmpresaModel empresa}) async {
+  Future<Sequencia> buscarSequencia(
+      {EmpresaModel empresa, int aplicacao = 96}) async {
     final dbInstance = await db.get();
-    final sequenciaJson = await dbInstance.query('sequencia',
-        where: "instancia = '${empresa.cdInstManfro}'");
+    final sequenciaJson = await dbInstance.query(
+      'sequencia',
+      where:
+          "instancia = '${empresa.cdInstManfro}' AND idAplicacao = '$aplicacao'",
+    );
     if (sequenciaJson.length == 0)
       throw CustomException('Sequencia não encontrada');
     return Sequencia.fromJson(sequenciaJson[0]);
@@ -66,10 +70,21 @@ class SincronizacaoSequenciaRepository extends SincronizacaoBase<Sequencia> {
   }) async {
     final List<Sequencia> listaSequencia = [];
     for (final empresa in empresas) {
+      final sequenciaBroca = await buscarSequenciaApi(
+        instancia: empresa.cdInstManfro,
+        idDispositivo: idDispositivo,
+        token: token,
+        idAplicacao: 116,
+      );
+      listaSequencia.add(sequenciaBroca);
+    }
+
+    for (final empresa in empresas) {
       final sequencia = await buscarSequenciaApi(
-          instancia: empresa.cdInstManfro,
-          idDispositivo: idDispositivo,
-          token: token);
+        instancia: empresa.cdInstManfro,
+        idDispositivo: idDispositivo,
+        token: token,
+      );
       listaSequencia.add(sequencia);
     }
     return listaSequencia;
@@ -87,9 +102,10 @@ class SincronizacaoSequenciaRepository extends SincronizacaoBase<Sequencia> {
     @required String token,
     @required String instancia,
     @required String idDispositivo,
+    int idAplicacao = 96,
   }) async {
     final sequenciaJson = await dio.get(
-        '/agt-api-pims/api/dispositivo/sequencia/aplicativo/idDispositivo/$idDispositivo/instancia/$instancia/idAplicativo/96',
+        '/agt-api-pims/api/dispositivo/sequencia/aplicativo/idDispositivo/$idDispositivo/instancia/$instancia/idAplicativo/$idAplicacao',
         options: Options(headers: {
           'authorization': 'Bearer $token',
         }));
@@ -131,10 +147,16 @@ class SincronizacaoSequenciaRepository extends SincronizacaoBase<Sequencia> {
   Future<void> _salvar(List<Sequencia> sequencias, Duration duracao) async {
     final dbInstancia = await db.get();
     for (final sequencia in sequencias) {
-      await dbInstancia.insert('sequencia', sequencia.toJson(),
-          conflictAlgorithm: ConflictAlgorithm.replace);
+      await dbInstancia.insert(
+        'sequencia',
+        sequencia.toJson(),
+        conflictAlgorithm: ConflictAlgorithm.replace,
+      );
     }
     await sincronizacaoHistoricoRepository.salvarDataAtualizacao(
-        'sequencia', duracao, sequencias.length);
+      'sequencia',
+      duracao,
+      sequencias.length,
+    );
   }
 }
