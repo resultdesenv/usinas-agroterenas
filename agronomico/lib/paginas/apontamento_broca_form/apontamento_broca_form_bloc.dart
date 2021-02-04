@@ -38,30 +38,44 @@ class ApontamentoBrocaFormBloc
             (prefFitoss != null ? int.tryParse(prefFitoss) : prefFitoss) ??
                 tiposFitossanidade?.first?.cdFitoss;
         List<ApontBrocaModel> brocas;
+        String mensagemErro;
 
         if (event.novoApontamento) {
-          final prefCana = await repositorioPreferencia.get(
-            idPreferencia: 'quantidade-canas',
-          );
-          final qtCana =
-              (prefCana != null ? int.tryParse(prefCana) : prefCana) ?? 100;
-          int noSeqAtual = 0;
-          brocas = List(qtCana)
-              .map((_) => ApontBrocaModel.fromUpnivel3(
-                    event.upnivel3,
-                    instancia: event.instancia,
-                    noBoletin: event.noBoletim,
-                    noSequencia: ++noSeqAtual,
-                    dispositivo: event.dispositivo,
-                    cdFunc: event.cdFunc,
-                    cdFitoss: cdFitoss,
-                  ))
-              .toList();
+          brocas = await repositorioBroca.get(
+              filtros: Map.from({
+            'cdUpnivel1': event.upnivel3.cdUpnivel1,
+            'cdUpnivel2': event.upnivel3.cdUpnivel2,
+            'cdUpnivel3': event.upnivel3.cdUpnivel3,
+          }));
+
+          if (event.novoApontamento && brocas.length > 0) {
+            mensagemErro = 'Esse talhão ja possui um apontamento, abrindo...';
+          } else {
+            final prefCana = await repositorioPreferencia.get(
+              idPreferencia: 'quantidade-canas',
+            );
+            final qtCana =
+                (prefCana != null ? int.tryParse(prefCana) : prefCana) ?? 100;
+            int noSeqAtual = 0;
+            brocas = List(qtCana)
+                .map((_) => ApontBrocaModel.fromUpnivel3(
+                      event.upnivel3,
+                      instancia: event.instancia,
+                      noBoletin: event.noBoletim,
+                      noSequencia: ++noSeqAtual,
+                      dispositivo: event.dispositivo,
+                      cdFunc: event.cdFunc,
+                      cdFitoss: cdFitoss,
+                    ))
+                .toList();
+          }
         } else {
           final Map<String, dynamic> filtros = Map();
           filtros['noBoletim'] = event.noBoletim;
           brocas = await repositorioBroca.get(filtros: filtros);
         }
+        print('event.novoApontamento');
+        print(event.novoApontamento);
         yield state.juntar(
           brocas: brocas,
           carregando: false,
@@ -69,6 +83,7 @@ class ApontamentoBrocaFormBloc
           novoApontamento: event.novoApontamento,
           tipoFitossanidade:
               brocas.first != null ? brocas.first.cdFitoss : null,
+          mensagemErro: mensagemErro,
         );
       } catch (e) {
         print(e);

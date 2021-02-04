@@ -10,6 +10,7 @@ class ApontBrocaConsultaRepository {
 
   Future<List<ApontBrocaModel>> get({
     Map<String, dynamic> filtros,
+    int limite,
   }) async {
     final banco = await db.get();
     final lista = await banco.query(
@@ -22,6 +23,7 @@ class ApontBrocaConsultaRepository {
               .join(' AND ')
           : null,
       orderBy: 'noSequencia ASC',
+      limit: limite,
     );
 
     return lista.map((e) => ApontBrocaModel.fromJson(e)).toList();
