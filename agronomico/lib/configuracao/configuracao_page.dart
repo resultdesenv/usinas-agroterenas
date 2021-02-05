@@ -7,6 +7,7 @@ import 'package:agronomico/comum/sincronizacao/sincronizacao_autenticacao.dart';
 import 'package:agronomico/comum/sincronizacao/sincronizacao_completa_repository.dart';
 import 'package:agronomico/comum/sincronizacao/sincronizacao_empresa_repository.dart';
 import 'package:agronomico/comum/sincronizacao/sincronizacao_historico_repository.dart';
+import 'package:agronomico/comum/sincronizacao/sincronizacao_tipo_fitossanidade_repository.dart';
 import 'package:agronomico/comum/sincronizacao/sincronizacao_usuario_empresa_repository.dart';
 import 'package:agronomico/comum/sincronizacao/sincronizacao_usuario_repository.dart';
 import 'package:agronomico/configuracao/configuracaoRepository.dart';
@@ -54,6 +55,11 @@ class ConfiguracaoPage extends StatelessWidget {
                 SincronizacaoUsuarioEmpresaRepository(
                     dio: dio,
                     db: Db(),
+                    sincronizacaoHistoricoRepository:
+                        SincronizacaoHistoricoRepository(db: Db())),
+                SincronizacaoTipoFitossanidadeRepository(
+                    db: Db(),
+                    dio: dio,
                     sincronizacaoHistoricoRepository:
                         SincronizacaoHistoricoRepository(db: Db())),
                 SincronizacaoSequenciaRepository(

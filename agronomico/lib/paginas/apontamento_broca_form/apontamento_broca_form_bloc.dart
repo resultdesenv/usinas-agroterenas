@@ -31,11 +31,14 @@ class ApontamentoBrocaFormBloc
       try {
         yield state.juntar(carregando: true);
         final tiposFitossanidade = await repositorioFitossanidade.get();
+        if (tiposFitossanidade.isEmpty)
+          throw 'Não foram encontrados tipos de fitossanidade, sincronize e tente novamente!';
+
         final prefFitoss = await repositorioPreferencia.get(
           idPreferencia: 'tipo-fitossanidade',
         );
         final cdFitoss =
-            (prefFitoss != null ? int.tryParse(prefFitoss) : prefFitoss) ??
+            (prefFitoss != null ? int.tryParse(prefFitoss) : null) ??
                 tiposFitossanidade?.first?.cdFitoss;
         List<ApontBrocaModel> brocas;
         String mensagemErro;

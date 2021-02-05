@@ -32,8 +32,8 @@ class SincronizacaoTipoFitossanidadeRepository
   }) async {
     final dataInicial = DateTime.now();
     await limpar();
-    final usuarios = await buscar(token);
-    await salvar(usuarios, dataInicial);
+    final tiposFitossanidade = await buscar(token);
+    await salvar(tiposFitossanidade, dataInicial);
   }
 
   Future<void> limpar() async {
