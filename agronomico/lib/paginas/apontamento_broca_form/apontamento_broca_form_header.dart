@@ -48,18 +48,18 @@ class ApontamentoBrocaFormHeader extends StatelessWidget {
                 ),
                 SizedBox(width: 16),
                 Expanded(
-                  child: _montaCampo('Upnivel 1', broca.cdUpnivel1.toString()),
+                  child: _montaCampo('Fazenda', broca.cdUpnivel1.toString()),
                 ),
               ],
             ),
             Row(
               children: [
                 Expanded(
-                  child: _montaCampo('Upnivel 2', broca.cdUpnivel2.toString()),
+                  child: _montaCampo('Zona', broca.cdUpnivel2.toString()),
                 ),
                 SizedBox(width: 16),
                 Expanded(
-                  child: _montaCampo('Upnivel 3', broca.cdUpnivel3.toString()),
+                  child: _montaCampo('Talhão', broca.cdUpnivel3.toString()),
                 ),
               ],
             ),

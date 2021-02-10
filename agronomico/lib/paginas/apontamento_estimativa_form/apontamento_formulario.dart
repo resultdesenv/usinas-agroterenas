@@ -79,7 +79,7 @@ class ApontamentoFormulario extends StatelessWidget {
                       Padding(padding: EdgeInsets.only(left: 16)),
                       Expanded(
                         child: _montaCampo(
-                          labelText: 'UpNivel1',
+                          labelText: 'Fazenda',
                           initialValue: apontamento.cdUpnivel1,
                           enabled: false,
                         ),
@@ -90,7 +90,7 @@ class ApontamentoFormulario extends StatelessWidget {
                     children: [
                       Expanded(
                         child: _montaCampo(
-                          labelText: 'UpNivel2',
+                          labelText: 'Zona',
                           initialValue: apontamento.cdUpnivel2,
                           enabled: false,
                         ),
@@ -98,7 +98,7 @@ class ApontamentoFormulario extends StatelessWidget {
                       Padding(padding: EdgeInsets.only(left: 16)),
                       Expanded(
                         child: _montaCampo(
-                          labelText: 'UpNivel3',
+                          labelText: 'Talhão',
                           initialValue: apontamento.cdUpnivel3,
                           enabled: false,
                         ),

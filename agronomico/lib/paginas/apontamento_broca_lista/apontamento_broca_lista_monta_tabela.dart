@@ -9,7 +9,7 @@ class ApontamentoBrocaListaMontaTabela extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
+    return Container(
       child: Table(
         children: [
           TableRow(
@@ -18,14 +18,13 @@ class ApontamentoBrocaListaMontaTabela extends StatelessWidget {
                 child: Text(
                   broca.noBoletim.toString(),
                   style: TextStyle(fontSize: 10),
-                  textAlign: TextAlign.end,
                 ),
               ),
               TableCell(
                 child: Text(
                   broca.noColetor.toString(),
                   style: TextStyle(fontSize: 10),
-                  textAlign: TextAlign.end,
+                  textAlign: TextAlign.center,
                 ),
               ),
               TableCell(
@@ -65,7 +64,7 @@ class ApontamentoBrocaListaMontaTabela extends StatelessWidget {
                   children: [
                     Positioned(
                       top: -12,
-                      left: 8,
+                      left: 16,
                       child: ['P', 'E'].contains(broca.status)
                           ? Icon(
                               Icons.backup,

@@ -119,7 +119,7 @@ class DrawerFiltros extends StatelessWidget {
                     : [],
               ),
               DropdownButtonFormField<String>(
-                decoration: InputDecoration(labelText: 'Upnivel1'),
+                decoration: InputDecoration(labelText: 'Fazenda'),
                 items: listaUp1.map((String item) {
                   return DropdownMenuItem<String>(
                     value: item ?? '',
@@ -147,7 +147,7 @@ class DrawerFiltros extends StatelessWidget {
                           child: Text(item.isEmpty ? 'Selecione' : item),
                         ))
                     .toList(),
-                decoration: InputDecoration(labelText: 'Upnivel2'),
+                decoration: InputDecoration(labelText: 'Zona'),
                 onChanged: buscaUp3,
                 value: filtros['cdUpnivel2'],
               ),
@@ -158,7 +158,7 @@ class DrawerFiltros extends StatelessWidget {
                           child: Text(item.isEmpty ? 'Selecione' : item),
                         ))
                     .toList(),
-                decoration: InputDecoration(labelText: 'Upnivel3'),
+                decoration: InputDecoration(labelText: 'Talhão'),
                 onChanged: (String valor) => alteraFiltro('cdUpnivel3', valor),
                 value: filtros['cdUpnivel3'],
               ),

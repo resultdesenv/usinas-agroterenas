@@ -22,6 +22,7 @@ class ApontamentoBrocaListaTile extends StatelessWidget {
         value: selecionado,
         onChanged: alteraSelecao,
       ),
+      tilePadding: EdgeInsets.symmetric(horizontal: 8),
       title: ApontamentoBrocaListaMontaTabela(broca: broca),
       childrenPadding: EdgeInsets.all(16),
       children: [

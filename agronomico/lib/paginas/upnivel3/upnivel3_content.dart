@@ -97,7 +97,7 @@ class UpNivel3Content extends StatelessWidget {
                                             ),
                                             TableCell(
                                               child: Text(
-                                                'Up1',
+                                                'Fazenda',
                                                 style: TextStyle(
                                                   fontSize: 10,
                                                   fontWeight: FontWeight.w500,
@@ -106,7 +106,7 @@ class UpNivel3Content extends StatelessWidget {
                                             ),
                                             TableCell(
                                               child: Text(
-                                                'Up2',
+                                                'Zona',
                                                 style: TextStyle(
                                                   fontSize: 10,
                                                   fontWeight: FontWeight.w500,
@@ -115,7 +115,7 @@ class UpNivel3Content extends StatelessWidget {
                                             ),
                                             TableCell(
                                               child: Text(
-                                                'Up3',
+                                                'Talhão',
                                                 style: TextStyle(
                                                   fontSize: 10,
                                                   fontWeight: FontWeight.w500,
