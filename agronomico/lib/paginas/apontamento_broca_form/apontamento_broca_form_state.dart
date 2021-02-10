@@ -1,4 +1,5 @@
 import 'package:agronomico/comum/modelo/apont_broca_model.dart';
+import 'package:agronomico/comum/modelo/sequencia_model.dart';
 import 'package:agronomico/comum/modelo/tipo_fitossanidade_model.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/foundation.dart';
@@ -14,6 +15,8 @@ class ApontamentoBrocaFormState extends Equatable {
   final int tipoFitossanidade;
   final bool salvo;
   final ApontBrocaModel primeiraBroca;
+  final int canas;
+  final Sequencia sequencia;
 
   ApontamentoBrocaFormState({
     this.brocas = const [],
@@ -25,6 +28,8 @@ class ApontamentoBrocaFormState extends Equatable {
     this.tipoFitossanidade,
     this.salvo = true,
     this.primeiraBroca,
+    this.canas,
+    this.sequencia,
   });
 
   ApontamentoBrocaFormState juntar({
@@ -37,6 +42,8 @@ class ApontamentoBrocaFormState extends Equatable {
     bool novoApontamento,
     bool salvo,
     ApontBrocaModel primeiraBroca,
+    int canas,
+    Sequencia sequencia,
   }) =>
       ApontamentoBrocaFormState(
         brocas: brocas ?? this.brocas,
@@ -48,6 +55,8 @@ class ApontamentoBrocaFormState extends Equatable {
         novoApontamento: novoApontamento ?? this.novoApontamento,
         salvo: salvo ?? this.salvo,
         primeiraBroca: primeiraBroca ?? this.primeiraBroca,
+        canas: canas ?? this.canas,
+        sequencia: sequencia ?? this.sequencia,
       );
 
   @override
@@ -60,5 +69,7 @@ class ApontamentoBrocaFormState extends Equatable {
         tipoFitossanidade,
         salvo,
         primeiraBroca,
+        canas,
+        sequencia,
       ];
 }

@@ -50,8 +50,10 @@ class SincronizacaoSequenciaRepository extends SincronizacaoBase<Sequencia> {
     return sequencia;
   }
 
-  Future<Sequencia> buscarSequencia(
-      {EmpresaModel empresa, int aplicacao = 96}) async {
+  Future<Sequencia> buscarSequencia({
+    EmpresaModel empresa,
+    int aplicacao = 96,
+  }) async {
     final dbInstance = await db.get();
     final sequenciaJson = await dbInstance.query(
       'sequencia',

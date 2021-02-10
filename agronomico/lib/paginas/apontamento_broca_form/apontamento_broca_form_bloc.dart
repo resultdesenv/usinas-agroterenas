@@ -40,10 +40,20 @@ class ApontamentoBrocaFormBloc
         final cdFitoss =
             (prefFitoss != null ? int.tryParse(prefFitoss) : null) ??
                 tiposFitossanidade?.first?.cdFitoss;
-        List<ApontBrocaModel> brocas;
+        List<ApontBrocaModel> brocas = [];
         String mensagemErro;
         ApontBrocaModel primeiraBroca;
 
+        final prefCana = await repositorioPreferencia.get(
+          idPreferencia: 'quantidade-canas',
+        );
+        final int qtCana =
+            (prefCana != null ? int.tryParse(prefCana) : prefCana) ?? 100;
+
+        final sequencia = await repositorioSequencia.buscarSequencia(
+          empresa: event.empresa,
+          aplicacao: 116,
+        );
         if (event.novoApontamento) {
           brocas = await repositorioBroca.get(
               filtros: Map.from({
@@ -55,17 +65,8 @@ class ApontamentoBrocaFormBloc
           if (event.novoApontamento && brocas.length > 0) {
             mensagemErro = 'Esse talhão ja possui um apontamento, abrindo...';
           } else {
-            final sequencia = await repositorioSequencia.buscarSequencia(
-              empresa: event.empresa,
-              aplicacao: 116,
-            );
-            final prefCana = await repositorioPreferencia.get(
-              idPreferencia: 'quantidade-canas',
-            );
-            final qtCana =
-                (prefCana != null ? int.tryParse(prefCana) : prefCana) ?? 100;
             int noSeqAtual = 0;
-
+            brocas = [];
             primeiraBroca = ApontBrocaModel.fromUpnivel3(
               event.upnivel3,
               instancia: event.instancia,
@@ -85,12 +86,15 @@ class ApontamentoBrocaFormBloc
           brocas: brocas,
           carregando: false,
           tiposFitossanidade: tiposFitossanidade,
-          novoApontamento: event.novoApontamento,
-          tipoFitossanidade:
-              brocas.first != null ? brocas.first.cdFitoss : null,
+          novoApontamento: mensagemErro == null ? event.novoApontamento : false,
+          tipoFitossanidade: brocas.length > 0 || primeiraBroca != null
+              ? primeiraBroca?.cdFitoss ?? brocas.first.cdFitoss
+              : null,
           mensagemErro: mensagemErro,
           primeiraBroca: primeiraBroca,
           salvo: primeiraBroca == null,
+          canas: brocas.length > 0 ? brocas.length : qtCana,
+          sequencia: sequencia,
         );
       } catch (e) {
         print(e);
@@ -139,6 +143,14 @@ class ApontamentoBrocaFormBloc
         await repositorioBroca.salvar(brocas);
 
         if (state.novoApontamento) {
+          await repositorioSequencia.salvarSequencia(
+            sequencia: state.sequencia.juntar(
+              sequencia: state.sequencia.sequencia + 1,
+            ),
+          );
+        }
+
+        if (state.novoApontamento) {
           final sequencia = await repositorioSequencia.buscarSequencia(
             empresa: event.empresa,
           );
@@ -166,9 +178,11 @@ class ApontamentoBrocaFormBloc
     if (event is AlteraQuantidade) {
       if (event.quantidade == 0) return;
       if (event.quantidade <= event.brocas.length) {
+        final brocas = event.brocas.sublist(0, event.quantidade);
         yield state.juntar(
-          brocas: event.brocas.sublist(0, event.quantidade),
+          brocas: brocas,
           salvo: false,
+          canas: brocas.length,
         );
       } else {
         final diferenca = event.quantidade - event.brocas.length;
@@ -202,7 +216,10 @@ class ApontamentoBrocaFormBloc
                   versao: null,
                 ))
             .toList();
-        yield state.juntar(brocas: event.brocas + novasBrocas);
+        yield state.juntar(
+          brocas: event.brocas + novasBrocas,
+          canas: event.brocas.length + novasBrocas.length,
+        );
       }
       try {
         await repositorioPreferencia.salvar(

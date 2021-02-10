@@ -66,13 +66,18 @@ class ApontamentoBrocaFormContent extends StatelessWidget {
                 child: state.carregando
                     ? Center(child: CircularProgressIndicator())
                     : Column(
-                        children: apontamentos.length > 0
+                        children: apontamentos.length > 0 ||
+                                state.primeiraBroca != null
                             ? [
                                 Padding(
                                   padding: EdgeInsets.symmetric(horizontal: 4),
                                   child: ApontamentoBrocaFormHeader(
-                                      broca: state.brocas.first,
-                                      canas: state.brocas.length,
+                                      broca: state.brocas.length > 0
+                                          ? state.brocas?.first
+                                          : state.primeiraBroca,
+                                      canas: state.canas,
+                                      controller: TextEditingController(
+                                          text: state.canas.toString()),
                                       novoApontamento: state.novoApontamento,
                                       tiposFitossanidade:
                                           state.tiposFitossanidade,

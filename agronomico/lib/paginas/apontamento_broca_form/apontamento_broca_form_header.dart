@@ -11,6 +11,7 @@ class ApontamentoBrocaFormHeader extends StatelessWidget {
   final bool novoApontamento;
   final int canas;
   final Function(String) alterarQuantidade;
+  final TextEditingController controller;
 
   ApontamentoBrocaFormHeader({
     @required this.onChanged,
@@ -19,6 +20,7 @@ class ApontamentoBrocaFormHeader extends StatelessWidget {
     @required this.novoApontamento,
     @required this.canas,
     @required this.alterarQuantidade,
+    @required this.controller,
   });
 
   @override
@@ -82,17 +84,30 @@ class ApontamentoBrocaFormHeader extends StatelessWidget {
                 Expanded(
                   child: TextFormField(
                     decoration: InputDecoration(labelText: 'Canas'),
+                    controller: controller,
                     keyboardType: TextInputType.number,
                     enabled: novoApontamento,
                     inputFormatters: [
                       FilteringTextInputFormatter.allow(RegExp(r'\d'))
                     ],
-                    initialValue: canas.toString(),
                     onFieldSubmitted: alterarQuantidade,
                   ),
                 ),
               ],
             ),
+            novoApontamento
+                ? Container(
+                    margin: EdgeInsets.only(top: 16),
+                    width: double.infinity,
+                    child: RaisedButton(
+                      elevation: 0,
+                      textColor: Colors.white,
+                      color: Theme.of(context).primaryColor,
+                      child: Text('Prosseguir'),
+                      onPressed: () => alterarQuantidade(controller.text),
+                    ),
+                  )
+                : Container(),
           ],
         ),
       ),
