@@ -42,6 +42,7 @@ class ApontamentoBrocaFormBloc
                 tiposFitossanidade?.first?.cdFitoss;
         List<ApontBrocaModel> brocas;
         String mensagemErro;
+        ApontBrocaModel primeiraBroca;
 
         if (event.novoApontamento) {
           brocas = await repositorioBroca.get(
@@ -64,17 +65,16 @@ class ApontamentoBrocaFormBloc
             final qtCana =
                 (prefCana != null ? int.tryParse(prefCana) : prefCana) ?? 100;
             int noSeqAtual = 0;
-            brocas = List(qtCana)
-                .map((_) => ApontBrocaModel.fromUpnivel3(
-                      event.upnivel3,
-                      instancia: event.instancia,
-                      noBoletin: 10000 + sequencia.sequencia + 1,
-                      noSequencia: ++noSeqAtual,
-                      dispositivo: event.dispositivo,
-                      cdFunc: event.cdFunc,
-                      cdFitoss: cdFitoss,
-                    ))
-                .toList();
+
+            primeiraBroca = ApontBrocaModel.fromUpnivel3(
+              event.upnivel3,
+              instancia: event.instancia,
+              noBoletin: 10000 + sequencia.sequencia + 1,
+              noSequencia: ++noSeqAtual,
+              dispositivo: event.dispositivo,
+              cdFunc: event.cdFunc,
+              cdFitoss: cdFitoss,
+            );
           }
         } else {
           final Map<String, dynamic> filtros = Map();
@@ -89,6 +89,8 @@ class ApontamentoBrocaFormBloc
           tipoFitossanidade:
               brocas.first != null ? brocas.first.cdFitoss : null,
           mensagemErro: mensagemErro,
+          primeiraBroca: primeiraBroca,
+          salvo: primeiraBroca == null,
         );
       } catch (e) {
         print(e);
@@ -104,7 +106,7 @@ class ApontamentoBrocaFormBloc
         final brocas = event.brocas
             .map((e) => e.juntar(cdFitoss: event.cdFitoss))
             .toList();
-        yield state.juntar(brocas: brocas);
+        yield state.juntar(brocas: brocas, salvo: false);
         await repositorioPreferencia.salvar(
           idPreferencia: 'tipo-fitossanidade',
           valorPreferencia: event.cdFitoss,
@@ -118,7 +120,7 @@ class ApontamentoBrocaFormBloc
     if (event is AlteraApontamento) {
       final brocas = state.brocas;
       brocas[event.indiceBroca] = event.broca;
-      yield state.juntar(brocas: brocas);
+      yield state.juntar(brocas: brocas, salvo: false);
     }
 
     if (event is SalvarApontamentos) {
@@ -149,38 +151,46 @@ class ApontamentoBrocaFormBloc
           carregando: false,
           voltarParaListagem: event.voltar,
           brocas: brocas,
+          salvo: true,
         );
       } catch (e) {
         print(e);
         yield state.juntar(
-            carregando: false, mensagemErro: e.toString(), brocas: brocas);
+          carregando: false,
+          mensagemErro: e.toString(),
+          brocas: brocas,
+        );
       }
     }
 
     if (event is AlteraQuantidade) {
       if (event.quantidade == 0) return;
       if (event.quantidade <= event.brocas.length) {
-        yield state.juntar(brocas: event.brocas.sublist(0, event.quantidade));
+        yield state.juntar(
+          brocas: event.brocas.sublist(0, event.quantidade),
+          salvo: false,
+        );
       } else {
         final diferenca = event.quantidade - event.brocas.length;
+        final brocaExemplo = state.primeiraBroca ?? event.brocas.first;
         int sequencia = event.brocas.length;
 
         final novasBrocas = List(diferenca)
             .map((_) => ApontBrocaModel(
-                  instancia: event.brocas.first?.instancia,
-                  noBoletim: event.brocas.first?.noBoletim,
+                  instancia: brocaExemplo?.instancia,
+                  noBoletim: brocaExemplo?.noBoletim,
                   noSequencia: ++sequencia,
-                  dispositivo: event.brocas.first?.dispositivo,
-                  cdFunc: event.brocas.first?.cdFunc,
-                  cdFitoss: event.brocas.first?.cdFitoss,
-                  cdSafra: event.brocas.first?.cdSafra,
-                  cdUpnivel1: event.brocas.first?.cdUpnivel1,
-                  cdUpnivel2: event.brocas.first?.cdUpnivel2,
-                  cdUpnivel3: event.brocas.first?.cdUpnivel3,
+                  dispositivo: brocaExemplo?.dispositivo,
+                  cdFunc: brocaExemplo?.cdFunc,
+                  cdFitoss: brocaExemplo?.cdFitoss,
+                  cdSafra: brocaExemplo?.cdSafra,
+                  cdUpnivel1: brocaExemplo?.cdUpnivel1,
+                  cdUpnivel2: brocaExemplo?.cdUpnivel2,
+                  cdUpnivel3: brocaExemplo?.cdUpnivel3,
                   dtOperacao: null,
                   dtStatus: null,
                   hrOperacao: null,
-                  noColetor: event.brocas.first?.noColetor,
+                  noColetor: brocaExemplo?.noColetor,
                   qtBrocados: 0,
                   qtCanas: 1,
                   qtCanaPodr: 0,
@@ -203,6 +213,13 @@ class ApontamentoBrocaFormBloc
         print(e);
         yield state.juntar(mensagemErro: e.toString());
       }
+    }
+
+    if (event is MarcaParaSalvar) {
+      final brocas = state.brocas;
+      brocas[event.broca.noSequencia - 1] = event.broca;
+
+      yield state.juntar(salvo: false, brocas: brocas);
     }
   }
 }

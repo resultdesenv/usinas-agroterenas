@@ -60,3 +60,9 @@ class AlteraQuantidade extends ApontamentoBrocaFormEvent {
 
   AlteraQuantidade({@required this.quantidade, @required this.brocas});
 }
+
+class MarcaParaSalvar extends ApontamentoBrocaFormEvent {
+  final ApontBrocaModel broca;
+
+  MarcaParaSalvar({@required this.broca});
+}

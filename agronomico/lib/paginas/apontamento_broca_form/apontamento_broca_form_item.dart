@@ -98,6 +98,9 @@ class ApontamentoBrocaFormItem extends StatelessWidget {
       );
 
   void _onChanged(BuildContext context, String value) {
-    if (value.length == 2) FocusScope.of(context).nextFocus();
+    if (value.length == 2) {
+      if (onChanged != null) onChanged(valores);
+      FocusScope.of(context).nextFocus();
+    }
   }
 }

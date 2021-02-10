@@ -12,6 +12,8 @@ class ApontamentoBrocaFormState extends Equatable {
   final bool voltarParaListagem;
   final bool novoApontamento;
   final int tipoFitossanidade;
+  final bool salvo;
+  final ApontBrocaModel primeiraBroca;
 
   ApontamentoBrocaFormState({
     this.brocas = const [],
@@ -21,6 +23,8 @@ class ApontamentoBrocaFormState extends Equatable {
     this.voltarParaListagem = false,
     this.novoApontamento = false,
     this.tipoFitossanidade,
+    this.salvo = true,
+    this.primeiraBroca,
   });
 
   ApontamentoBrocaFormState juntar({
@@ -31,6 +35,8 @@ class ApontamentoBrocaFormState extends Equatable {
     List<TipoFitossanidadeModel> tiposFitossanidade,
     String mensagemErro,
     bool novoApontamento,
+    bool salvo,
+    ApontBrocaModel primeiraBroca,
   }) =>
       ApontamentoBrocaFormState(
         brocas: brocas ?? this.brocas,
@@ -40,6 +46,8 @@ class ApontamentoBrocaFormState extends Equatable {
         mensagemErro: mensagemErro,
         voltarParaListagem: voltarParaListagem,
         novoApontamento: novoApontamento ?? this.novoApontamento,
+        salvo: salvo ?? this.salvo,
+        primeiraBroca: primeiraBroca ?? this.primeiraBroca,
       );
 
   @override
@@ -50,5 +58,7 @@ class ApontamentoBrocaFormState extends Equatable {
         voltarParaListagem,
         novoApontamento,
         tipoFitossanidade,
+        salvo,
+        primeiraBroca,
       ];
 }

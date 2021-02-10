@@ -44,12 +44,18 @@ class ApontamentoBrocaFormContent extends StatelessWidget {
                     controllerBrocados: TextEditingController(
                       text: e.qtBrocados.toInt().toString().padLeft(2, '0'),
                     ),
+                    onChanged: (broca) => context
+                        .bloc<ApontamentoBrocaFormBloc>()
+                        .add(MarcaParaSalvar(broca: broca)),
                   ))
               .toList();
 
           return WillPopScope(
             onWillPop: () => _confirmaSair(
-                context, apontamentos.map((e) => e.valores).toList()),
+              context,
+              apontamentos.map((e) => e.valores).toList(),
+              state.salvo,
+            ),
             child: Scaffold(
               appBar: AppBar(
                 title: Text(
@@ -121,40 +127,42 @@ class ApontamentoBrocaFormContent extends StatelessWidget {
   Future<bool> _confirmaSair(
     BuildContext context,
     List<ApontBrocaModel> brocas,
+    bool salvo,
   ) async {
-    final bool res = await showDialog(
-      context: context,
-      builder: (_) => AlertDialog(
-        title: Text('Deseja sair?'),
-        content:
-            Text('Ao sair sem salvar, você perderá todos os dados editados!'),
-        actions: <Widget>[
-          FlatButton(
-            onPressed: () => Navigator.of(context).pop(false),
-            child: Text('Cancelar'),
+    final bool res = salvo ||
+        await showDialog(
+          context: context,
+          builder: (_) => AlertDialog(
+            title: Text('Deseja sair?'),
+            content: Text(
+                'Ao sair sem salvar, você perderá todos os dados editados!'),
+            actions: <Widget>[
+              FlatButton(
+                onPressed: () => Navigator.of(context).pop(false),
+                child: Text('Cancelar'),
+              ),
+              FlatButton(
+                textColor: Theme.of(context).primaryColor,
+                onPressed: () {
+                  Navigator.of(context).pop(false);
+                  context.bloc<ApontamentoBrocaFormBloc>().add(
+                        SalvarApontamentos(
+                          empresa: BaseInherited.of(context).empresaAutenticada,
+                          brocas: brocas,
+                          voltar: true,
+                        ),
+                      );
+                },
+                child: Text('Salvar'),
+              ),
+              FlatButton(
+                textColor: Colors.red,
+                onPressed: () => Navigator.of(context).pop(true),
+                child: Text('Sair'),
+              ),
+            ],
           ),
-          FlatButton(
-            textColor: Theme.of(context).primaryColor,
-            onPressed: () {
-              Navigator.of(context).pop(false);
-              context.bloc<ApontamentoBrocaFormBloc>().add(
-                    SalvarApontamentos(
-                      empresa: BaseInherited.of(context).empresaAutenticada,
-                      brocas: brocas,
-                      voltar: true,
-                    ),
-                  );
-            },
-            child: Text('Salvar'),
-          ),
-          FlatButton(
-            textColor: Colors.red,
-            onPressed: () => Navigator.of(context).pop(true),
-            child: Text('Sair'),
-          ),
-        ],
-      ),
-    );
+        );
     return res ?? false;
   }
 }
