@@ -18,8 +18,8 @@ class DrawerFiltros extends StatelessWidget {
     'Pendente': '(\'P\',\'E\')',
   };
   final Function(String up1) buscaSafra;
-  final Function(String safra) buscaUp2;
-  final Function(String up2) buscaUp3;
+  final Function(String up2) buscaUp1;
+  final Function(String safra) buscaUp3;
   final bool filtrarData;
 
   DrawerFiltros({
@@ -31,7 +31,7 @@ class DrawerFiltros extends StatelessWidget {
     @required this.listaUp2,
     @required this.listaUp3,
     @required this.buscaSafra,
-    @required this.buscaUp2,
+    @required this.buscaUp1,
     @required this.buscaUp3,
     this.estimativa = false,
     this.filtrarData = true,
@@ -119,6 +119,17 @@ class DrawerFiltros extends StatelessWidget {
                     : [],
               ),
               DropdownButtonFormField<String>(
+                items: listaUp2
+                    .map((String item) => DropdownMenuItem<String>(
+                          value: item ?? '',
+                          child: Text(item.isEmpty ? 'Selecione' : item),
+                        ))
+                    .toList(),
+                decoration: InputDecoration(labelText: 'Zona'),
+                onChanged: buscaUp1,
+                value: filtros['cdUpnivel2'],
+              ),
+              DropdownButtonFormField<String>(
                 decoration: InputDecoration(labelText: 'Fazenda'),
                 items: listaUp1.map((String item) {
                   return DropdownMenuItem<String>(
@@ -137,19 +148,8 @@ class DrawerFiltros extends StatelessWidget {
                           child: Text(item.isEmpty ? 'Selecione' : item),
                         ))
                     .toList(),
-                onChanged: buscaUp2,
-                value: filtros['cdSafra'],
-              ),
-              DropdownButtonFormField<String>(
-                items: listaUp2
-                    .map((String item) => DropdownMenuItem<String>(
-                          value: item ?? '',
-                          child: Text(item.isEmpty ? 'Selecione' : item),
-                        ))
-                    .toList(),
-                decoration: InputDecoration(labelText: 'Zona'),
                 onChanged: buscaUp3,
-                value: filtros['cdUpnivel2'],
+                value: filtros['cdSafra'],
               ),
               DropdownButtonFormField<String>(
                 items: listaUp3

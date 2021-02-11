@@ -39,14 +39,14 @@ class BuscaSafra extends ApontamentoEstimativaListaEvent {
   BuscaSafra({@required this.up1});
 }
 
-class BuscaUpnivel2 extends ApontamentoEstimativaListaEvent {
-  final String safra;
+class BuscaUpnivel1 extends ApontamentoEstimativaListaEvent {
+  final String up2;
 
-  BuscaUpnivel2({@required this.safra});
+  BuscaUpnivel1({@required this.up2});
 }
 
 class BuscaUpnivel3 extends ApontamentoEstimativaListaEvent {
-  final String up2;
+  final String safra;
 
-  BuscaUpnivel3({@required this.up2});
+  BuscaUpnivel3({@required this.safra});
 }

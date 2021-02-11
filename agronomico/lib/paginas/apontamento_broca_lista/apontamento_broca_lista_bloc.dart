@@ -20,21 +20,39 @@ class ApontamentoBrocaListaBloc
   Stream<ApontamentoBrocaListaState> mapEventToState(
     ApontamentoBrocaListaEvent event,
   ) async* {
-    if (event is BuscaListaBroca) {
+    if (event is IniciaBrocaLista) {
+      final res = await preferenciaRepository.get(idPreferencia: 'broca_lista');
+      final Map<String, dynamic> filtros = res != null ? json.decode(res) : {};
+      final up2 = await repositorioBroca.buscaUp2();
+      final listaDropDown = {
+        'cdUpnivel2': up2,
+      };
+
+      filtros.keys.forEach((chave) {
+        if (filtros[chave] != null && filtros[chave].toString().isNotEmpty) {
+          listaDropDown[chave] = [filtros[chave]];
+        }
+      });
+
       yield state.juntar(
-        carregando: true,
-        apagaSelecao: true,
+        filtros: filtros,
+        listaDropDown: listaDropDown,
       );
+    }
+
+    if (event is BuscaListaBroca) {
+      yield state.juntar(carregando: true, apagaSelecao: true);
       try {
         if (event.salvaFiltros) {
           await preferenciaRepository.salvar(
-            idPreferencia: 'estimativaLista',
+            idPreferencia: 'broca_lista',
             valorPreferencia: json.encode(event.filtros),
           );
         }
 
         final brocas = await repositorioBroca.resumos(
-            filtros: _formataFiltros(event.filtros));
+          filtros: _formataFiltros(event.filtros),
+        );
 
         yield state.juntar(
           filtros: event.filtros,
@@ -63,30 +81,28 @@ class ApontamentoBrocaListaBloc
       final filtros = state.filtros;
       final safra = await repositorioBroca.buscaSafra(
         up1: event.up1,
+        up2: state.filtros['cdUpnivel2'],
       );
       listaDropDown['cdSafra'] = safra;
       yield state.juntar(listaDropDown: listaDropDown, filtros: {
         ...filtros,
         'cdUpnivel1': event.up1,
         'cdSafra': '',
-        'cdUpnivel2': '',
         'cdUpnivel3': '',
       });
     }
 
-    if (event is BuscaUpnivel2) {
+    if (event is BuscaUpnivel1) {
       final listaDropDown = state.listaDropDown;
       final filtros = state.filtros;
-      final up2 = await repositorioBroca.buscaUp2(
-        safra: event.safra,
-      );
-
-      listaDropDown['cdUpnivel2'] = up2;
+      final up1 = await repositorioBroca.buscaUp1(up2: event.up2);
+      listaDropDown['cdUpnivel1'] = up1;
 
       yield state.juntar(listaDropDown: listaDropDown, filtros: {
         ...filtros,
-        'cdSafra': event.safra,
-        'cdUpnivel2': '',
+        'cdUpnivel2': event.up2,
+        'cdUpnivel1': '',
+        'cdSafra': '',
         'cdUpnivel3': '',
       });
     }
@@ -95,20 +111,24 @@ class ApontamentoBrocaListaBloc
       final listaDropDown = state.listaDropDown;
       final filtros = state.filtros;
       final up3 = await repositorioBroca.buscaUp3(
-        up2: event.up2,
+        safra: event.safra,
+        up1: state.filtros['cdUpnivel1'],
+        up2: state.filtros['cdUpnivel2'],
       );
       listaDropDown['cdUpnivel3'] = up3;
 
       yield state.juntar(listaDropDown: listaDropDown, filtros: {
         ...filtros,
-        'cdUpnivel2': event.up2,
+        'cdSafra': event.safra,
         'cdUpnivel3': '',
       });
     }
 
     if (event is AlteraSelecaoBroca) {
       yield state.juntar(
-          brocaSelecionada: event.broca, apagaSelecao: !event.value);
+        brocaSelecionada: event.broca,
+        apagaSelecao: !event.value,
+      );
     }
 
     if (event is RemoverBrocas) {

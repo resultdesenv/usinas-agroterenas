@@ -3,6 +3,7 @@ import 'package:agronomico/comum/repositorios/apont_broca_consulta_repository.da
 import 'package:agronomico/comum/repositorios/preferencia_repository.dart';
 import 'package:agronomico/paginas/apontamento_broca_lista/apontamento_broca_lista_bloc.dart';
 import 'package:agronomico/paginas/apontamento_broca_lista/apontamento_broca_lista_content.dart';
+import 'package:agronomico/paginas/apontamento_broca_lista/apontamento_broca_lista_event.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -31,7 +32,7 @@ class _ApontamentoBrocaListaPageState extends State<ApontamentoBrocaListaPage> {
       create: (_) => ApontamentoBrocaListaBloc(
         repositorioBroca: ApontBrocaConsultaRepository(db: Db()),
         preferenciaRepository: PreferenciaRepository(db: Db()),
-      ),
+      )..add(IniciaBrocaLista()),
       child: Scaffold(
         body: ApontamentoBrocaListaContent(scaffoldKey: scaffoldKey),
       ),

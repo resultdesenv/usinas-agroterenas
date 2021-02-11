@@ -1,13 +1,11 @@
 import 'dart:convert';
 
 import 'package:agronomico/comum/db/db.dart';
-import 'package:agronomico/comum/modelo/apont_broca_model.dart';
 import 'package:agronomico/comum/repositorios/preferencia_repository.dart';
 import 'package:agronomico/comum/sincronizacao/sincronizacao_out_repository.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:simple_moment/simple_moment.dart';
-import 'package:sqflite/sqflite.dart';
 
 class BrocaOutRepository extends SincronizacaoOutRepository {
   final Db db;

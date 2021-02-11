@@ -46,7 +46,7 @@ class SincronizacaoSequenciaRepository extends SincronizacaoBase<Sequencia> {
       sequencia.toJson(),
       conflictAlgorithm: ConflictAlgorithm.replace,
     );
-    print(await dbInstance.query('sequencia'));
+
     return sequencia;
   }
 
@@ -72,6 +72,15 @@ class SincronizacaoSequenciaRepository extends SincronizacaoBase<Sequencia> {
   }) async {
     final List<Sequencia> listaSequencia = [];
     for (final empresa in empresas) {
+      final sequencia = await buscarSequenciaApi(
+        instancia: empresa.cdInstManfro,
+        idDispositivo: idDispositivo,
+        token: token,
+      );
+      listaSequencia.add(sequencia);
+    }
+
+    for (final empresa in empresas) {
       final sequenciaBroca = await buscarSequenciaApi(
         instancia: empresa.cdInstManfro,
         idDispositivo: idDispositivo,
@@ -80,21 +89,15 @@ class SincronizacaoSequenciaRepository extends SincronizacaoBase<Sequencia> {
       );
       listaSequencia.add(sequenciaBroca);
     }
-
-    for (final empresa in empresas) {
-      final sequencia = await buscarSequenciaApi(
-        instancia: empresa.cdInstManfro,
-        idDispositivo: idDispositivo,
-        token: token,
-      );
-      listaSequencia.add(sequencia);
-    }
     return listaSequencia;
   }
 
   Future<List<Sequencia>> buscarListaSequenciaDb() async {
     final dbInstance = await db.get();
-    final sequenciasJson = await dbInstance.query('sequencia');
+    final sequenciasJson = await dbInstance.query(
+      'sequencia',
+      orderBy: 'idAplicacao ASC',
+    );
     return sequenciasJson
         .map((sequenciaJson) => Sequencia.fromJson(sequenciaJson))
         .toList();

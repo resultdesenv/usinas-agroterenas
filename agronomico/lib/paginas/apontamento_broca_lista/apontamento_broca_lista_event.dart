@@ -3,6 +3,8 @@ import 'package:flutter/foundation.dart';
 
 abstract class ApontamentoBrocaListaEvent {}
 
+class IniciaBrocaLista extends ApontamentoBrocaListaEvent {}
+
 class BuscaListaBroca extends ApontamentoBrocaListaEvent {
   final Map<String, dynamic> filtros;
   final bool salvaFiltros;
@@ -26,16 +28,16 @@ class BuscaSafra extends ApontamentoBrocaListaEvent {
   BuscaSafra({@required this.up1});
 }
 
-class BuscaUpnivel2 extends ApontamentoBrocaListaEvent {
-  final String safra;
+class BuscaUpnivel1 extends ApontamentoBrocaListaEvent {
+  final String up2;
 
-  BuscaUpnivel2({@required this.safra});
+  BuscaUpnivel1({@required this.up2});
 }
 
 class BuscaUpnivel3 extends ApontamentoBrocaListaEvent {
-  final String up2;
+  final String safra;
 
-  BuscaUpnivel3({@required this.up2});
+  BuscaUpnivel3({@required this.safra});
 }
 
 class AlteraSelecaoBroca extends ApontamentoBrocaListaEvent {

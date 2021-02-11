@@ -251,15 +251,15 @@ class ApontamentoBrocaListaContent extends StatelessWidget {
                   .bloc<ApontamentoBrocaListaBloc>()
                   .add(BuscaSafra(up1: up1));
             },
-            buscaUp2: (safra) {
+            buscaUp1: (up2) {
               context
                   .bloc<ApontamentoBrocaListaBloc>()
-                  .add(BuscaUpnivel2(safra: safra));
+                  .add(BuscaUpnivel1(up2: up2));
             },
-            buscaUp3: (up2) {
+            buscaUp3: (safra) {
               context
                   .bloc<ApontamentoBrocaListaBloc>()
-                  .add(BuscaUpnivel3(up2: up2));
+                  .add(BuscaUpnivel3(safra: safra));
             },
           ),
         );

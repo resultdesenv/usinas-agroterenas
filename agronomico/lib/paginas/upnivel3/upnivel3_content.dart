@@ -204,11 +204,11 @@ class UpNivel3Content extends StatelessWidget {
               buscaSafra: (up1) {
                 context.bloc<UpNivel3Bloc>().add(BuscaSafra(up1: up1));
               },
-              buscaUp2: (safra) {
-                context.bloc<UpNivel3Bloc>().add(BuscaUpnivel2(safra: safra));
+              buscaUp1: (up2) {
+                context.bloc<UpNivel3Bloc>().add(BuscaUpnivel1(up2: up2));
               },
-              buscaUp3: (up2) {
-                context.bloc<UpNivel3Bloc>().add(BuscaUpnivel3(up2: up2));
+              buscaUp3: (safra) {
+                context.bloc<UpNivel3Bloc>().add(BuscaUpnivel3(safra: safra));
               },
             ),
           );

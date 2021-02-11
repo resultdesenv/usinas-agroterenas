@@ -26,53 +26,68 @@ class RepositorioEstimativa {
     return EstimativaModelo.converterListaMapObjeto(lista);
   }
 
-  Future<List<String>> buscaUp1() async {
-    final banco = await db.get();
-    final List<String> up1 = await banco.query(
-      'apont_estimativa',
-      distinct: true,
-      columns: ['cdUpnivel1'],
-    ).then((itens) => itens.map((e) => e['cdUpnivel1'].toString()).toList());
-    return ['', ...up1];
-  }
-
-  Future<List<String>> buscaSafra({@required String up1}) async {
-    final banco = await db.get();
-    final List<String> safra = await banco
-        .query(
-          'apont_estimativa',
-          distinct: true,
-          columns: ['cdSafra'],
-          where: 'cdUpnivel1 = ?',
-          whereArgs: [up1],
-        )
-        .then((itens) => itens.map((e) => e['cdSafra'].toString()).toList());
-    return ['', ...safra];
-  }
-
-  Future<List<String>> buscaUp2({@required String safra}) async {
+  Future<List<String>> buscaUp2() async {
     final banco = await db.get();
     final List<String> up2 = await banco
         .query(
           'apont_estimativa',
           distinct: true,
           columns: ['cdUpnivel2'],
-          where: 'cdSafra = ?',
-          whereArgs: [safra],
+          orderBy: 'cdUpnivel2 ASC',
         )
         .then((itens) => itens.map((e) => e['cdUpnivel2'].toString()).toList());
     return ['', ...up2];
   }
 
-  Future<List<String>> buscaUp3({@required String up2}) async {
+  Future<List<String>> buscaUp1({
+    @required String up2,
+  }) async {
+    final banco = await db.get();
+    final List<String> up1 = await banco
+        .query(
+          'apont_estimativa',
+          distinct: true,
+          columns: ['cdUpnivel1'],
+          where: 'cdUpnivel1 = ? AND cdUpnivel2 = ?',
+          whereArgs: [up2],
+          orderBy: 'cdUpnivel1 ASC',
+        )
+        .then((itens) => itens.map((e) => e['cdUpnivel1'].toString()).toList());
+    return ['', ...up1];
+  }
+
+  Future<List<String>> buscaSafra({
+    @required String up1,
+    @required String up2,
+  }) async {
+    final banco = await db.get();
+    final List<String> safra = await banco
+        .query(
+          'apont_estimativa',
+          distinct: true,
+          columns: ['cdSafra'],
+          where: 'cdUpnivel1 = ? AND cdUpnivel2 = ?',
+          whereArgs: [up1, up2],
+          orderBy: 'cdSafra ASC',
+        )
+        .then((itens) => itens.map((e) => e['cdSafra'].toString()).toList());
+    return ['', ...safra];
+  }
+
+  Future<List<String>> buscaUp3({
+    @required String safra,
+    @required String up1,
+    @required String up2,
+  }) async {
     final banco = await db.get();
     final List<String> up3 = await banco
         .query(
           'apont_estimativa',
           distinct: true,
           columns: ['cdUpnivel3'],
-          where: 'cdUpnivel2 = ?',
-          whereArgs: [up2],
+          where: 'cdSafra = ? AND cdUpnivel1 = ? AND cdUpnivel2 = ?',
+          whereArgs: [safra, up1, up2],
+          orderBy: 'cdUpnivel3 ASC',
         )
         .then((itens) => itens.map((e) => e['cdUpnivel3'].toString()).toList());
     return ['', ...up3];
