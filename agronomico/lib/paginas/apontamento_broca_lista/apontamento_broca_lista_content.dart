@@ -1,14 +1,13 @@
 import 'package:agronomico/base/base_inherited.dart';
 import 'package:agronomico/comum/componentes/drawer_filtros.dart';
 import 'package:agronomico/comum/componentes/drawer_menu.dart';
-import 'package:agronomico/comum/modelo/upnivel3_model.dart';
 import 'package:agronomico/comum/utilidades/navegacao.dart';
 import 'package:agronomico/paginas/apontamento_broca_form/apontamento_broca_form_page.dart';
 import 'package:agronomico/paginas/apontamento_broca_lista/apontamento_broca_lista_bloc.dart';
 import 'package:agronomico/paginas/apontamento_broca_lista/apontamento_broca_lista_event.dart';
 import 'package:agronomico/paginas/apontamento_broca_lista/apontamento_broca_lista_state.dart';
 import 'package:agronomico/paginas/apontamento_broca_lista/apontamento_broca_lista_tile.dart';
-import 'package:agronomico/paginas/upnivel3/upnivel3_page.dart';
+import 'package:agronomico/paginas/talhao_unico/talhao_unico_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -36,22 +35,7 @@ class ApontamentoBrocaListaContent extends StatelessWidget {
                 icon: Icon(Icons.add),
                 onPressed: () => navegar(
                   context: context,
-                  pagina: UpNivel3Page(
-                    callback: ({
-                      int cdFunc,
-                      int noBoletim,
-                      int dispositivo,
-                      List<UpNivel3Model> upniveis,
-                    }) =>
-                        navegar(
-                            context: context,
-                            pagina: ApontamentoBrocaFormPage(
-                              cdFunc: cdFunc,
-                              noBoletim: noBoletim,
-                              dispositivo: dispositivo,
-                              upnivel3: upniveis.first,
-                            )),
-                  ),
+                  pagina: TalhaoUnicoPage(),
                 ),
                 tooltip: 'Adicionar Boletim',
               ),

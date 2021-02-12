@@ -98,7 +98,7 @@ class SincronizacaoPage extends StatelessWidget {
                 ),
                 HistoricoItemAtualizacaoModel(
                   upnivel3: true,
-                  nome: 'Área Nivel3 Safra - Estimativa',
+                  nome: 'Área Talhão - Safra',
                   tabela: 'upnivel3',
                   repository: SincronizacaoUpNivel3Repository(
                     db: Db(),
@@ -108,7 +108,7 @@ class SincronizacaoPage extends StatelessWidget {
                   ),
                 ),
                 HistoricoItemAtualizacaoModel(
-                  nome: 'Área Nivel3 Safra - Local',
+                  nome: 'Área Talhão - Local',
                   tabela: 'upnivel3',
                   filterNivel2: true,
                   repository: SincronizacaoUpNivel3LocalRepository(

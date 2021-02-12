@@ -44,7 +44,9 @@ class UpNivel3ConsultaRepository {
       where: filtros != null && filtros.keys.length > 0
           ? filtros.keys
               .map((e) => !['date(dtUltimoCorte)'].contains(e)
-                  ? "$e = '${filtros[e]}'"
+                  ? ['cdUpnivel2', 'cdSafra'].contains(e)
+                      ? "$e LIKE '${filtros[e]}'"
+                      : "$e = '${filtros[e]}'"
                   : '$e ${filtros[e]}')
               .join(' AND ')
           : null,
@@ -98,7 +100,7 @@ class UpNivel3ConsultaRepository {
   }
 
   Future<List<String>> buscaSafra({
-    @required String up1,
+    String up1,
     @required String up2,
   }) async {
     final banco = await db.get();
@@ -107,8 +109,8 @@ class UpNivel3ConsultaRepository {
           'upnivel3',
           distinct: true,
           columns: ['cdSafra'],
-          where: 'cdUpnivel1 = ? AND cdUpnivel2 = ?',
-          whereArgs: [up1, up2],
+          where: '${up1 != null ? 'cdUpnivel1 = ? AND ' : ''}cdUpnivel2 = ?',
+          whereArgs: up1 != null ? [up1, up2] : [up2],
           orderBy: 'cdSafra ASC',
         )
         .then((itens) => itens.map((e) => e['cdSafra'].toString()).toList());
