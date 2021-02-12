@@ -35,7 +35,19 @@ class ApontamentoBrocaListaContent extends StatelessWidget {
                 icon: Icon(Icons.add),
                 onPressed: () => navegar(
                   context: context,
-                  pagina: TalhaoUnicoPage(),
+                  pagina: TalhaoUnicoPage(
+                    callback: ({cdFunc, dispositivo, talhao}) {
+                      navegar(
+                        context: context,
+                        pagina: ApontamentoBrocaFormPage(
+                          cdFunc: cdFunc,
+                          dispositivo: dispositivo,
+                          upnivel3: talhao,
+                          novoApontamento: true,
+                        ),
+                      );
+                    },
+                  ),
                 ),
                 tooltip: 'Adicionar Boletim',
               ),

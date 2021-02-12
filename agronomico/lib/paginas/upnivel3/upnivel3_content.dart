@@ -70,9 +70,9 @@ class UpNivel3Content extends StatelessWidget {
                                               estado.lista.length,
                                           onChanged: (valor) => context
                                               .bloc<UpNivel3Bloc>()
-                                              .add(
-                                                CheckAllUpNivel3(valor: valor),
-                                              ),
+                                              .add(CheckAllUpNivel3(
+                                                valor: valor,
+                                              )),
                                         )
                                       : SizedBox(
                                           height: 48,
@@ -164,9 +164,7 @@ class UpNivel3Content extends StatelessWidget {
                           ),
                         ],
                       )
-                    : Center(
-                        child: Text('Nenhum registro encontrado!'),
-                      ),
+                    : Center(child: Text('Nenhum registro encontrado!')),
             floatingActionButton: Stack(
               overflow: Overflow.visible,
               children: [

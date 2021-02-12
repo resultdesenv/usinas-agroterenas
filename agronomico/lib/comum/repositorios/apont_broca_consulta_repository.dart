@@ -43,7 +43,7 @@ class ApontBrocaConsultaRepository {
                       : '$e ${filtros[e]}')
                   .join(' AND ')
               : null,
-          orderBy: 'noBoletim ASC',
+          orderBy: 'noBoletim DESC',
         )
         .then((l) => l.map((e) => ApontBrocaModel.fromJson(e)).toList());
     final List<ApontBrocaModel> listaAuxiliar = [];

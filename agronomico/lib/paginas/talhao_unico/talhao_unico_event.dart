@@ -1,3 +1,4 @@
+import 'package:agronomico/comum/modelo/upnivel3_model.dart';
 import 'package:flutter/foundation.dart';
 
 abstract class TalhaoUnicoEvent {}
@@ -24,4 +25,14 @@ class AlteraFiltros extends TalhaoUnicoEvent {
   final Map<String, dynamic> filtros;
 
   AlteraFiltros({@required this.filtros});
+}
+
+class EscolheTalhao extends TalhaoUnicoEvent {
+  final UpNivel3Model talhao;
+  final int cdFunc;
+
+  EscolheTalhao({
+    @required this.talhao,
+    @required this.cdFunc,
+  });
 }

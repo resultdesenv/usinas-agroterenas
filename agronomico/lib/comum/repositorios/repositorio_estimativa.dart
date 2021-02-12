@@ -21,6 +21,7 @@ class RepositorioEstimativa {
                   : '$e ${filtros[e]}')
               .join(' AND ')
           : null,
+      orderBy: 'noBoletim DESC',
     );
 
     return EstimativaModelo.converterListaMapObjeto(lista);

@@ -65,11 +65,14 @@ class ApontamentoBrocaFormContent extends StatelessWidget {
               body: Center(
                 child: state.carregando
                     ? Center(child: CircularProgressIndicator())
-                    : Column(
-                        children: apontamentos.length > 0 ||
-                                state.primeiraBroca != null
-                            ? [
-                                Padding(
+                    : apontamentos.length > 0 || state.primeiraBroca != null
+                        ? ListView.builder(
+                            addAutomaticKeepAlives: true,
+                            itemCount: apontamentos.length + 1,
+                            padding: EdgeInsets.all(8),
+                            itemBuilder: (_, index) {
+                              if (index == 0) {
+                                return Padding(
                                   padding: EdgeInsets.symmetric(horizontal: 4),
                                   child: ApontamentoBrocaFormHeader(
                                       broca: state.brocas.length > 0
@@ -97,19 +100,12 @@ class ApontamentoBrocaFormContent extends StatelessWidget {
                                             quantidade:
                                                 int.tryParse(quantidade),
                                           ))),
-                                ),
-                                Expanded(
-                                  child: ListView.builder(
-                                    addAutomaticKeepAlives: true,
-                                    itemCount: apontamentos.length,
-                                    padding: EdgeInsets.all(8),
-                                    itemBuilder: (_, index) =>
-                                        apontamentos[index],
-                                  ),
-                                ),
-                              ]
-                            : [],
-                      ),
+                                );
+                              }
+                              return apontamentos[index - 1];
+                            },
+                          )
+                        : Container(),
               ),
               backgroundColor: Color(0xFFFAFAFA),
               floatingActionButton: FloatingActionButton(
