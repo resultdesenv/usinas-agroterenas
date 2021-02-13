@@ -224,7 +224,6 @@ class ApontamentoBrocaListaContent extends StatelessWidget {
           drawer: DrawerMenu(),
           endDrawer: DrawerFiltros(
             apontamento: true,
-            filtrarData: false,
             filtros: state.filtros,
             controllerBoletim:
                 TextEditingController(text: state.filtros['noBoletim'] ?? ''),

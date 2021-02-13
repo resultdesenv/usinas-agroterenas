@@ -214,7 +214,6 @@ class ApontamentoEstimativaListaContent extends StatelessWidget {
           drawer: DrawerMenu(),
           endDrawer: DrawerFiltros(
             apontamento: true,
-            filtrarData: false,
             filtros: estado.filtros,
             controllerBoletim:
                 TextEditingController(text: estado.filtros['noBoletim'] ?? ''),
