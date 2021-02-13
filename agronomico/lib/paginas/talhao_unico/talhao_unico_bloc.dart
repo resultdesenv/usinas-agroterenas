@@ -63,6 +63,7 @@ class TalhaoUnicoBloc extends Bloc<TalhaoUnicoEvent, TalhaoUnicoState> {
       yield state.juntar(
         loading: true,
         talhoes: [],
+        filtros: event.filtros,
       );
       try {
         final res = await upNivel3ConsultaRepository.get(

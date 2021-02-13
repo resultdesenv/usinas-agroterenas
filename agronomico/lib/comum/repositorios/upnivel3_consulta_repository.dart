@@ -45,7 +45,7 @@ class UpNivel3ConsultaRepository {
           ? filtros.keys
               .map((e) => !['date(dtUltimoCorte)'].contains(e)
                   ? ['cdUpnivel2', 'cdSafra'].contains(e)
-                      ? "$e LIKE '${filtros[e]}'"
+                      ? "$e LIKE '%${filtros[e]}%'"
                       : "$e = '${filtros[e]}'"
                   : '$e ${filtros[e]}')
               .join(' AND ')

@@ -103,7 +103,7 @@ class ApontamentoBrocaFormHeader extends StatelessWidget {
                       elevation: 0,
                       textColor: Colors.white,
                       color: Theme.of(context).primaryColor,
-                      child: Text('Prosseguir'),
+                      child: Text('Gerar Canas'),
                       onPressed: () => alterarQuantidade(controller.text),
                     ),
                   )

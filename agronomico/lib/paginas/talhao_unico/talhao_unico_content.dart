@@ -4,6 +4,7 @@ import 'package:agronomico/paginas/talhao_unico/talhao_unico_event.dart';
 import 'package:agronomico/paginas/talhao_unico/talhao_unico_state.dart';
 import 'package:agronomico/paginas/talhao_unico/talhao_unico_tile.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class TalhaoUnicoContent extends StatelessWidget {
@@ -44,12 +45,12 @@ class TalhaoUnicoContent extends StatelessWidget {
                             contentPadding: EdgeInsets.symmetric(vertical: 14),
                           ),
                           controller: controllerZona,
-                          onChanged: (value) => context
-                              .bloc<TalhaoUnicoBloc>()
-                              .add(AlteraFiltros(filtros: {
-                                ...state.filtros,
-                                'cdUpnivel2': value
-                              })),
+                          keyboardType: TextInputType.number,
+                          inputFormatters: [
+                            FilteringTextInputFormatter.allow(
+                              RegExp(r'\d'),
+                            )
+                          ],
                         ),
                       ),
                       SizedBox(width: 16),
@@ -60,31 +61,12 @@ class TalhaoUnicoContent extends StatelessWidget {
                             contentPadding: EdgeInsets.symmetric(vertical: 14),
                           ),
                           controller: controllerSafra,
-                          onChanged: (value) => context
-                              .bloc<TalhaoUnicoBloc>()
-                              .add(AlteraFiltros(filtros: {
-                                ...state.filtros,
-                                'cdSafra': value
-                              })),
-                        ),
-                      ),
-                      Expanded(
-                        child: DropdownButtonFormField<String>(
-                          decoration: InputDecoration(labelText: 'Safra'),
-                          items: (state.listaDropDown['cdSafra'] ?? [])
-                              .map((String item) => DropdownMenuItem<String>(
-                                    value: item ?? '',
-                                    child:
-                                        Text(item.isEmpty ? 'Selecione' : item),
-                                  ))
-                              .toList(),
-                          onChanged: (value) => context
-                              .bloc<TalhaoUnicoBloc>()
-                              .add(AlteraFiltros(filtros: {
-                                ...state.filtros,
-                                'cdSafra': value
-                              })),
-                          value: state.filtros['cdSafra'],
+                          keyboardType: TextInputType.number,
+                          inputFormatters: [
+                            FilteringTextInputFormatter.allow(
+                              RegExp(r'\d'),
+                            )
+                          ],
                         ),
                       ),
                       SizedBox(width: 16),
@@ -94,7 +76,10 @@ class TalhaoUnicoContent extends StatelessWidget {
                             .bloc<TalhaoUnicoBloc>()
                             .add(BuscaListaTalhoes(
                               salvaFiltros: true,
-                              filtros: state.filtros,
+                              filtros: {
+                                'cdUpnivel2': controllerZona.text,
+                                'cdSafra': controllerSafra.text,
+                              },
                             )),
                       )
                     ],

@@ -27,7 +27,7 @@ class TalhaoUnicoMontaTabela extends StatelessWidget {
             ),
             TableCell(
               child: Text(
-                talhao.cdUpnivel1.replaceAll(' ', '0'),
+                talhao.cdUpnivel1,
                 style: TextStyle(
                   fontSize: 10,
                   color: disabled ? Colors.black38 : Colors.black,
@@ -37,7 +37,7 @@ class TalhaoUnicoMontaTabela extends StatelessWidget {
             ),
             TableCell(
               child: Text(
-                talhao.cdUpnivel2.replaceAll(' ', '0'),
+                talhao.cdUpnivel2,
                 style: TextStyle(
                   fontSize: 10,
                   color: disabled ? Colors.black38 : Colors.black,
@@ -47,7 +47,7 @@ class TalhaoUnicoMontaTabela extends StatelessWidget {
             ),
             TableCell(
               child: Text(
-                talhao.cdUpnivel3.replaceAll(' ', '0'),
+                talhao.cdUpnivel3,
                 style: TextStyle(
                   fontSize: 10,
                   color: disabled ? Colors.black38 : Colors.black,
