@@ -213,15 +213,13 @@ class ApontamentoEstimativaListaContent extends StatelessWidget {
           ),
           drawer: DrawerMenu(),
           endDrawer: DrawerFiltros(
-            estimativa: true,
+            apontamento: true,
             filtrarData: false,
             filtros: estado.filtros,
-            listaSafra: estado.listaDropDown['cdSafra'] ?? [],
-            listaUp1: estado.listaDropDown['cdUpnivel1'] ?? [],
-            listaUp2: estado.listaDropDown['cdUpnivel2'] ?? [],
-            listaUp3: estado.listaDropDown['cdUpnivel3'] ?? [],
-            controller:
+            controllerBoletim:
                 TextEditingController(text: estado.filtros['noBoletim'] ?? ''),
+            controllerZona:
+                TextEditingController(text: estado.filtros['cdUpnivel2'] ?? ''),
             alteraFiltro: (chave, valor) {
               context
                   .bloc<ApontamentoEstimativaListaBloc>()
@@ -231,21 +229,6 @@ class ApontamentoEstimativaListaContent extends StatelessWidget {
               context
                   .bloc<ApontamentoEstimativaListaBloc>()
                   .add(CarregarListas(filtros: valores));
-            },
-            buscaSafra: (up1) {
-              context
-                  .bloc<ApontamentoEstimativaListaBloc>()
-                  .add(BuscaSafra(up1: up1));
-            },
-            buscaUp1: (up2) {
-              context
-                  .bloc<ApontamentoEstimativaListaBloc>()
-                  .add(BuscaUpnivel1(up2: up2));
-            },
-            buscaUp3: (safra) {
-              context
-                  .bloc<ApontamentoEstimativaListaBloc>()
-                  .add(BuscaUpnivel3(safra: safra));
             },
           ),
         );

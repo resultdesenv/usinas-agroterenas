@@ -185,10 +185,8 @@ class UpNivel3Content extends StatelessWidget {
             endDrawer: DrawerFiltros(
               filtrarData: false,
               filtros: estado.filtros,
-              listaSafra: estado.listaDropDown['cdSafra'] ?? [],
-              listaUp1: estado.listaDropDown['cdUpnivel1'] ?? [],
-              listaUp2: estado.listaDropDown['cdUpnivel2'] ?? [],
-              listaUp3: estado.listaDropDown['cdUpnivel3'] ?? [],
+              controllerZona: TextEditingController(
+                  text: estado.filtros['cdUpnivel2'] ?? ''),
               alteraFiltro: (chave, valor) {
                 context
                     .bloc<UpNivel3Bloc>()
@@ -198,15 +196,6 @@ class UpNivel3Content extends StatelessWidget {
                 context
                     .bloc<UpNivel3Bloc>()
                     .add(BuscaListaUpNivel3(filtros: filtros));
-              },
-              buscaSafra: (up1) {
-                context.bloc<UpNivel3Bloc>().add(BuscaSafra(up1: up1));
-              },
-              buscaUp1: (up2) {
-                context.bloc<UpNivel3Bloc>().add(BuscaUpnivel1(up2: up2));
-              },
-              buscaUp3: (safra) {
-                context.bloc<UpNivel3Bloc>().add(BuscaUpnivel3(safra: safra));
               },
             ),
           );

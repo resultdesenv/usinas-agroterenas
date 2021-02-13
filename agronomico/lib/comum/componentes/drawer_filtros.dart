@@ -3,12 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:simple_moment/simple_moment.dart';
 
 class DrawerFiltros extends StatelessWidget {
-  final TextEditingController controller;
-  final bool estimativa;
-  final List<String> listaSafra;
-  final List<String> listaUp1;
-  final List<String> listaUp2;
-  final List<String> listaUp3;
+  final TextEditingController controllerBoletim;
+  final TextEditingController controllerZona;
+  final bool apontamento;
   final Map<String, dynamic> filtros;
   final Function(String chave, String valor) alteraFiltro;
   final Function(Map<String, dynamic> filtros) filtrar;
@@ -17,25 +14,16 @@ class DrawerFiltros extends StatelessWidget {
     'Sincronizado': '(\'I\')',
     'Pendente': '(\'P\',\'E\')',
   };
-  final Function(String up1) buscaSafra;
-  final Function(String up2) buscaUp1;
-  final Function(String safra) buscaUp3;
   final bool filtrarData;
 
   DrawerFiltros({
     @required this.filtros,
     @required this.alteraFiltro,
     @required this.filtrar,
-    @required this.listaSafra,
-    @required this.listaUp1,
-    @required this.listaUp2,
-    @required this.listaUp3,
-    @required this.buscaSafra,
-    @required this.buscaUp1,
-    @required this.buscaUp3,
-    this.estimativa = false,
+    @required this.controllerZona,
+    this.apontamento = false,
     this.filtrarData = true,
-    this.controller,
+    this.controllerBoletim,
   });
 
   @override
@@ -53,11 +41,11 @@ class DrawerFiltros extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             mainAxisSize: MainAxisSize.min,
             children: [
-              estimativa
+              apontamento
                   ? TextFormField(
                       decoration: InputDecoration(labelText: 'Boletim'),
                       keyboardType: TextInputType.number,
-                      controller: controller,
+                      controller: controllerBoletim,
                     )
                   : Container(),
               Row(
@@ -118,51 +106,12 @@ class DrawerFiltros extends StatelessWidget {
                       ]
                     : [],
               ),
-              DropdownButtonFormField<String>(
-                items: listaUp2
-                    .map((String item) => DropdownMenuItem<String>(
-                          value: item ?? '',
-                          child: Text(item.isEmpty ? 'Selecione' : item),
-                        ))
-                    .toList(),
+              TextFormField(
                 decoration: InputDecoration(labelText: 'Zona'),
-                onChanged: buscaUp1,
-                value: filtros['cdUpnivel2'],
+                keyboardType: TextInputType.number,
+                controller: controllerZona,
               ),
-              DropdownButtonFormField<String>(
-                decoration: InputDecoration(labelText: 'Fazenda'),
-                items: listaUp1.map((String item) {
-                  return DropdownMenuItem<String>(
-                    value: item ?? '',
-                    child: Text(item.isEmpty ? 'Selecione' : item),
-                  );
-                }).toList(),
-                onChanged: buscaSafra,
-                value: filtros['cdUpnivel1'],
-              ),
-              DropdownButtonFormField<String>(
-                decoration: InputDecoration(labelText: 'Safra'),
-                items: listaSafra
-                    .map((String item) => DropdownMenuItem<String>(
-                          value: item ?? '',
-                          child: Text(item.isEmpty ? 'Selecione' : item),
-                        ))
-                    .toList(),
-                onChanged: buscaUp3,
-                value: filtros['cdSafra'],
-              ),
-              DropdownButtonFormField<String>(
-                items: listaUp3
-                    .map((String item) => DropdownMenuItem<String>(
-                          value: item ?? '',
-                          child: Text(item.isEmpty ? 'Selecione' : item),
-                        ))
-                    .toList(),
-                decoration: InputDecoration(labelText: 'Talhão'),
-                onChanged: (String valor) => alteraFiltro('cdUpnivel3', valor),
-                value: filtros['cdUpnivel3'],
-              ),
-              estimativa
+              apontamento
                   ? DropdownButtonFormField<String>(
                       items: listaStatus.keys
                           .map((String chave) => DropdownMenuItem<String>(
@@ -183,17 +132,16 @@ class DrawerFiltros extends StatelessWidget {
                   icon: Icon(Icons.close),
                   label: Text('Limpar Filtros'),
                   onPressed: () {
-                    if (estimativa) {
-                      controller.text = '';
+                    if (apontamento) {
+                      controllerBoletim.text = '';
+                      controllerZona.text = '';
                       alteraFiltro('status', '');
                     }
                     alteraFiltro('noBoletim', '');
                     alteraFiltro('dtInicio', '');
                     alteraFiltro('dtFim', '');
                     alteraFiltro('cdSafra', '');
-                    alteraFiltro('cdUpnivel1', '');
                     alteraFiltro('cdUpnivel2', '');
-                    alteraFiltro('cdUpnivel3', '');
                     alteraFiltro('status', '');
                   },
                 ),
@@ -205,11 +153,16 @@ class DrawerFiltros extends StatelessWidget {
                   icon: Icon(Icons.filter_list),
                   label: Text('Filtrar'),
                   onPressed: () {
-                    if (estimativa) alteraFiltro('noBoletim', controller.text);
+                    if (apontamento) {
+                      alteraFiltro('noBoletim', controllerBoletim.text);
+                    }
+                    alteraFiltro('cdUpnivel2', controllerZona.text);
+
                     Navigator.of(context).pop();
                     filtrar({
                       ...filtros,
-                      'noBoletim': estimativa ? controller.text : ''
+                      'noBoletim': apontamento ? controllerBoletim.text : '',
+                      'cdUpnivel2': controllerZona.text,
                     });
                   },
                   color: Theme.of(context).primaryColor,

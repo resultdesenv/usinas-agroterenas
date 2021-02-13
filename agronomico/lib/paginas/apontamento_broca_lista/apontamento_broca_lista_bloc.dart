@@ -76,54 +76,6 @@ class ApontamentoBrocaListaBloc
       yield state.juntar(filtros: filtros);
     }
 
-    if (event is BuscaSafra) {
-      final listaDropDown = state.listaDropDown;
-      final filtros = state.filtros;
-      final safra = await repositorioBroca.buscaSafra(
-        up1: event.up1,
-        up2: state.filtros['cdUpnivel2'],
-      );
-      listaDropDown['cdSafra'] = safra;
-      yield state.juntar(listaDropDown: listaDropDown, filtros: {
-        ...filtros,
-        'cdUpnivel1': event.up1,
-        'cdSafra': '',
-        'cdUpnivel3': '',
-      });
-    }
-
-    if (event is BuscaUpnivel1) {
-      final listaDropDown = state.listaDropDown;
-      final filtros = state.filtros;
-      final up1 = await repositorioBroca.buscaUp1(up2: event.up2);
-      listaDropDown['cdUpnivel1'] = up1;
-
-      yield state.juntar(listaDropDown: listaDropDown, filtros: {
-        ...filtros,
-        'cdUpnivel2': event.up2,
-        'cdUpnivel1': '',
-        'cdSafra': '',
-        'cdUpnivel3': '',
-      });
-    }
-
-    if (event is BuscaUpnivel3) {
-      final listaDropDown = state.listaDropDown;
-      final filtros = state.filtros;
-      final up3 = await repositorioBroca.buscaUp3(
-        safra: event.safra,
-        up1: state.filtros['cdUpnivel1'],
-        up2: state.filtros['cdUpnivel2'],
-      );
-      listaDropDown['cdUpnivel3'] = up3;
-
-      yield state.juntar(listaDropDown: listaDropDown, filtros: {
-        ...filtros,
-        'cdSafra': event.safra,
-        'cdUpnivel3': '',
-      });
-    }
-
     if (event is AlteraSelecaoBroca) {
       yield state.juntar(
         brocaSelecionada: event.broca,

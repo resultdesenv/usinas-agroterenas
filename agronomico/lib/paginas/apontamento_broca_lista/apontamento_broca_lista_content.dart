@@ -223,15 +223,13 @@ class ApontamentoBrocaListaContent extends StatelessWidget {
           ),
           drawer: DrawerMenu(),
           endDrawer: DrawerFiltros(
-            estimativa: true,
+            apontamento: true,
             filtrarData: false,
             filtros: state.filtros,
-            listaSafra: state.listaDropDown['cdSafra'] ?? [],
-            listaUp1: state.listaDropDown['cdUpnivel1'] ?? [],
-            listaUp2: state.listaDropDown['cdUpnivel2'] ?? [],
-            listaUp3: state.listaDropDown['cdUpnivel3'] ?? [],
-            controller:
+            controllerBoletim:
                 TextEditingController(text: state.filtros['noBoletim'] ?? ''),
+            controllerZona:
+                TextEditingController(text: state.filtros['cdUpnivel2'] ?? ''),
             alteraFiltro: (chave, valor) {
               context
                   .bloc<ApontamentoBrocaListaBloc>()
@@ -241,21 +239,6 @@ class ApontamentoBrocaListaContent extends StatelessWidget {
               context
                   .bloc<ApontamentoBrocaListaBloc>()
                   .add(BuscaListaBroca(filtros: valores, salvaFiltros: true));
-            },
-            buscaSafra: (up1) {
-              context
-                  .bloc<ApontamentoBrocaListaBloc>()
-                  .add(BuscaSafra(up1: up1));
-            },
-            buscaUp1: (up2) {
-              context
-                  .bloc<ApontamentoBrocaListaBloc>()
-                  .add(BuscaUpnivel1(up2: up2));
-            },
-            buscaUp3: (safra) {
-              context
-                  .bloc<ApontamentoBrocaListaBloc>()
-                  .add(BuscaUpnivel3(safra: safra));
             },
           ),
         );

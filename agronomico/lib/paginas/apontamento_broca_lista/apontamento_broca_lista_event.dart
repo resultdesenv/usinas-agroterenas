@@ -22,24 +22,6 @@ class AlterarFiltroBroca extends ApontamentoBrocaListaEvent {
   AlterarFiltroBroca({@required this.chave, @required this.valor});
 }
 
-class BuscaSafra extends ApontamentoBrocaListaEvent {
-  final String up1;
-
-  BuscaSafra({@required this.up1});
-}
-
-class BuscaUpnivel1 extends ApontamentoBrocaListaEvent {
-  final String up2;
-
-  BuscaUpnivel1({@required this.up2});
-}
-
-class BuscaUpnivel3 extends ApontamentoBrocaListaEvent {
-  final String safra;
-
-  BuscaUpnivel3({@required this.safra});
-}
-
 class AlteraSelecaoBroca extends ApontamentoBrocaListaEvent {
   final ApontBrocaModel broca;
   final bool value;

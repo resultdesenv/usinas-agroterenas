@@ -53,7 +53,6 @@ class UpNivel3Bloc extends Bloc<UpNivel3Event, UpNivel3State> {
           lista: [],
           selecionadas: [],
         );
-
         final res = await upNivel3ConsultaRepository.get(
           filtros: _formataFiltros(evento.filtros),
         );
@@ -100,48 +99,6 @@ class UpNivel3Bloc extends Bloc<UpNivel3Event, UpNivel3State> {
         filtros: filtros,
         listaDropDown: listaDropDown,
       );
-    } else if (evento is BuscaSafra) {
-      final listaDropDown = state.listaDropDown;
-      final filtros = state.filtros;
-      final safra = await upNivel3ConsultaRepository.buscaSafra(
-        up1: evento.up1,
-        up2: state.filtros['cdUpnivel2'],
-      );
-      listaDropDown['cdSafra'] = safra;
-      yield state.juntar(listaDropDown: listaDropDown, filtros: {
-        ...filtros,
-        'cdUpnivel1': evento.up1,
-        'cdSafra': '',
-        'cdUpnivel3': '',
-      });
-    } else if (evento is BuscaUpnivel1) {
-      final listaDropDown = state.listaDropDown;
-      final filtros = state.filtros;
-      final up1 = await upNivel3ConsultaRepository.buscaUp1(up2: evento.up2);
-      listaDropDown['cdUpnivel1'] = up1;
-
-      yield state.juntar(listaDropDown: listaDropDown, filtros: {
-        ...filtros,
-        'cdUpnivel2': evento.up2,
-        'cdUpnivel1': '',
-        'cdSafra': '',
-        'cdUpnivel3': '',
-      });
-    } else if (evento is BuscaUpnivel3) {
-      final listaDropDown = state.listaDropDown;
-      final filtros = state.filtros;
-      final up3 = await upNivel3ConsultaRepository.buscaUp3(
-        safra: evento.safra,
-        up1: state.filtros['cdUpnivel1'],
-        up2: state.filtros['cdUpnivel2'],
-      );
-      listaDropDown['cdUpnivel3'] = up3;
-
-      yield state.juntar(listaDropDown: listaDropDown, filtros: {
-        ...filtros,
-        'cdSafra': evento.safra,
-        'cdUpnivel3': '',
-      });
     } else if (evento is ConfirmaSelecaoUpNivel3) {
       try {
         final empresa = BaseInherited.of(

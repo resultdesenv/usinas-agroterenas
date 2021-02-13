@@ -67,7 +67,7 @@ class TalhaoUnicoBloc extends Bloc<TalhaoUnicoEvent, TalhaoUnicoState> {
       );
       try {
         final res = await upNivel3ConsultaRepository.get(
-          filtros: event.filtros,
+          filtros: _formataFiltros(event.filtros),
         );
 
         if (event.salvaFiltros)
@@ -103,5 +103,11 @@ class TalhaoUnicoBloc extends Bloc<TalhaoUnicoEvent, TalhaoUnicoState> {
         talhao: event.talhao,
       );
     }
+  }
+
+  Map<String, dynamic> _formataFiltros(Map<String, dynamic> filtros) {
+    final Map<String, dynamic> filtrosFormatados = Map.from(filtros);
+    filtrosFormatados.removeWhere((chave, valor) => valor.isEmpty);
+    return filtrosFormatados;
   }
 }

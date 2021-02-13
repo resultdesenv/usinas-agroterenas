@@ -39,21 +39,3 @@ class CheckAllUpNivel3 extends UpNivel3Event {
 
   CheckAllUpNivel3({@required this.valor});
 }
-
-class BuscaSafra extends UpNivel3Event {
-  final String up1;
-
-  BuscaSafra({@required this.up1});
-}
-
-class BuscaUpnivel1 extends UpNivel3Event {
-  final String up2;
-
-  BuscaUpnivel1({@required this.up2});
-}
-
-class BuscaUpnivel3 extends UpNivel3Event {
-  final String safra;
-
-  BuscaUpnivel3({@required this.safra});
-}

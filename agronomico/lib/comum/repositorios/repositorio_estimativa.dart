@@ -17,7 +17,9 @@ class RepositorioEstimativa {
       where: filtros != null && filtros.keys.length > 0
           ? filtros.keys
               .map((e) => !['status', 'date(dtHistorico)'].contains(e)
-                  ? "$e = '${filtros[e]}'"
+                  ? ['cdUpnivel2', 'cdSafra'].contains(e)
+                      ? "$e LIKE '%${filtros[e]}%'"
+                      : "$e = '${filtros[e]}'"
                   : '$e ${filtros[e]}')
               .join(' AND ')
           : null,
