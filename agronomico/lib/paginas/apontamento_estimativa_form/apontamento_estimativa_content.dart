@@ -109,6 +109,30 @@ class ApontamentoEstimativaContent extends StatelessWidget {
                           tooltip: 'Apagar todos os registros',
                         )
                       : Container(),
+                  IconButton(
+                    icon: Icon(Icons.save),
+                    onPressed: () {
+                      if (formularios.every((element) => element.validar())) {
+                        context
+                            .bloc<ApontamentoEstimativaBloc>()
+                            .add(SalvarApontamentos(
+                              empresa:
+                                  BaseInherited.of(context).empresaAutenticada,
+                              estimativas: formularios
+                                  .map((form) => form.valores)
+                                  .toList(),
+                            ));
+                      } else {
+                        final snackbar = SnackBar(
+                          duration: Duration(seconds: 30),
+                          content: Text('Alguns campos não foram preenchidos!'),
+                        );
+
+                        Scaffold.of(context).showSnackBar(snackbar);
+                      }
+                    },
+                    tooltip: 'Salvar',
+                  ),
                 ],
               ),
               body: estado.loading
@@ -135,28 +159,6 @@ class ApontamentoEstimativaContent extends StatelessWidget {
                           child:
                               Text('Nenhum apontamento para ser preenchido!')),
               backgroundColor: Color(0xFFEAEAEA),
-              floatingActionButton: FloatingActionButton(
-                child: Icon(Icons.save),
-                onPressed: () {
-                  if (formularios.every((element) => element.validar())) {
-                    context
-                        .bloc<ApontamentoEstimativaBloc>()
-                        .add(SalvarApontamentos(
-                          empresa: BaseInherited.of(context).empresaAutenticada,
-                          estimativas:
-                              formularios.map((form) => form.valores).toList(),
-                        ));
-                  } else {
-                    final snackbar = SnackBar(
-                      duration: Duration(seconds: 30),
-                      content: Text('Alguns campos não foram preenchidos!'),
-                    );
-
-                    Scaffold.of(context).showSnackBar(snackbar);
-                  }
-                },
-                tooltip: 'Salvar',
-              ),
             );
           },
         ),

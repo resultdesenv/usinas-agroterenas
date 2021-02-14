@@ -61,6 +61,18 @@ class ApontamentoBrocaFormContent extends StatelessWidget {
                 title: Text(
                   BaseInherited.of(context).empresaAutenticada.cdInstManfro,
                 ),
+                actions: [
+                  IconButton(
+                    icon: Icon(Icons.save),
+                    onPressed: () => context
+                        .bloc<ApontamentoBrocaFormBloc>()
+                        .add(SalvarApontamentos(
+                          empresa: BaseInherited.of(context).empresaAutenticada,
+                          brocas: apontamentos.map((e) => e.valores).toList(),
+                        )),
+                    tooltip: 'Salvar',
+                  )
+                ],
               ),
               body: Center(
                 child: state.carregando
@@ -108,16 +120,6 @@ class ApontamentoBrocaFormContent extends StatelessWidget {
                         : Container(),
               ),
               backgroundColor: Color(0xFFFAFAFA),
-              floatingActionButton: FloatingActionButton(
-                child: Icon(Icons.save),
-                onPressed: () => context
-                    .bloc<ApontamentoBrocaFormBloc>()
-                    .add(SalvarApontamentos(
-                      empresa: BaseInherited.of(context).empresaAutenticada,
-                      brocas: apontamentos.map((e) => e.valores).toList(),
-                    )),
-                tooltip: 'Salvar',
-              ),
             ),
           );
         },
