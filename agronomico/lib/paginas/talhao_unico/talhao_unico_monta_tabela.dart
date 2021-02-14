@@ -25,16 +25,16 @@ class TalhaoUnicoMontaTabela extends StatelessWidget {
                 ),
               ),
             ),
-            TableCell(
-              child: Text(
-                talhao.cdUpnivel1,
-                style: TextStyle(
-                  fontSize: 10,
-                  color: disabled ? Colors.black38 : Colors.black,
-                ),
-                textAlign: TextAlign.center,
-              ),
-            ),
+            // TableCell(
+            //   child: Text(
+            //     talhao.cdUpnivel1,
+            //     style: TextStyle(
+            //       fontSize: 10,
+            //       color: disabled ? Colors.black38 : Colors.black,
+            //     ),
+            //     textAlign: TextAlign.center,
+            //   ),
+            // ),
             TableCell(
               child: Text(
                 talhao.cdUpnivel2,

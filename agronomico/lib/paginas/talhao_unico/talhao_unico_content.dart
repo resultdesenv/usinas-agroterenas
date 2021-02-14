@@ -91,7 +91,7 @@ class TalhaoUnicoContent extends StatelessWidget {
                     top: 16,
                     left: 16,
                     bottom: 16,
-                    right: 48,
+                    right: 84,
                   ),
                   color: Colors.grey[200],
                   child: Table(
@@ -107,19 +107,10 @@ class TalhaoUnicoContent extends StatelessWidget {
                               ),
                             ),
                           ),
-                          // TODO: Remover fazenda
-                          TableCell(
-                            child: Text(
-                              'Fazenda',
-                              style: TextStyle(
-                                fontSize: 10,
-                                fontWeight: FontWeight.w500,
-                              ),
-                            ),
-                          ),
                           TableCell(
                             child: Text(
                               'Zona',
+                              textAlign: TextAlign.center,
                               style: TextStyle(
                                 fontSize: 10,
                                 fontWeight: FontWeight.w500,
@@ -129,6 +120,7 @@ class TalhaoUnicoContent extends StatelessWidget {
                           TableCell(
                             child: Text(
                               'Talhão',
+                              textAlign: TextAlign.end,
                               style: TextStyle(
                                 fontSize: 10,
                                 fontWeight: FontWeight.w500,
@@ -138,6 +130,7 @@ class TalhaoUnicoContent extends StatelessWidget {
                           TableCell(
                             child: Text(
                               'Area',
+                              textAlign: TextAlign.end,
                               style: TextStyle(
                                 fontSize: 10,
                                 fontWeight: FontWeight.w500,
