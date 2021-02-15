@@ -8,6 +8,8 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class TalhaoUnicoContent extends StatelessWidget {
+  final formKey = GlobalKey<FormState>();
+
   @override
   Widget build(BuildContext context) {
     return BlocListener<TalhaoUnicoBloc, TalhaoUnicoState>(
@@ -36,53 +38,64 @@ class TalhaoUnicoContent extends StatelessWidget {
               children: [
                 Padding(
                   padding: EdgeInsets.all(16),
-                  child: Row(
-                    children: [
-                      Expanded(
-                        child: TextFormField(
-                          decoration: InputDecoration(
-                            labelText: 'Zona',
-                            contentPadding: EdgeInsets.symmetric(vertical: 14),
+                  child: Form(
+                    key: formKey,
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Expanded(
+                          child: TextFormField(
+                            decoration: InputDecoration(
+                              labelText: 'Zona',
+                              contentPadding:
+                                  EdgeInsets.symmetric(vertical: 14),
+                            ),
+                            validator: _validarCampo,
+                            controller: controllerZona,
+                            keyboardType: TextInputType.number,
+                            inputFormatters: [
+                              FilteringTextInputFormatter.allow(
+                                RegExp(r'\d'),
+                              )
+                            ],
                           ),
-                          controller: controllerZona,
-                          keyboardType: TextInputType.number,
-                          inputFormatters: [
-                            FilteringTextInputFormatter.allow(
-                              RegExp(r'\d'),
-                            )
-                          ],
                         ),
-                      ),
-                      SizedBox(width: 16),
-                      Expanded(
-                        child: TextFormField(
-                          decoration: InputDecoration(
-                            labelText: 'Safra',
-                            contentPadding: EdgeInsets.symmetric(vertical: 14),
+                        SizedBox(width: 16),
+                        Expanded(
+                          child: TextFormField(
+                            decoration: InputDecoration(
+                              labelText: 'Safra',
+                              contentPadding:
+                                  EdgeInsets.symmetric(vertical: 14),
+                            ),
+                            controller: controllerSafra,
+                            keyboardType: TextInputType.number,
+                            inputFormatters: [
+                              FilteringTextInputFormatter.allow(
+                                RegExp(r'\d'),
+                              )
+                            ],
                           ),
-                          controller: controllerSafra,
-                          keyboardType: TextInputType.number,
-                          inputFormatters: [
-                            FilteringTextInputFormatter.allow(
-                              RegExp(r'\d'),
-                            )
-                          ],
                         ),
-                      ),
-                      SizedBox(width: 16),
-                      FloatingActionButton(
-                        child: Icon(Icons.search),
-                        onPressed: () => context
-                            .bloc<TalhaoUnicoBloc>()
-                            .add(BuscaListaTalhoes(
-                              salvaFiltros: true,
-                              filtros: {
-                                'cdUpnivel2': controllerZona.text,
-                                'cdSafra': controllerSafra.text,
-                              },
-                            )),
-                      )
-                    ],
+                        SizedBox(width: 16),
+                        FloatingActionButton(
+                          child: Icon(Icons.search),
+                          onPressed: () {
+                            if (formKey.currentState.validate()) {
+                              context
+                                  .bloc<TalhaoUnicoBloc>()
+                                  .add(BuscaListaTalhoes(
+                                    salvaFiltros: true,
+                                    filtros: {
+                                      'cdUpnivel2': controllerZona.text,
+                                      'cdSafra': controllerSafra.text,
+                                    },
+                                  ));
+                            }
+                          },
+                        )
+                      ],
+                    ),
                   ),
                 ),
                 state.loading ? LinearProgressIndicator() : Container(),
@@ -164,5 +177,11 @@ class TalhaoUnicoContent extends StatelessWidget {
         },
       ),
     );
+  }
+
+  String _validarCampo(String value) {
+    return value == null || value.isEmpty || double.parse(value) == 0
+        ? 'Preencha este campo!'
+        : null;
   }
 }
