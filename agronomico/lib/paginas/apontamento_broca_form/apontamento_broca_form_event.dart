@@ -32,6 +32,13 @@ class AlteraTipoBroca extends ApontamentoBrocaFormEvent {
   AlteraTipoBroca({@required this.cdFitoss, @required this.brocas});
 }
 
+class AlteraDataBroca extends ApontamentoBrocaFormEvent {
+  final DateTime data;
+  final List<ApontBrocaModel> brocas;
+
+  AlteraDataBroca({@required this.data, @required this.brocas});
+}
+
 class AlteraApontamento extends ApontamentoBrocaFormEvent {
   final int indiceBroca;
   final ApontBrocaModel broca;

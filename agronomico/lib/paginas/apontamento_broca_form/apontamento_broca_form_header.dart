@@ -1,3 +1,4 @@
+import 'package:agronomico/comum/componentes/date_field.dart';
 import 'package:agronomico/comum/modelo/apont_broca_model.dart';
 import 'package:agronomico/comum/modelo/tipo_fitossanidade_model.dart';
 import 'package:flutter/material.dart';
@@ -11,6 +12,7 @@ class ApontamentoBrocaFormHeader extends StatelessWidget {
   final bool novoApontamento;
   final int canas;
   final Function(String) alterarQuantidade;
+  final Function(DateTime) alterarData;
   final TextEditingController controller;
 
   ApontamentoBrocaFormHeader({
@@ -20,6 +22,7 @@ class ApontamentoBrocaFormHeader extends StatelessWidget {
     @required this.novoApontamento,
     @required this.canas,
     @required this.alterarQuantidade,
+    @required this.alterarData,
     @required this.controller,
   });
 
@@ -82,18 +85,26 @@ class ApontamentoBrocaFormHeader extends StatelessWidget {
                 ),
                 SizedBox(width: 16),
                 Expanded(
-                  child: TextFormField(
-                    decoration: InputDecoration(labelText: 'Canas'),
-                    controller: controller,
-                    keyboardType: TextInputType.number,
-                    enabled: novoApontamento,
-                    inputFormatters: [
-                      FilteringTextInputFormatter.allow(RegExp(r'\d'))
-                    ],
-                    onFieldSubmitted: alterarQuantidade,
+                  child: Padding(
+                    padding: EdgeInsets.only(top: 10),
+                    child: DateField(
+                      callback: alterarData,
+                      label: 'Data',
+                      selectedDate: DateTime.parse(broca.dtOperacao),
+                    ),
                   ),
                 ),
               ],
+            ),
+            TextFormField(
+              decoration: InputDecoration(labelText: 'Canas'),
+              controller: controller,
+              keyboardType: TextInputType.number,
+              enabled: novoApontamento,
+              inputFormatters: [
+                FilteringTextInputFormatter.allow(RegExp(r'\d'))
+              ],
+              onFieldSubmitted: alterarQuantidade,
             ),
             novoApontamento
                 ? Container(

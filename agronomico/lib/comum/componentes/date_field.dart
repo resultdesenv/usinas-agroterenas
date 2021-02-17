@@ -6,10 +6,11 @@ class DateField extends StatefulWidget {
   final DateTime selectedDate;
   final String label;
 
-  DateField(
-      {@required this.callback,
-      @required this.selectedDate,
-      @required this.label});
+  DateField({
+    @required this.callback,
+    @required this.selectedDate,
+    @required this.label,
+  });
 
   @override
   _DateFieldState createState() => _DateFieldState();

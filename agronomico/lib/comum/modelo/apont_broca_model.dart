@@ -132,13 +132,15 @@ class ApontBrocaModel extends Equatable {
         dispositivo: json['dispositivo'],
       );
 
-  factory ApontBrocaModel.fromUpnivel3(UpNivel3Model upnivel,
-          {@required int noBoletin,
-          @required int noSequencia,
-          @required int dispositivo,
-          @required int cdFunc,
-          @required String instancia,
-          @required int cdFitoss}) =>
+  factory ApontBrocaModel.fromUpnivel3(
+    UpNivel3Model upnivel, {
+    @required int noBoletin,
+    @required int noSequencia,
+    @required int dispositivo,
+    @required int cdFunc,
+    @required String instancia,
+    @required int cdFitoss,
+  }) =>
       ApontBrocaModel(
         dispositivo: dispositivo,
         cdFunc: cdFunc,

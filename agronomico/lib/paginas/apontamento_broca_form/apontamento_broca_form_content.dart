@@ -103,6 +103,13 @@ class ApontamentoBrocaFormContent extends StatelessWidget {
                                               brocas: apontamentos
                                                   .map((e) => e.valores)
                                                   .toList())),
+                                      alterarData: (data) => context
+                                          .bloc<ApontamentoBrocaFormBloc>()
+                                          .add(AlteraDataBroca(
+                                              data: data,
+                                              brocas: apontamentos
+                                                  .map((a) => a.valores)
+                                                  .toList())),
                                       alterarQuantidade: (quantidade) => context
                                           .bloc<ApontamentoBrocaFormBloc>()
                                           .add(AlteraQuantidade(

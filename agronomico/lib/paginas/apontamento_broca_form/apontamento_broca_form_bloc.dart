@@ -121,6 +121,22 @@ class ApontamentoBrocaFormBloc
       }
     }
 
+    if (event is AlteraDataBroca) {
+      try {
+        final brocas = event.brocas
+            .map((e) => e.juntar(
+                  hrOperacao:
+                      Moment.fromDate(event.data).format('yyyy-MM-dd HH:mm:ss'),
+                  dtOperacao: event.data.toIso8601String().substring(0, 10),
+                ))
+            .toList();
+        yield state.juntar(brocas: brocas, salvo: false);
+      } catch (e) {
+        print(e);
+        yield state.juntar(mensagemErro: e.toString());
+      }
+    }
+
     if (event is AlteraApontamento) {
       final brocas = state.brocas;
       brocas[event.indiceBroca] = event.broca;
