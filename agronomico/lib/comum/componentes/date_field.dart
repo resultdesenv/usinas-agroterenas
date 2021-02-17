@@ -43,7 +43,7 @@ class _DateFieldState extends State<DateField> {
                   Padding(
                     padding: const EdgeInsets.only(
                       right: 8.0,
-                      top: 12,
+                      top: 14,
                     ),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -75,7 +75,8 @@ class _DateFieldState extends State<DateField> {
                 padding: const EdgeInsets.symmetric(vertical: 8),
                 child: Text(
                   widget.label ?? '',
-                  style: TextStyle(fontSize: 12, color: Colors.black54),
+                  style: TextStyle(
+                      fontSize: 12, color: Theme.of(context).primaryColor),
                 ),
               ),
             )

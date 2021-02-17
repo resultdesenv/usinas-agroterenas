@@ -76,7 +76,7 @@ class ApontamentoBrocaListaContent extends StatelessWidget {
                               ),
                               Expanded(
                                 child: Padding(
-                                  padding: EdgeInsets.only(right: 16),
+                                  padding: EdgeInsets.only(right: 18),
                                   child: Table(
                                     children: [
                                       TableRow(
@@ -92,7 +92,7 @@ class ApontamentoBrocaListaContent extends StatelessWidget {
                                           ),
                                           TableCell(
                                             child: Text(
-                                              'Coletor',
+                                              'Data',
                                               style: TextStyle(
                                                 fontSize: 10,
                                                 fontWeight: FontWeight.w500,
@@ -102,6 +102,7 @@ class ApontamentoBrocaListaContent extends StatelessWidget {
                                           TableCell(
                                             child: Text(
                                               'Safra',
+                                              // textAlign: TextAlign.center,
                                               style: TextStyle(
                                                 fontSize: 10,
                                                 fontWeight: FontWeight.w500,
@@ -191,7 +192,10 @@ class ApontamentoBrocaListaContent extends StatelessWidget {
               AnimatedPositioned(
                 curve: Curves.easeInOut,
                 duration: Duration(milliseconds: 380),
-                bottom: state.brocaSelecionada != null ? 0 : -84,
+                bottom: state.brocaSelecionada != null &&
+                        state.brocaSelecionada?.status != 'I'
+                    ? 0
+                    : -84,
                 right: 0,
                 child: AnimatedContainer(
                   duration: Duration(milliseconds: 380),

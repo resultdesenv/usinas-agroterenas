@@ -62,21 +62,17 @@ class ApontamentoBrocaFormBloc
             'cdUpnivel3': event.upnivel3.cdUpnivel3,
           }));
 
-          if (event.novoApontamento && brocas.length > 0) {
-            mensagemErro = 'Esse talhão ja possui um apontamento, abrindo...';
-          } else {
-            int noSeqAtual = 0;
-            brocas = [];
-            primeiraBroca = ApontBrocaModel.fromUpnivel3(
-              event.upnivel3,
-              instancia: event.instancia,
-              noBoletin: 10000 + sequencia.sequencia + 1,
-              noSequencia: ++noSeqAtual,
-              dispositivo: event.dispositivo,
-              cdFunc: event.cdFunc,
-              cdFitoss: cdFitoss,
-            );
-          }
+          int noSeqAtual = 0;
+          brocas = [];
+          primeiraBroca = ApontBrocaModel.fromUpnivel3(
+            event.upnivel3,
+            instancia: event.instancia,
+            noBoletin: 10000 + sequencia.sequencia + 1,
+            noSequencia: ++noSeqAtual,
+            dispositivo: event.dispositivo,
+            cdFunc: event.cdFunc,
+            cdFitoss: cdFitoss,
+          );
         } else {
           final Map<String, dynamic> filtros = Map();
           filtros['noBoletim'] = event.noBoletim;
@@ -217,9 +213,9 @@ class ApontamentoBrocaFormBloc
                   cdUpnivel1: brocaExemplo?.cdUpnivel1,
                   cdUpnivel2: brocaExemplo?.cdUpnivel2,
                   cdUpnivel3: brocaExemplo?.cdUpnivel3,
-                  dtOperacao: null,
-                  dtStatus: null,
-                  hrOperacao: null,
+                  dtOperacao: brocaExemplo?.dtOperacao,
+                  dtStatus: brocaExemplo?.dtStatus,
+                  hrOperacao: brocaExemplo?.hrOperacao,
                   noColetor: brocaExemplo?.noColetor,
                   qtBrocados: 0,
                   qtCanas: 1,
@@ -229,7 +225,7 @@ class ApontamentoBrocaFormBloc
                   qtEntrenos: 0,
                   qtMedia: 0,
                   status: 'P',
-                  versao: null,
+                  versao: brocaExemplo?.versao,
                 ))
             .toList();
         yield state.juntar(
