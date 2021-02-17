@@ -40,7 +40,7 @@ class ApontBrocaConsultaRepository {
           'apont_broca',
           where: filtros != null && filtros.keys.length > 0
               ? filtros.keys
-                  .map((e) => !['status', 'date(dtHistorico)'].contains(e)
+                  .map((e) => !['status', 'date(dtOperacao)'].contains(e)
                       ? ['cdUpnivel2', 'cdSafra'].contains(e)
                           ? "$e LIKE '%${filtros[e]}%'"
                           : "$e = '${filtros[e]}'"

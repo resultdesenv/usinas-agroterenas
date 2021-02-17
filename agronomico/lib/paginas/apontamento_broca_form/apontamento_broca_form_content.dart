@@ -21,7 +21,7 @@ class ApontamentoBrocaFormContent extends StatelessWidget {
         if (state.mensagemErro != null && state.mensagemErro.isNotEmpty) {
           final snack = SnackBar(
             content: Text(state.mensagemErro),
-            duration: Duration(minutes: 1),
+            duration: Duration(seconds: 10),
           );
           Scaffold.of(context).showSnackBar(snack);
         }
