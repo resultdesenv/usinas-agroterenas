@@ -20,10 +20,15 @@ class ApontamentoBrocaListaTile extends StatelessWidget {
     return ExpansionTile(
       leading: Checkbox(
         value: selecionado,
-        onChanged: alteraSelecao,
+        onChanged: (v) {
+          if (broca.status != 'I') alteraSelecao(v);
+        },
       ),
       tilePadding: EdgeInsets.symmetric(horizontal: 8),
-      title: ApontamentoBrocaListaMontaTabela(broca: broca),
+      title: ApontamentoBrocaListaMontaTabela(
+        broca: broca,
+        disabled: broca.status == 'I',
+      ),
       childrenPadding: EdgeInsets.all(16),
       children: [
         Column(
@@ -60,6 +65,39 @@ class ApontamentoBrocaListaTile extends StatelessWidget {
             ),
             Table(
               children: [
+                TableRow(
+                  children: [
+                    TableCell(
+                      child: Container(
+                        child: Text(
+                          'Coletor',
+                        ),
+                        padding: EdgeInsets.all(12),
+                        decoration: BoxDecoration(
+                          border: Border(
+                            right: BorderSide(color: Colors.black12, width: 1),
+                          ),
+                        ),
+                      ),
+                    ),
+                    TableCell(
+                      child: Padding(
+                        child: Text(
+                          broca.noColetor.toString(),
+                          textAlign: TextAlign.right,
+                        ),
+                        padding: EdgeInsets.all(12),
+                      ),
+                    ),
+                  ],
+                  decoration: BoxDecoration(
+                    border: Border(
+                      top: BorderSide(color: Colors.black12, width: 1),
+                      right: BorderSide(color: Colors.black12, width: 1),
+                      left: BorderSide(color: Colors.black12, width: 1),
+                    ),
+                  ),
+                ),
                 TableRow(
                   children: [
                     TableCell(
