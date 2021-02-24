@@ -104,7 +104,7 @@ class TalhaoUnicoContent extends StatelessWidget {
                     top: 16,
                     left: 16,
                     bottom: 16,
-                    right: 84,
+                    right: 76,
                   ),
                   color: Colors.grey[200],
                   child: Table(
@@ -115,7 +115,7 @@ class TalhaoUnicoContent extends StatelessWidget {
                             child: Text(
                               'Safra',
                               style: TextStyle(
-                                fontSize: 10,
+                                fontSize: 14,
                                 fontWeight: FontWeight.w500,
                               ),
                             ),
@@ -125,7 +125,7 @@ class TalhaoUnicoContent extends StatelessWidget {
                               'Zona',
                               textAlign: TextAlign.center,
                               style: TextStyle(
-                                fontSize: 10,
+                                fontSize: 14,
                                 fontWeight: FontWeight.w500,
                               ),
                             ),
@@ -135,7 +135,7 @@ class TalhaoUnicoContent extends StatelessWidget {
                               'Talhão',
                               textAlign: TextAlign.end,
                               style: TextStyle(
-                                fontSize: 10,
+                                fontSize: 14,
                                 fontWeight: FontWeight.w500,
                               ),
                             ),
@@ -145,7 +145,7 @@ class TalhaoUnicoContent extends StatelessWidget {
                               'Area',
                               textAlign: TextAlign.end,
                               style: TextStyle(
-                                fontSize: 10,
+                                fontSize: 14,
                                 fontWeight: FontWeight.w500,
                               ),
                             ),

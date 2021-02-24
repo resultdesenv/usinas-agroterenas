@@ -15,12 +15,12 @@ class ApontamentoBrocaFormContent extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocListener<ApontamentoBrocaFormBloc, ApontamentoBrocaFormState>(
       listenWhen: (previous, current) =>
-          previous.mensagemErro != current.mensagemErro ||
+          previous.mensagem != current.mensagem ||
           current.voltarParaListagem != null,
       listener: (_, state) {
-        if (state.mensagemErro != null && state.mensagemErro.isNotEmpty) {
+        if (state.mensagem != null && state.mensagem.isNotEmpty) {
           final snack = SnackBar(
-            content: Text(state.mensagemErro),
+            content: Text(state.mensagem),
             duration: Duration(seconds: 10),
           );
           Scaffold.of(context).showSnackBar(snack);

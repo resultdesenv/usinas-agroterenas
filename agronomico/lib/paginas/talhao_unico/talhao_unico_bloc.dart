@@ -25,22 +25,7 @@ class TalhaoUnicoBloc extends Bloc<TalhaoUnicoEvent, TalhaoUnicoState> {
 
   @override
   Stream<TalhaoUnicoState> mapEventToState(TalhaoUnicoEvent event) async* {
-    if (event is IniciarTalhaoUnico) {
-      yield state.juntar(loading: true);
-      try {
-        final Map<String, dynamic> filtros = json.decode(
-            await preferenciaRepository.get(idPreferencia: 'talhao_filtros') ??
-                '{}');
-
-        yield state.juntar(
-          filtros: filtros,
-          loading: false,
-        );
-      } catch (e) {
-        print(e);
-        yield state.juntar(loading: false, mensagemErro: e.toString());
-      }
-    }
+    if (event is IniciarTalhaoUnico) {}
 
     if (event is BuscaSafra) {
       yield state.juntar(loading: true);

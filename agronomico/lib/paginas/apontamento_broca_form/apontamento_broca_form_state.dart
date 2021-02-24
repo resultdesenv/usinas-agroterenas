@@ -8,7 +8,7 @@ import 'package:flutter/foundation.dart';
 class ApontamentoBrocaFormState extends Equatable {
   final List<ApontBrocaModel> brocas;
   final bool carregando;
-  final String mensagemErro;
+  final String mensagem;
   final List<TipoFitossanidadeModel> tiposFitossanidade;
   final bool voltarParaListagem;
   final bool novoApontamento;
@@ -22,7 +22,7 @@ class ApontamentoBrocaFormState extends Equatable {
     this.brocas = const [],
     this.tiposFitossanidade = const [],
     this.carregando = false,
-    this.mensagemErro,
+    this.mensagem,
     this.voltarParaListagem = false,
     this.novoApontamento = false,
     this.tipoFitossanidade,
@@ -38,7 +38,7 @@ class ApontamentoBrocaFormState extends Equatable {
     bool voltarParaListagem,
     List<ApontBrocaModel> brocas,
     List<TipoFitossanidadeModel> tiposFitossanidade,
-    String mensagemErro,
+    String mensagem,
     bool novoApontamento,
     bool salvo,
     ApontBrocaModel primeiraBroca,
@@ -50,7 +50,7 @@ class ApontamentoBrocaFormState extends Equatable {
         tipoFitossanidade: tipoFitossanidade ?? this.tipoFitossanidade,
         carregando: carregando ?? this.carregando,
         tiposFitossanidade: tiposFitossanidade ?? this.tiposFitossanidade,
-        mensagemErro: mensagemErro,
+        mensagem: mensagem,
         voltarParaListagem: voltarParaListagem,
         novoApontamento: novoApontamento ?? this.novoApontamento,
         salvo: salvo ?? this.salvo,

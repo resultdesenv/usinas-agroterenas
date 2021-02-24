@@ -41,7 +41,7 @@ class ApontamentoBrocaFormBloc
             (prefFitoss != null ? int.tryParse(prefFitoss) : null) ??
                 tiposFitossanidade?.first?.cdFitoss;
         List<ApontBrocaModel> brocas = [];
-        String mensagemErro;
+        String mensagem;
         ApontBrocaModel primeiraBroca;
 
         final prefCana = await repositorioPreferencia.get(
@@ -82,11 +82,11 @@ class ApontamentoBrocaFormBloc
           brocas: brocas,
           carregando: false,
           tiposFitossanidade: tiposFitossanidade,
-          novoApontamento: mensagemErro == null ? event.novoApontamento : false,
+          novoApontamento: mensagem == null ? event.novoApontamento : false,
           tipoFitossanidade: brocas.length > 0 || primeiraBroca != null
               ? primeiraBroca?.cdFitoss ?? brocas.first.cdFitoss
               : null,
-          mensagemErro: mensagemErro,
+          mensagem: mensagem,
           primeiraBroca: primeiraBroca,
           salvo: primeiraBroca == null,
           canas: brocas.length > 0 ? brocas.length : qtCana,
@@ -95,7 +95,7 @@ class ApontamentoBrocaFormBloc
       } catch (e) {
         print(e);
         yield state.juntar(
-          mensagemErro: e.toString(),
+          mensagem: e.toString(),
           carregando: false,
         );
       }
@@ -113,7 +113,7 @@ class ApontamentoBrocaFormBloc
         );
       } catch (e) {
         print(e);
-        yield state.juntar(mensagemErro: e.toString());
+        yield state.juntar(mensagem: e.toString());
       }
     }
 
@@ -129,7 +129,7 @@ class ApontamentoBrocaFormBloc
         yield state.juntar(brocas: brocas, salvo: false);
       } catch (e) {
         print(e);
-        yield state.juntar(mensagemErro: e.toString());
+        yield state.juntar(mensagem: e.toString());
       }
     }
 
@@ -176,12 +176,13 @@ class ApontamentoBrocaFormBloc
           voltarParaListagem: event.voltar,
           brocas: brocas,
           salvo: true,
+          mensagem: 'Apontamento salvo com sucesso',
         );
       } catch (e) {
         print(e);
         yield state.juntar(
           carregando: false,
-          mensagemErro: e.toString(),
+          mensagem: e.toString(),
           brocas: brocas,
         );
       }
@@ -240,7 +241,7 @@ class ApontamentoBrocaFormBloc
         );
       } catch (e) {
         print(e);
-        yield state.juntar(mensagemErro: e.toString());
+        yield state.juntar(mensagem: e.toString());
       }
     }
 

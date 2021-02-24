@@ -20,26 +20,16 @@ class TalhaoUnicoMontaTabela extends StatelessWidget {
               child: Text(
                 talhao.cdSafra.toString(),
                 style: TextStyle(
-                  fontSize: 10,
+                  fontSize: 14,
                   color: disabled ? Colors.black38 : Colors.black,
                 ),
               ),
             ),
-            // TableCell(
-            //   child: Text(
-            //     talhao.cdUpnivel1,
-            //     style: TextStyle(
-            //       fontSize: 10,
-            //       color: disabled ? Colors.black38 : Colors.black,
-            //     ),
-            //     textAlign: TextAlign.center,
-            //   ),
-            // ),
             TableCell(
               child: Text(
                 talhao.cdUpnivel2,
                 style: TextStyle(
-                  fontSize: 10,
+                  fontSize: 14,
                   color: disabled ? Colors.black38 : Colors.black,
                 ),
                 textAlign: TextAlign.center,
@@ -49,7 +39,7 @@ class TalhaoUnicoMontaTabela extends StatelessWidget {
               child: Text(
                 talhao.cdUpnivel3,
                 style: TextStyle(
-                  fontSize: 10,
+                  fontSize: 14,
                   color: disabled ? Colors.black38 : Colors.black,
                 ),
                 textAlign: TextAlign.end,
@@ -59,7 +49,7 @@ class TalhaoUnicoMontaTabela extends StatelessWidget {
               child: Text(
                 talhao.qtAreaProd.toString(),
                 style: TextStyle(
-                  fontSize: 10,
+                  fontSize: 14,
                   color: disabled ? Colors.black38 : Colors.black,
                 ),
                 textAlign: TextAlign.end,
