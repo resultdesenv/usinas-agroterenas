@@ -143,7 +143,9 @@ class UpNivel3Bloc extends Bloc<UpNivel3Event, UpNivel3State> {
               estimativas.add(item.gerarEstimativa(
                 cdFunc: cdFunc,
                 noSeq: ++noSeqAtual,
-                noBoletim: 10000 + sequencia.sequencia + 1,
+                noBoletim: (dispositivo['idDispositivo'] * 10000) +
+                    sequencia.sequencia +
+                    1,
                 dispositivo: dispositivo['idDispositivo'],
               ));
             }

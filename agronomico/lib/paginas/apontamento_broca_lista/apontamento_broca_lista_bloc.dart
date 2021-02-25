@@ -28,11 +28,9 @@ class ApontamentoBrocaListaBloc
         'cdUpnivel2': up2,
       };
 
-      filtros.keys.forEach((chave) {
-        if (filtros[chave] != null && filtros[chave].toString().isNotEmpty) {
-          listaDropDown[chave] = [filtros[chave]];
-        }
-      });
+      filtros.remove('dtInicio');
+      filtros.remove('dtFim');
+      print(filtros);
 
       yield state.juntar(
         filtros: filtros,

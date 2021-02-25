@@ -28,11 +28,6 @@ class DrawerFiltros extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (filtrarData && filtros['dtInicio'] == null)
-      alteraFiltro('dtInicio', Moment.now().format('yyyy-MM-dd'));
-    if (filtrarData && filtros['dtFim'] == null)
-      alteraFiltro('dtFim', Moment.now().format('yyyy-MM-dd'));
-
     return SafeArea(
       child: Drawer(
         child: SingleChildScrollView(
@@ -60,7 +55,7 @@ class DrawerFiltros extends StatelessWidget {
                             label: 'Data Inicial',
                             selectedDate: filtros['dtInicio'] != null
                                 ? DateTime.parse(filtros['dtInicio'])
-                                : DateTime.now(),
+                                : null,
                           ),
                         ),
                         SizedBox(
@@ -89,7 +84,7 @@ class DrawerFiltros extends StatelessWidget {
                             label: 'Data Final',
                             selectedDate: filtros['dtFim'] != null
                                 ? DateTime.parse(filtros['dtFim'])
-                                : DateTime.now(),
+                                : null,
                           ),
                         ),
                         SizedBox(

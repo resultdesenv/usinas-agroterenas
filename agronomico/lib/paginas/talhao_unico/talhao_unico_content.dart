@@ -89,6 +89,10 @@ class TalhaoUnicoContent extends StatelessWidget {
                                     filtros: {
                                       'cdUpnivel2': controllerZona.text,
                                       'cdSafra': controllerSafra.text,
+                                      'cdEmpresa': BaseInherited.of(context)
+                                          .empresaAutenticada
+                                          .cdEmpresa
+                                          .toString(),
                                     },
                                   ));
                             }

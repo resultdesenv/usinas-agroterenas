@@ -67,7 +67,7 @@ class ApontamentoBrocaFormBloc
           primeiraBroca = ApontBrocaModel.fromUpnivel3(
             event.upnivel3,
             instancia: event.instancia,
-            noBoletin: 10000 + sequencia.sequencia + 1,
+            noBoletin: (event.dispositivo * 10000) + sequencia.sequencia + 1,
             noSequencia: ++noSeqAtual,
             dispositivo: event.dispositivo,
             cdFunc: event.cdFunc,
@@ -152,6 +152,11 @@ class ApontamentoBrocaFormBloc
               ))
           .toList();
       try {
+        brocas.forEach((broca) {
+          if (broca.qtEntrenos == 0 && broca.qtBrocados > 0)
+            throw 'Cana ${broca.noSequencia} com Broca sem Entreno';
+        });
+
         await repositorioBroca.salvar(brocas);
 
         if (state.novoApontamento) {
