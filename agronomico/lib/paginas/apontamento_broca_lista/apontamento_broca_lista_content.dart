@@ -7,7 +7,6 @@ import 'package:agronomico/paginas/apontamento_broca_lista/apontamento_broca_lis
 import 'package:agronomico/paginas/apontamento_broca_lista/apontamento_broca_lista_event.dart';
 import 'package:agronomico/paginas/apontamento_broca_lista/apontamento_broca_lista_state.dart';
 import 'package:agronomico/paginas/apontamento_broca_lista/apontamento_broca_lista_tile.dart';
-import 'package:agronomico/paginas/talhao_unico/talhao_unico_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -31,26 +30,6 @@ class ApontamentoBrocaListaContent extends StatelessWidget {
               )
             ]),
             actions: [
-              IconButton(
-                icon: Icon(Icons.add),
-                onPressed: () => navegar(
-                  context: context,
-                  pagina: TalhaoUnicoPage(
-                    callback: ({cdFunc, dispositivo, talhao}) {
-                      navegar(
-                        context: context,
-                        pagina: ApontamentoBrocaFormPage(
-                          cdFunc: cdFunc,
-                          dispositivo: dispositivo,
-                          upnivel3: talhao,
-                          novoApontamento: true,
-                        ),
-                      );
-                    },
-                  ),
-                ),
-                tooltip: 'Adicionar Boletim',
-              ),
               IconButton(
                 icon: Icon(Icons.filter_list),
                 tooltip: 'Filtros',

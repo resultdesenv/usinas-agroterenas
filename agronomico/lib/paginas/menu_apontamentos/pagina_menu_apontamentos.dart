@@ -28,14 +28,15 @@ class PaginaMenuApontamentos extends StatelessWidget {
               crossAxisSpacing: 4,
               mainAxisSpacing: 4,
             ),
-            children: menuOpcoes
-                .map((e) => MenuApontamentosItem(
-                      titulo: e['titulo'],
-                      icone: e['icone'],
-                      pagina: e['pagina'],
-                      context: context,
-                    ))
-                .toList(),
+            children: menuOpcoes.map((e) {
+              final Function(BuildContext) onTap = e['onTap'];
+              return MenuApontamentosItem(
+                titulo: e['titulo'],
+                icone: e['icone'],
+                onTap: () => onTap(context),
+                context: context,
+              );
+            }).toList(),
           ),
         ],
       ),

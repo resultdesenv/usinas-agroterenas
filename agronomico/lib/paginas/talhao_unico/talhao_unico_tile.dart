@@ -1,7 +1,6 @@
 import 'package:agronomico/comum/modelo/upnivel3_model.dart';
 import 'package:agronomico/paginas/talhao_unico/talhao_unico_monta_tabela.dart';
 import 'package:flutter/material.dart';
-import 'package:simple_moment/simple_moment.dart';
 
 class TalhaoUnicoTile extends StatelessWidget {
   final UpNivel3Model talhao;

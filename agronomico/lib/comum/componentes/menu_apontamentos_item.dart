@@ -1,23 +1,22 @@
-import 'package:agronomico/comum/utilidades/navegacao.dart';
 import 'package:flutter/material.dart';
 
 class MenuApontamentosItem extends StatelessWidget {
   final String titulo;
   final IconData icone;
-  final Widget pagina;
   final BuildContext context;
+  final Function() onTap;
 
   MenuApontamentosItem({
     @required this.titulo,
     @required this.icone,
-    @required this.pagina,
     @required this.context,
+    this.onTap,
   });
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: () => navegar(context: context, pagina: pagina),
+      onTap: onTap,
       child: Card(
           child: Column(children: <Widget>[
         Expanded(
