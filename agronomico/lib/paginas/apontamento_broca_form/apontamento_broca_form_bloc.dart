@@ -60,19 +60,25 @@ class ApontamentoBrocaFormBloc
             'cdUpnivel1': event.upnivel3.cdUpnivel1,
             'cdUpnivel2': event.upnivel3.cdUpnivel2,
             'cdUpnivel3': event.upnivel3.cdUpnivel3,
+            'status': 'in (\'P\',\'E\')',
+            'dtOperacao': Moment.now().format('yyyy-MM-dd')
           }));
 
-          int noSeqAtual = 0;
-          brocas = [];
-          primeiraBroca = ApontBrocaModel.fromUpnivel3(
-            event.upnivel3,
-            instancia: event.instancia,
-            noBoletin: (event.dispositivo * 10000) + sequencia.sequencia + 1,
-            noSequencia: ++noSeqAtual,
-            dispositivo: event.dispositivo,
-            cdFunc: event.cdFunc,
-            cdFitoss: cdFitoss,
-          );
+          if (event.novoApontamento && brocas.length > 0) {
+            mensagem = 'Esse talhão ja possui um apontamento, abrindo...';
+          } else {
+            brocas = [];
+            int noSeqAtual = 0;
+            primeiraBroca = ApontBrocaModel.fromUpnivel3(
+              event.upnivel3,
+              instancia: event.instancia,
+              noBoletin: (event.dispositivo * 10000) + sequencia.sequencia + 1,
+              noSequencia: ++noSeqAtual,
+              dispositivo: event.dispositivo,
+              cdFunc: event.cdFunc,
+              cdFitoss: cdFitoss,
+            );
+          }
         } else {
           final Map<String, dynamic> filtros = Map();
           filtros['noBoletim'] = event.noBoletim;
