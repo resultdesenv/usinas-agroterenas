@@ -67,6 +67,8 @@ class ApontamentoBrocaFormContent extends StatelessWidget {
                     onPressed: () => context
                         .bloc<ApontamentoBrocaFormBloc>()
                         .add(SalvarApontamentos(
+                          confirmaNaoApontadas: (canasFaltantes) =>
+                              _confirmaCanasFaltantes(context, canasFaltantes),
                           empresa: BaseInherited.of(context).empresaAutenticada,
                           brocas: apontamentos.map((e) => e.valores).toList(),
                         )),
@@ -157,6 +159,8 @@ class ApontamentoBrocaFormContent extends StatelessWidget {
                   Navigator.of(context).pop(false);
                   context.bloc<ApontamentoBrocaFormBloc>().add(
                         SalvarApontamentos(
+                          confirmaNaoApontadas: (canasFaltantes) =>
+                              _confirmaCanasFaltantes(context, canasFaltantes),
                           empresa: BaseInherited.of(context).empresaAutenticada,
                           brocas: brocas,
                           voltar: true,
@@ -173,6 +177,32 @@ class ApontamentoBrocaFormContent extends StatelessWidget {
             ],
           ),
         );
+    return res ?? false;
+  }
+
+  Future<bool> _confirmaCanasFaltantes(
+    BuildContext context,
+    int canasFaltantes,
+  ) async {
+    final bool res = await showDialog(
+      context: context,
+      builder: (_) => AlertDialog(
+        title: Text('Canas sem apontamento'),
+        content: Text(
+            'Ainda existem $canasFaltantes cana${canasFaltantes > 1 ? 's' : ''} sem apontamento, deseja salvar?'),
+        actions: <Widget>[
+          FlatButton(
+            onPressed: () => Navigator.of(context).pop(false),
+            child: Text('Cancelar'),
+          ),
+          FlatButton(
+            textColor: Theme.of(context).primaryColor,
+            onPressed: () => Navigator.of(context).pop(true),
+            child: Text('Salvar'),
+          ),
+        ],
+      ),
+    );
     return res ?? false;
   }
 }

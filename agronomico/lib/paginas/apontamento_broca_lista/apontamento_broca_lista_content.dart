@@ -220,7 +220,12 @@ class ApontamentoBrocaListaContent extends StatelessWidget {
             filtrar: (valores) {
               context
                   .bloc<ApontamentoBrocaListaBloc>()
-                  .add(BuscaListaBroca(filtros: valores, salvaFiltros: true));
+                  .add(BuscaListaBroca(filtros: {
+                    ...valores,
+                    'instancia': BaseInherited.of(context)
+                        .empresaAutenticada
+                        .cdInstManfro,
+                  }, salvaFiltros: true));
             },
           ),
         );

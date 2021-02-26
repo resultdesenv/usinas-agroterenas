@@ -30,7 +30,6 @@ class ApontamentoBrocaListaBloc
 
       filtros.remove('dtInicio');
       filtros.remove('dtFim');
-      print(filtros);
 
       yield state.juntar(
         filtros: filtros,

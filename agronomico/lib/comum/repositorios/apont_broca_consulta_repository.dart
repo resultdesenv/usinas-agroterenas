@@ -58,14 +58,15 @@ class ApontBrocaConsultaRepository {
       );
       if (indiceResumo != -1) {
         final resumo = listaAuxiliar[indiceResumo];
-        listaAuxiliar[indiceResumo] = listaAuxiliar[indiceResumo].juntar(
-          qtBrocados: resumo.qtBrocados + broca.qtBrocados,
-          qtCanaPodr: resumo.qtCanaPodr + broca.qtCanaPodr,
-          qtEntrPodr: resumo.qtEntrPodr + broca.qtEntrPodr,
-          qtCanas: resumo.qtCanas + broca.qtCanas,
-          qtCanasbroc: resumo.qtCanasbroc + broca.qtCanasbroc,
-          qtEntrenos: resumo.qtEntrenos + broca.qtEntrenos,
-        );
+        if (broca.qtEntrenos > 0)
+          listaAuxiliar[indiceResumo] = listaAuxiliar[indiceResumo].juntar(
+            qtBrocados: resumo.qtBrocados + broca.qtBrocados,
+            qtCanaPodr: resumo.qtCanaPodr + broca.qtCanaPodr,
+            qtEntrPodr: resumo.qtEntrPodr + broca.qtEntrPodr,
+            qtCanas: resumo.qtCanas + broca.qtCanas,
+            qtCanasbroc: resumo.qtCanasbroc + broca.qtCanasbroc,
+            qtEntrenos: resumo.qtEntrenos + broca.qtEntrenos,
+          );
         return;
       }
 

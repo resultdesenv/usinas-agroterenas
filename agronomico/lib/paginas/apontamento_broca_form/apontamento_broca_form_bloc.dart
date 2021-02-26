@@ -157,6 +157,15 @@ class ApontamentoBrocaFormBloc
             throw 'Cana ${broca.noSequencia} com Broca sem Entreno';
         });
 
+        int canasFaltantes = 0;
+        brocas.forEach((broca) {
+          if (broca.qtEntrenos == 0 && broca.qtBrocados == 0) canasFaltantes++;
+        });
+        if (canasFaltantes > 0 &&
+            !await event.confirmaNaoApontadas(canasFaltantes)) {
+          throw 'Cancelando operação!';
+        }
+
         await repositorioBroca.salvar(brocas);
 
         if (state.novoApontamento) {

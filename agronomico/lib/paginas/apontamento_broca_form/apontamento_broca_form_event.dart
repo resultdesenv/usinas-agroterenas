@@ -53,10 +53,12 @@ class SalvarApontamentos extends ApontamentoBrocaFormEvent {
   final EmpresaModel empresa;
   final List<ApontBrocaModel> brocas;
   final bool voltar;
+  final Future<bool> Function(int canasFaltantes) confirmaNaoApontadas;
 
   SalvarApontamentos({
     @required this.empresa,
     @required this.brocas,
+    @required this.confirmaNaoApontadas,
     this.voltar = false,
   });
 }
