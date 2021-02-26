@@ -20,8 +20,7 @@ class TalhaoUnicoContent extends StatelessWidget {
         builder: (context, state) {
           final controllerZona =
               TextEditingController(text: state.filtros['cdUpnivel2']);
-          final controllerSafra =
-              TextEditingController(text: state.filtros['cdSafra']);
+          final controllerSujestao = TextEditingController(text: '13');
 
           return Scaffold(
             appBar: AppBar(
@@ -64,11 +63,11 @@ class TalhaoUnicoContent extends StatelessWidget {
                         Expanded(
                           child: TextFormField(
                             decoration: InputDecoration(
-                              labelText: 'Safra',
+                              labelText: 'Sugestão Qtd Cana',
                               contentPadding:
                                   EdgeInsets.symmetric(vertical: 14),
                             ),
-                            controller: controllerSafra,
+                            controller: controllerSujestao,
                             keyboardType: TextInputType.number,
                             inputFormatters: [
                               FilteringTextInputFormatter.allow(
@@ -88,7 +87,6 @@ class TalhaoUnicoContent extends StatelessWidget {
                                     salvaFiltros: true,
                                     filtros: {
                                       'cdUpnivel2': controllerZona.text,
-                                      'cdSafra': controllerSafra.text,
                                       'cdEmpresa': BaseInherited.of(context)
                                           .empresaAutenticada
                                           .cdEmpresa
@@ -167,6 +165,7 @@ class TalhaoUnicoContent extends StatelessWidget {
                       onPressed: (talhao) {
                         context.bloc<TalhaoUnicoBloc>().add(EscolheTalhao(
                               talhao: talhao,
+                              qtCanas: int.tryParse(controllerSujestao.text),
                               cdFunc: BaseInherited.of(context)
                                   .usuarioAutenticada
                                   .cdFunc,

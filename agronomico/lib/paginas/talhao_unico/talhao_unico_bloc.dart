@@ -15,6 +15,7 @@ class TalhaoUnicoBloc extends Bloc<TalhaoUnicoEvent, TalhaoUnicoState> {
     int cdFunc,
     int dispositivo,
     UpNivel3Model talhao,
+    int qtCanas,
   }) callback;
 
   TalhaoUnicoBloc({
@@ -86,6 +87,7 @@ class TalhaoUnicoBloc extends Bloc<TalhaoUnicoEvent, TalhaoUnicoState> {
         cdFunc: event.cdFunc,
         dispositivo: dispositivo['idDispositivo'],
         talhao: event.talhao,
+        qtCanas: event.qtCanas,
       );
     }
   }

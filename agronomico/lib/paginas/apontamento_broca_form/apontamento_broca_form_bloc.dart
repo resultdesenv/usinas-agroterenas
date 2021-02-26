@@ -44,11 +44,11 @@ class ApontamentoBrocaFormBloc
         String mensagem;
         ApontBrocaModel primeiraBroca;
 
-        final prefCana = await repositorioPreferencia.get(
-          idPreferencia: 'quantidade-canas',
-        );
-        final int qtCana =
-            (prefCana != null ? int.tryParse(prefCana) : prefCana) ?? 100;
+        // final prefCana = await repositorioPreferencia.get(
+        //   idPreferencia: 'quantidade-canas',
+        // );
+        final int qtCana = event.qtCanas ?? 100;
+        // (qtCanas != null ? int.tryParse(prefCana) : prefCana) ?? 100;
 
         final sequencia = await repositorioSequencia.buscarSequencia(
           empresa: event.empresa,

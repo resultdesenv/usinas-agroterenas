@@ -30,9 +30,11 @@ class AlteraFiltros extends TalhaoUnicoEvent {
 class EscolheTalhao extends TalhaoUnicoEvent {
   final UpNivel3Model talhao;
   final int cdFunc;
+  final int qtCanas;
 
   EscolheTalhao({
     @required this.talhao,
     @required this.cdFunc,
+    @required this.qtCanas,
   });
 }

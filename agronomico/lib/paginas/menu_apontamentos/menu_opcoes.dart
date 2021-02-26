@@ -29,7 +29,7 @@ final menuOpcoes = [
     'onTap': (BuildContext context) => navegar(
           context: context,
           pagina: TalhaoUnicoPage(
-            callback: ({cdFunc, dispositivo, talhao}) {
+            callback: ({cdFunc, dispositivo, talhao, qtCanas}) {
               navegar(
                 context: context,
                 pagina: ApontamentoBrocaFormPage(
@@ -37,6 +37,7 @@ final menuOpcoes = [
                   dispositivo: dispositivo,
                   upnivel3: talhao,
                   novoApontamento: true,
+                  qtCanas: qtCanas,
                 ),
               );
             },

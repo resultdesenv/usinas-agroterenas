@@ -13,6 +13,7 @@ class IniciarFormBrocas extends ApontamentoBrocaFormEvent {
   final bool novoApontamento;
   final String instancia;
   final EmpresaModel empresa;
+  final int qtCanas;
 
   IniciarFormBrocas({
     @required this.upnivel3,
@@ -21,6 +22,7 @@ class IniciarFormBrocas extends ApontamentoBrocaFormEvent {
     @required this.dispositivo,
     @required this.instancia,
     @required this.empresa,
+    this.qtCanas,
     this.novoApontamento = true,
   });
 }

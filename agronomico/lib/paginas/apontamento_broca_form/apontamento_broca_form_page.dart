@@ -19,6 +19,7 @@ class ApontamentoBrocaFormPage extends StatelessWidget {
   final int noBoletim;
   final UpNivel3Model upnivel3;
   final bool novoApontamento;
+  final int qtCanas;
 
   ApontamentoBrocaFormPage({
     this.upnivel3,
@@ -26,6 +27,7 @@ class ApontamentoBrocaFormPage extends StatelessWidget {
     this.dispositivo,
     this.noBoletim,
     this.novoApontamento = true,
+    this.qtCanas,
   });
 
   @override
@@ -51,6 +53,7 @@ class ApontamentoBrocaFormPage extends StatelessWidget {
           noBoletim: noBoletim,
           upnivel3: upnivel3,
           novoApontamento: novoApontamento,
+          qtCanas: qtCanas,
           empresa: BaseInherited.of(context).empresaAutenticada)),
       child: Scaffold(
         body: ApontamentoBrocaFormContent(),

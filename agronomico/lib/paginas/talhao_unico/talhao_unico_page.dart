@@ -13,6 +13,7 @@ class TalhaoUnicoPage extends StatelessWidget {
     int cdFunc,
     int dispositivo,
     UpNivel3Model talhao,
+    int qtCanas,
   }) callback;
 
   TalhaoUnicoPage({@required this.callback});
