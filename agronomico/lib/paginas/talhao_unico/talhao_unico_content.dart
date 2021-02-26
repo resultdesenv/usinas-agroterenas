@@ -18,9 +18,15 @@ class TalhaoUnicoContent extends StatelessWidget {
       listener: (_, state) {},
       child: BlocBuilder<TalhaoUnicoBloc, TalhaoUnicoState>(
         builder: (context, state) {
+          double somaAreas = 0;
+          state.talhoes.forEach((talhao) {
+            if (talhao.qtAreaProd != null) somaAreas += talhao.qtAreaProd;
+          });
+          final sujestao = (somaAreas * 3).ceil().toString();
+
           final controllerZona =
               TextEditingController(text: state.filtros['cdUpnivel2']);
-          final controllerSujestao = TextEditingController(text: '13');
+          final controllerSujestao = TextEditingController(text: sujestao);
 
           return Scaffold(
             appBar: AppBar(
