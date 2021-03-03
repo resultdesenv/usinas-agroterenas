@@ -193,6 +193,12 @@ class ApontBrocaConsultaRepository {
   Future<bool> salvar(List<ApontBrocaModel> brocas) async {
     final banco = await db.get();
 
+    await banco.delete(
+      'apont_broca',
+      where: 'noBoletim = ?',
+      whereArgs: [brocas.first.noBoletim],
+    );
+
     for (final item in brocas) {
       await banco.insert(
         'apont_broca',

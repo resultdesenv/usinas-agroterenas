@@ -95,6 +95,10 @@ class UpNivel3Bloc extends Bloc<UpNivel3Event, UpNivel3State> {
         }
       });
 
+      filtros.remove('dtInicio');
+      filtros.remove('dtFim');
+      filtros.remove('cdUpnivel2');
+
       yield state.juntar(
         filtros: filtros,
         listaDropDown: listaDropDown,

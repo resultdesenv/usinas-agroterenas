@@ -74,6 +74,18 @@ class AlteraQuantidade extends ApontamentoBrocaFormEvent {
 
 class MarcaParaSalvar extends ApontamentoBrocaFormEvent {
   final ApontBrocaModel broca;
+  final bool geraBroca;
+  final int indice;
 
-  MarcaParaSalvar({@required this.broca});
+  MarcaParaSalvar({
+    @required this.broca,
+    @required this.geraBroca,
+    @required this.indice,
+  });
+}
+
+class RemoverBroca extends ApontamentoBrocaFormEvent {
+  final int indice;
+
+  RemoverBroca({@required this.indice});
 }

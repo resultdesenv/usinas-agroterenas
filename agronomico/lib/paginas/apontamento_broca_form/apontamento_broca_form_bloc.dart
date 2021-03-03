@@ -44,11 +44,7 @@ class ApontamentoBrocaFormBloc
         String mensagem;
         ApontBrocaModel primeiraBroca;
 
-        // final prefCana = await repositorioPreferencia.get(
-        //   idPreferencia: 'quantidade-canas',
-        // );
         final int qtCana = event.qtCanas ?? 100;
-        // (qtCanas != null ? int.tryParse(prefCana) : prefCana) ?? 100;
 
         final sequencia = await repositorioSequencia.buscarSequencia(
           empresa: event.empresa,
@@ -78,6 +74,8 @@ class ApontamentoBrocaFormBloc
               cdFunc: event.cdFunc,
               cdFitoss: cdFitoss,
             );
+
+            brocas.add(primeiraBroca);
           }
         } else {
           final Map<String, dynamic> filtros = Map();
@@ -95,7 +93,7 @@ class ApontamentoBrocaFormBloc
           mensagem: mensagem,
           primeiraBroca: primeiraBroca,
           salvo: primeiraBroca == null,
-          canas: brocas.length > 0 ? brocas.length : qtCana,
+          canas: brocas.length > 1 ? brocas.length : qtCana,
           sequencia: sequencia,
         );
       } catch (e) {
@@ -215,7 +213,6 @@ class ApontamentoBrocaFormBloc
         yield state.juntar(
           brocas: brocas,
           salvo: false,
-          canas: brocas.length,
         );
       } else {
         final diferenca = event.quantidade - event.brocas.length;
@@ -251,7 +248,6 @@ class ApontamentoBrocaFormBloc
             .toList();
         yield state.juntar(
           brocas: event.brocas + novasBrocas,
-          canas: event.brocas.length + novasBrocas.length,
         );
       }
       try {
@@ -266,10 +262,47 @@ class ApontamentoBrocaFormBloc
     }
 
     if (event is MarcaParaSalvar) {
-      final brocas = state.brocas;
-      brocas[event.broca.noSequencia - 1] = event.broca;
+      final brocas = event.geraBroca
+          ? List<ApontBrocaModel>.from(state.brocas)
+          : state.brocas;
+      brocas[event.indice] = event.broca;
+
+      if (event.geraBroca) {
+        final brocaExemplo = state.brocas.last;
+        brocas.add(ApontBrocaModel(
+          instancia: brocaExemplo?.instancia,
+          noBoletim: brocaExemplo?.noBoletim,
+          noSequencia: state.brocas.last.noSequencia + 1,
+          dispositivo: brocaExemplo?.dispositivo,
+          cdFunc: brocaExemplo?.cdFunc,
+          cdFitoss: brocaExemplo?.cdFitoss,
+          cdSafra: brocaExemplo?.cdSafra,
+          cdUpnivel1: brocaExemplo?.cdUpnivel1,
+          cdUpnivel2: brocaExemplo?.cdUpnivel2,
+          cdUpnivel3: brocaExemplo?.cdUpnivel3,
+          dtOperacao: brocaExemplo?.dtOperacao,
+          dtStatus: brocaExemplo?.dtStatus,
+          hrOperacao: brocaExemplo?.hrOperacao,
+          noColetor: brocaExemplo?.noColetor,
+          qtBrocados: 0,
+          qtCanas: 1,
+          qtCanaPodr: 0,
+          qtCanasbroc: 0,
+          qtEntrPodr: 0,
+          qtEntrenos: 0,
+          qtMedia: 0,
+          status: 'P',
+          versao: brocaExemplo?.versao,
+        ));
+      }
 
       yield state.juntar(salvo: false, brocas: brocas);
+    }
+
+    if (event is RemoverBroca) {
+      final brocas = List<ApontBrocaModel>.from(state.brocas);
+      brocas.removeAt(event.indice);
+      yield state.juntar(brocas: brocas);
     }
   }
 }

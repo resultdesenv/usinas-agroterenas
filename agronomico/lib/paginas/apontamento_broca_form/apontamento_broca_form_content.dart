@@ -35,20 +35,30 @@ class ApontamentoBrocaFormContent extends StatelessWidget {
       },
       child: BlocBuilder<ApontamentoBrocaFormBloc, ApontamentoBrocaFormState>(
         builder: (context, state) {
-          final apontamentos = state.brocas
-              .map((e) => ApontamentoBrocaFormItem(
-                    broca: e,
-                    controllerTotal: TextEditingController(
-                      text: e.qtEntrenos.toInt().toString().padLeft(2, '0'),
-                    ),
-                    controllerBrocados: TextEditingController(
-                      text: e.qtBrocados.toInt().toString().padLeft(2, '0'),
-                    ),
-                    onChanged: (broca) => context
-                        .bloc<ApontamentoBrocaFormBloc>()
-                        .add(MarcaParaSalvar(broca: broca)),
-                  ))
-              .toList();
+          final apontamentos = state.brocas.map((e) {
+            final indiceBroca = state.brocas.indexOf(e);
+            return ApontamentoBrocaFormItem(
+              broca: e,
+              controllerTotal: TextEditingController(
+                text: e.qtEntrenos.toInt().toString().padLeft(2, '0'),
+              ),
+              controllerBrocados: TextEditingController(
+                text: e.qtBrocados.toInt().toString().padLeft(2, '0'),
+              ),
+              totalBrocas: state.brocas.length,
+              onDissmissed: (_) => context
+                  .bloc<ApontamentoBrocaFormBloc>()
+                  .add(RemoverBroca(indice: indiceBroca)),
+              onChanged: (broca, geraBroca) {
+                context.bloc<ApontamentoBrocaFormBloc>().add(MarcaParaSalvar(
+                      broca: broca,
+                      indice: indiceBroca,
+                      geraBroca:
+                          geraBroca && indiceBroca == state.brocas.length - 1,
+                    ));
+              },
+            );
+          }).toList();
 
           return WillPopScope(
             onWillPop: () => _confirmaSair(

@@ -95,6 +95,10 @@ class ApontamentoEstimativaListaBloc extends Bloc<
         }
       });
 
+      filtros.remove('dtInicio');
+      filtros.remove('dtFim');
+      filtros.remove('cdUpnivel2');
+
       yield state.juntar(
         filtros: filtros,
         listaDropDown: listaDropDown,

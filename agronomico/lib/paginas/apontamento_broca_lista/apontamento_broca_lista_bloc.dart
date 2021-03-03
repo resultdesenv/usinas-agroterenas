@@ -30,6 +30,7 @@ class ApontamentoBrocaListaBloc
 
       filtros.remove('dtInicio');
       filtros.remove('dtFim');
+      filtros.remove('cdUpnivel2');
 
       yield state.juntar(
         filtros: filtros,
