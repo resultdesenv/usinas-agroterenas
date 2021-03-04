@@ -38,6 +38,7 @@ class ApontamentoBrocaFormContent extends StatelessWidget {
           final apontamentos = state.brocas.map((e) {
             final indiceBroca = state.brocas.indexOf(e);
             return ApontamentoBrocaFormItem(
+              novoApontamento: state.novoApontamento,
               broca: e,
               controllerTotal: TextEditingController(
                 text: e.qtEntrenos.toInt().toString().padLeft(2, '0'),
@@ -49,12 +50,10 @@ class ApontamentoBrocaFormContent extends StatelessWidget {
               onDissmissed: (_) => context
                   .bloc<ApontamentoBrocaFormBloc>()
                   .add(RemoverBroca(indice: indiceBroca)),
-              onChanged: (broca, geraBroca) {
+              onChanged: (broca) {
                 context.bloc<ApontamentoBrocaFormBloc>().add(MarcaParaSalvar(
                       broca: broca,
                       indice: indiceBroca,
-                      geraBroca:
-                          geraBroca && indiceBroca == state.brocas.length - 1,
                     ));
               },
             );

@@ -3,6 +3,7 @@ import 'package:agronomico/comum/repositorios/apont_broca_consulta_repository.da
 import 'package:agronomico/comum/repositorios/preferencia_repository.dart';
 import 'package:agronomico/comum/repositorios/sequencia_repository.dart';
 import 'package:agronomico/comum/repositorios/tipo_fitossanidade_consulta_repository.dart';
+import 'package:agronomico/comum/sincronizacao/broca_out_repository.dart';
 import 'package:agronomico/paginas/apontamento_broca_form/apontamento_broca_form_event.dart';
 import 'package:agronomico/paginas/apontamento_broca_form/apontamento_broca_form_state.dart';
 import 'package:bloc/bloc.dart';
@@ -74,8 +75,6 @@ class ApontamentoBrocaFormBloc
               cdFunc: event.cdFunc,
               cdFitoss: cdFitoss,
             );
-
-            brocas.add(primeiraBroca);
           }
         } else {
           final Map<String, dynamic> filtros = Map();
@@ -93,7 +92,7 @@ class ApontamentoBrocaFormBloc
           mensagem: mensagem,
           primeiraBroca: primeiraBroca,
           salvo: primeiraBroca == null,
-          canas: brocas.length > 1 ? brocas.length : qtCana,
+          canas: brocas.length > 0 ? brocas.length : qtCana,
           sequencia: sequencia,
         );
       } catch (e) {
@@ -213,6 +212,7 @@ class ApontamentoBrocaFormBloc
         yield state.juntar(
           brocas: brocas,
           salvo: false,
+          canas: brocas.length,
         );
       } else {
         final diferenca = event.quantidade - event.brocas.length;
@@ -248,6 +248,7 @@ class ApontamentoBrocaFormBloc
             .toList();
         yield state.juntar(
           brocas: event.brocas + novasBrocas,
+          canas: event.brocas.length + novasBrocas.length,
         );
       }
       try {
@@ -262,39 +263,8 @@ class ApontamentoBrocaFormBloc
     }
 
     if (event is MarcaParaSalvar) {
-      final brocas = event.geraBroca
-          ? List<ApontBrocaModel>.from(state.brocas)
-          : state.brocas;
+      final brocas = state.brocas;
       brocas[event.indice] = event.broca;
-
-      if (event.geraBroca) {
-        final brocaExemplo = state.brocas.last;
-        brocas.add(ApontBrocaModel(
-          instancia: brocaExemplo?.instancia,
-          noBoletim: brocaExemplo?.noBoletim,
-          noSequencia: state.brocas.last.noSequencia + 1,
-          dispositivo: brocaExemplo?.dispositivo,
-          cdFunc: brocaExemplo?.cdFunc,
-          cdFitoss: brocaExemplo?.cdFitoss,
-          cdSafra: brocaExemplo?.cdSafra,
-          cdUpnivel1: brocaExemplo?.cdUpnivel1,
-          cdUpnivel2: brocaExemplo?.cdUpnivel2,
-          cdUpnivel3: brocaExemplo?.cdUpnivel3,
-          dtOperacao: brocaExemplo?.dtOperacao,
-          dtStatus: brocaExemplo?.dtStatus,
-          hrOperacao: brocaExemplo?.hrOperacao,
-          noColetor: brocaExemplo?.noColetor,
-          qtBrocados: 0,
-          qtCanas: 1,
-          qtCanaPodr: 0,
-          qtCanasbroc: 0,
-          qtEntrPodr: 0,
-          qtEntrenos: 0,
-          qtMedia: 0,
-          status: 'P',
-          versao: brocaExemplo?.versao,
-        ));
-      }
 
       yield state.juntar(salvo: false, brocas: brocas);
     }
@@ -302,7 +272,10 @@ class ApontamentoBrocaFormBloc
     if (event is RemoverBroca) {
       final brocas = List<ApontBrocaModel>.from(state.brocas);
       brocas.removeAt(event.indice);
-      yield state.juntar(brocas: brocas);
+      for (var i = 0; i < brocas.length; i++) {
+        brocas[i] = brocas[i].juntar(noSequencia: i + 1);
+      }
+      yield state.juntar(brocas: brocas, canas: brocas.length);
     }
   }
 }

@@ -6,17 +6,17 @@ import 'package:flutter/widgets.dart';
 class ApontamentoBrocaFormItem extends StatelessWidget {
   final ApontBrocaModel broca;
   final int totalBrocas;
-  final Function(ApontBrocaModel, bool) onChanged;
+  final Function(ApontBrocaModel) onChanged;
   final Function(DismissDirection) onDissmissed;
   final focusTotal = FocusNode();
   final focusBrocados = FocusNode();
   final controllerTotal;
   final controllerBrocados;
+  final bool novoApontamento;
   final inputFormatters = [
     FilteringTextInputFormatter.allow(RegExp(r'[\d]')),
     LengthLimitingTextInputFormatter(2),
     TextInputFormatter.withFunction((_, novo) {
-      print(novo.text);
       return TextEditingValue(
         text: novo.text.isEmpty
             ? ''
@@ -32,6 +32,7 @@ class ApontamentoBrocaFormItem extends StatelessWidget {
     @required this.broca,
     @required this.onDissmissed,
     @required this.totalBrocas,
+    @required this.novoApontamento,
     this.onChanged,
     @required this.controllerTotal,
     @required this.controllerBrocados,
@@ -73,7 +74,7 @@ class ApontamentoBrocaFormItem extends StatelessWidget {
                   textInputAction: TextInputAction.next,
                   keyboardType: TextInputType.number,
                   decoration: InputDecoration(labelText: 'Total'),
-                  onChanged: (value) => _onChanged(context, value, false),
+                  onChanged: (value) => _onChanged(context, value),
                   inputFormatters: inputFormatters,
                 ),
               ),
@@ -85,7 +86,7 @@ class ApontamentoBrocaFormItem extends StatelessWidget {
                   textInputAction: TextInputAction.next,
                   keyboardType: TextInputType.number,
                   decoration: InputDecoration(labelText: 'Brocados'),
-                  onChanged: (value) => _onChanged(context, value, true),
+                  onChanged: (value) => _onChanged(context, value),
                   inputFormatters: inputFormatters,
                 ),
               ),
@@ -108,7 +109,8 @@ class ApontamentoBrocaFormItem extends StatelessWidget {
         ),
       ),
       direction: DismissDirection.startToEnd,
-      key: ValueKey(broca.noSequencia.toString()),
+      key: ValueKey(broca.noSequencia.toString() +
+          new DateTime.now().microsecond.toString()),
     );
   }
 
@@ -117,15 +119,16 @@ class ApontamentoBrocaFormItem extends StatelessWidget {
         qtEntrenos: double.tryParse(controllerTotal.text) ?? 0,
       );
 
-  void _onChanged(BuildContext context, String value, bool geraBroca) {
+  void _onChanged(BuildContext context, String value) {
     if (value.length == 2) {
-      if (onChanged != null) onChanged(valores, geraBroca);
+      if (onChanged != null) onChanged(valores);
       FocusScope.of(context).nextFocus();
     }
   }
 
   Future<bool> _confirmaRemocao(BuildContext context) async =>
       totalBrocas > 1 &&
+      novoApontamento &&
       await showDialog(
         context: context,
         builder: (_) => AlertDialog(
