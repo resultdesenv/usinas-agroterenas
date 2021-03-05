@@ -42,11 +42,13 @@ class BrocaOutRepository extends SincronizacaoOutRepository {
       final inicioSincronizacao = DateTime.now();
       await dio.post(
         '/agt-api-pims/api/fitossanidade/insert',
-        data: itens.map((i) => {...i, 'noSequencia': i['noBoletim']}).toList(),
+        data: itens,
         options: Options(headers: {
           'authorization': 'Bearer $token',
         }),
       );
+
+      print(itens);
 
       final diferenca = DateTime.now().difference(inicioSincronizacao);
       final duracaoSincronizacao = diferenca.inMinutes > 0

@@ -3,7 +3,6 @@ import 'package:agronomico/comum/repositorios/apont_broca_consulta_repository.da
 import 'package:agronomico/comum/repositorios/preferencia_repository.dart';
 import 'package:agronomico/comum/repositorios/sequencia_repository.dart';
 import 'package:agronomico/comum/repositorios/tipo_fitossanidade_consulta_repository.dart';
-import 'package:agronomico/comum/sincronizacao/broca_out_repository.dart';
 import 'package:agronomico/paginas/apontamento_broca_form/apontamento_broca_form_event.dart';
 import 'package:agronomico/paginas/apontamento_broca_form/apontamento_broca_form_state.dart';
 import 'package:bloc/bloc.dart';
